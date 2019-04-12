@@ -26,7 +26,8 @@ public:
 	void Move();
 
 	//éûä‘Ç…âﬂÇ¨ÇΩÇÁè¡Ç∑
-	bool ReferTimeUp() { Check(); return timeUp; }
+	bool ReferTimeUp() { return timeUp; }
+	void Update() { Check(); }
 
 	void SetGraphHandle(int *GH) { graphicHandle = GH; }
 

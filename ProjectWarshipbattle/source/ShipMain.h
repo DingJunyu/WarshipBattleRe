@@ -86,6 +86,7 @@ public:
 	//エフェクト生成
 	Effect NewBubble(int num);
 	Effect NewSmoke(int num);
+	int ReferBubblePointCount() { return bubblePointCount; }
 
 	void CheckAndPlaySound();
 
@@ -111,7 +112,9 @@ private:
 
 	EffectPoint * bubbleStartPoint;//水泡生成ポイント
 	int bubblePointCount;//水泡生成ポイントの数
-	Coordinate2D<int> bubblePointPos[24];
+
+	/*あたり判定・泡生成用点*/
+	Coordinate2D<int> aroundPointPos[AUTO_SHIP_DATA::AROUND_POINT];
 	void FindThosePoint();
 
 	EffectPoint * smokeStartPoint;

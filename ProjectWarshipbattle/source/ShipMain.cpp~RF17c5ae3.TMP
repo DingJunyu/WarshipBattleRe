@@ -13,11 +13,10 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH ,int ShipNum,
 	LoadSound(SL);
 	FindThosePoint();
 
-	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
 	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
 		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
 		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
-			aroundPointPos[i].z, true, 2500, 20, true,
+			aroundPointPos[i].z, true, 1250, 20, true,
 			0.15, 1.001);
 	}
 
@@ -74,9 +73,8 @@ void ShipMain::FindThosePoint() {
 		for (int yy = 0; yy < (int)sz; yy++) {
 			if (GetPixel(xx, yy) != Cr) {	// 透過色ではなくなったとき
 				aroundPointPos[num].x = xx * ReferMultiple() -
-					sx * ReferMultiple() * .5;			// 座標の登録
-				aroundPointPos[num].z = yy * ReferMultiple() -
-					sz * ReferMultiple() * .5;
+					xz * ReferMultiple();			// 座標の登録
+				aroundPointPos[num].z = yy * ReferMultiple();
 				if (num++ >= AROUND_POINT - 1) flg = true;	// 配列をオーバーしたらやめるフラグ
 				break;
 			}
@@ -85,10 +83,8 @@ void ShipMain::FindThosePoint() {
 		// 下から上へ1ドットずつ調べる
 		for (int yy = (int)sz - 1; yy > 0; yy--) {
 			if (GetPixel(xx, yy) != Cr) {	// 透過色ではなくなったとき
-				aroundPointPos[num].x = xx * ReferMultiple() -
-					sx * ReferMultiple() * .5;			// 座標の登録
-				aroundPointPos[num].z = yy * ReferMultiple() -
-					sz * ReferMultiple() * .5;
+				aroundPointPos[num].x = xx * ReferMultiple();			// 座標の登録
+				aroundPointPos[num].z = yy * ReferMultiple();
 				if (num++ >= AROUND_POINT - 1) flg = true;	// 配列をオーバーしたらやめるフラグ
 				break;
 			}
@@ -184,6 +180,7 @@ void ShipMain::TEST() {
 	shipCrashR = 200;
 
 	/*エフェクト関連*/
+	bubblePointCount = 5;
 	smokePointCount = 2;
 
 	/*音声関連*/
@@ -191,7 +188,7 @@ void ShipMain::TEST() {
 
 /*デバッグ用テスト関数*/
 void ShipMain::TestDraw(double x, double z) {
-	for (int i = 0; i < bubblePointCount; i++) {
+	for (int i = 0; i < 5; i++) {
 		bubbleStartPoint[i].TestDraw(ReferRadianOnZ(),ReferCoordX(),
 			ReferCoordZ(),x,z);
 	}

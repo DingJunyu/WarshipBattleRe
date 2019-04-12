@@ -15,8 +15,8 @@ Effect EffectPoint::NewEffect(double Radian, double Speed,
 	double realX;
 	double realZ;
 	/*実際に生成すべきところの座標を計算する*/
-	realX = cos(Radian) * newX - sin(Radian) * newZ + CoordX;
-	realZ = cos(Radian) * newZ + sin(Radian) * newX + CoordZ;
+	realX = CoordX - cos(Radian) * newX + sin(Radian) * newZ;
+	realZ = CoordZ - cos(Radian) * newZ - sin(Radian) * newX;
 	Effect E(movable,continueTime,Radian,Radian,0,Speed,realX,realZ,graphHandle,
 		spread,zoomMutliple, zoomRate);
 	return E;//正しいステータスを持っているエフェクトを返す

@@ -31,6 +31,7 @@ public:
 	double ReferRadianOnY() { return radianOnY; }
 	double ReferLength() { return length; }
 	double ReferWidth() { return width; }
+	double ReferMultiple() { return multiple; }
 
 	//当たり判定用問い合わせ
 	double ReferLeft() { return coord.x - width; }
@@ -40,6 +41,7 @@ public:
 
 	//状態問い合わせ関数
 	bool ReferAlive() { return alive; }
+	int *ReferGraphHandle() { return pictureHandle; }
 
 	//移動関数
 	void Move();
@@ -71,6 +73,7 @@ public:
 	//サイズを設定する
 	void SetLength(double L) { length = L; }
 	void SetWidth(double W) { width = W; }
+	void SetMultiple(double M) { multiple = M; }
 	void Killed() { alive = false; }
 	void SetSpeed(double Spe);
 	void SetMaxSpeedOnZ(double Speed) { maxSpeedOnZ = Speed; }
@@ -114,5 +117,6 @@ private:
 	//画像のハンドル
 	int *pictureHandle;
 	int *shadowHandle;
+	double multiple;
 };
 

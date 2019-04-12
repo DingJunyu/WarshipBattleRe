@@ -255,6 +255,7 @@ void IngameDataManagement::TEST() {
 	auto ship = alliesFleet.begin();//イテレータを使って自分の船を選ぶ
 	//ここの部分は初期化関数とファイル読み込みはまだ出来ていない
 	//初期化関数は下のようにしたい
+	ship->SetMultiple(0.125);
 	ship->InifThisShip(PL.ReferBattleCrusierHandle(4000), 
 		PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);//初期化
 	ship->NewCoordX(2200);//新しい座標をあげる
@@ -267,12 +268,13 @@ void IngameDataManagement::TEST() {
 	ship->SetWeaponTest(&PL);//武器をロードする
 
 
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < 1; i++) {
 		enemyFleet.push_back(ShipMain());//テスト用敵船を生成する
 		auto enemyShip = enemyFleet.end();//イテレータで船を選ぶ
 		enemyShip--;
 		double radian = (double)(rand() % 180) / 180.0*MathAndPhysics::PI;
 
+		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
 		enemyShip->NewCoordX(2600 + i * (rand() % 400));
@@ -466,6 +468,9 @@ void IngameDataManagement::Inif() {
 	SL.Inif();//音声ローダー初期化
 	CT.Inif(&SL);//キーボードコントローラー初期化
 	CUI.IngameInif(&PL,&SL);//マウスコントローラー初期化
+	TEST();
+	hOffScreen = MakeScreen(3200, 1966);
+	SetDrawScreen(hOffScreen);
 }
 
 /*使ったメモリを解放する*/
@@ -505,7 +510,8 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 			if (abs(ship->ReferSpeedOnZ()) > 0.1 && rand() % 3 == 0
 				&& rand() % 100 > ship->ReferSpeedOnZ() * 10) {//一定の速度があれば、確率で生成する
 				//for(int i = 0; i < ship->ReferBubbleCount(); i++)
-				for (int i = 0; i < 4; i++)//すべてのエフェクトポイントからエフェクトを生成する
+				for (int i = 0; i < ship->ReferBubblePointCount(); i++)
+					//すべてのエフェクトポイントからエフェクトを生成する
 					bubbleList.push_back(ship->NewBubble(i));//リストの末に追加する
 			}
 		}
@@ -552,6 +558,7 @@ void IngameDataManagement::CheckAndCleanThisEffectList(std::list<Effect> *effect
 		for (auto effect = effectList->begin();
 			effect != effectList->end();
 			effect++) {
+		effect->Update();//状態更新
 		if (effect->ReferTimeUp()) {//時間超えたら
 			effect = effectList->erase(effect);//リストから削除
 		}
@@ -652,6 +659,7 @@ void IngameDataManagement::CheckTeamA(std::vector<ShipMain> *shipList) {
 			ship++) {
 			if (!ship->ReferAlive()) {
 				sinkingShip.push_back(*ship);
+				ship->DestroyMemory();//メモリ解放
 				ship = shipList->erase(ship);
 			}
 			if (shipList->empty() || ship == shipList->end())

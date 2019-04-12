@@ -98,7 +98,6 @@ void SingleGame_DeathMatch_Progress() {
 
 	/*初期化*/
 	IDM.Inif();
-	IDM.TEST();
 
 	/*ゲームメインプログレス*/
 	while (!TDMC.GameOver(IDM.TeamDestroyed())) {

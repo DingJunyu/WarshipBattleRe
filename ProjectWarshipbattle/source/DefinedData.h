@@ -39,6 +39,10 @@ enum SaveForCUI {
 	SHOW
 };
 
+namespace AUTO_SHIP_DATA {
+	const int AROUND_POINT = 32;
+}
+
 //ëDå^ÇÃî‘çÜ
 const int RESERVED_NUMBER_FOR_SHIPS = 1000;
 enum ShipType {

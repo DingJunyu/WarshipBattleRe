@@ -111,13 +111,13 @@ void AllMovableObjects::Draw(Camera CM) {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
 	DrawRotaGraph3((int)xOnScreen + shadowDistanceOnX, 
 		(int)zOnScreen + shadowDistanceOnZ, (int)(length / 2), 
-		(int)(width) / 2, 0.125, 0.125,
+		(int)(width) / 2, multiple, multiple,
 		radianOnZ, *shadowHandle, TRUE, FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//描画モードをもとに戻る
 
 	//本体を描く
 	DrawRotaGraph3((int)xOnScreen, (int)zOnScreen, (int)(length / 2), 
-		(int)(width) / 2, 0.125, 0.125,
+		(int)(width) / 2, multiple, multiple,
 		radianOnZ, *pictureHandle, TRUE, FALSE);
 
 	/*テスト*/
@@ -139,13 +139,13 @@ void AllMovableObjects::DrawSub(Camera CM) {
 	DrawRotaGraph3((int)(coord.x - CM.ReferRealCameraX() + shadowDistanceOnX),
 		(int)(coord.z - CM.ReferRealCameraZ() + shadowDistanceOnZ),
 		(int)(length / 2), (int)(width / 2),
-		0.125, 0.125, radianOnZ,
+		multiple, multiple, radianOnZ,
 		*shadowHandle, TRUE, FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//描画モードをもとに戻る
 	//本体を描く
 	DrawRotaGraph3((int)(coord.x - CM.ReferRealCameraX()),
 		(int)(coord.z - CM.ReferRealCameraZ()),
 		(int)(length / 2), (int)(width / 2),
-		0.125, 0.125, radianOnZ,
+		multiple, multiple, radianOnZ,
 		*pictureHandle, TRUE, FALSE);
 }

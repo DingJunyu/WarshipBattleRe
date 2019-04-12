@@ -9,14 +9,6 @@ Effect::~Effect()
 }
 
 void Effect::Draw(int x,int z) {
-	if (spread) {//拡散ができれば
-		zoomMutliple *= zoomRate;
-		if (zoomRate > 1)//拡大率がフレームごとに減る
-			zoomRate *= 0.99;
-		if (zoomRate <= 1)
-			zoomRate = 1;
-	}
-
 	double rotateX = 0;
 	double rotateZ = 0;
 	double offsetOnX;
@@ -34,18 +26,26 @@ void Effect::Draw(int x,int z) {
 	/*テスト用*/
 	/*unsigned int Cr = GetColor(0, 0, 255);
 	DrawPixel(coordX - x, coordZ - z, Cr);*/
+}
+
+void Effect::Check() {
+	if (spread) {//拡散ができれば
+		zoomMutliple *= zoomRate;
+		if (zoomRate > 1)//拡大率がフレームごとに減る
+			zoomRate *= 0.99;
+		if (zoomRate <= 1)
+			zoomRate = 1;
+	}
 
 	//目標角度になる前に回る
-	if (radian != targetRadian && abs(radian - targetRadian) > 
+	if (radian != targetRadian && abs(radian - targetRadian) >
 		radianChangePerFrame) {
 		if (radian < 0)
 			radian += radianChangePerFrame;
 		if (radian > 0)
 			radian -= radianChangePerFrame;
 	}
-}
 
-void Effect::Check() {
 	//このエフェクトの時間が切れたか
 	if (GetNowCount() > endTime)
 		timeUp = true;

@@ -13,7 +13,6 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH ,int ShipNum,
 	LoadSound(SL);
 	FindThosePoint();
 
-	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
 	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
 		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
 		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
@@ -184,6 +183,7 @@ void ShipMain::TEST() {
 	shipCrashR = 200;
 
 	/*エフェクト関連*/
+	bubblePointCount = 5;
 	smokePointCount = 2;
 
 	/*音声関連*/
@@ -191,7 +191,7 @@ void ShipMain::TEST() {
 
 /*デバッグ用テスト関数*/
 void ShipMain::TestDraw(double x, double z) {
-	for (int i = 0; i < bubblePointCount; i++) {
+	for (int i = 0; i < 5; i++) {
 		bubbleStartPoint[i].TestDraw(ReferRadianOnZ(),ReferCoordX(),
 			ReferCoordZ(),x,z);
 	}

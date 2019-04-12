@@ -132,6 +132,8 @@ private:
 	std::list<Effect> smokeList;//雲リスト
 	std::list<Effect> explosionList;//爆発リスト
 	std::list<Effect> rippleList;//水泡リスト(砲弾落下地)
+
+	int hOffScreen;
 };
 
 void SetNewEffect(std::list<Effect> *effectList,std::list<ShipMain> shipList);
