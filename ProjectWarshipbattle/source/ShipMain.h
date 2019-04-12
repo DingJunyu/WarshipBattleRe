@@ -114,7 +114,7 @@ private:
 	int bubblePointCount;//水泡生成ポイントの数
 
 	/*あたり判定・泡生成用点*/
-	Coordinate2D<int> aroundPointPos[AUTO_SHIP_DATA::AROUND_POINT];
+	Coordinate2D<double> aroundPointPos[AUTO_SHIP_DATA::AROUND_POINT];
 	void FindThosePoint();
 
 	EffectPoint * smokeStartPoint;

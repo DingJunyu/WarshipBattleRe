@@ -507,7 +507,7 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 		for (auto ship = alliesFleet.begin();
 			ship != alliesFleet.end();
 			ship++) {
-			if (abs(ship->ReferSpeedOnZ()) > 0.1 && rand() % 3 == 0
+			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 3 == 0
 				&& rand() % 100 > ship->ReferSpeedOnZ() * 10) {//ˆê’è‚Ì‘¬“x‚ª‚ ‚ê‚ÎAŠm—¦‚Å¶¬‚·‚é
 				//for(int i = 0; i < ship->ReferBubbleCount(); i++)
 				for (int i = 0; i < ship->ReferBubblePointCount(); i++)

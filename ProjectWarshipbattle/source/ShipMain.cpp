@@ -11,32 +11,15 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH ,int ShipNum,
 	//GetDataFromShipdata(ShipNum);
 	MemorySecure();
 	LoadSound(SL);
-	FindThosePoint();
+	FindThosePoint();//あたり判定用ポイントを取得する
 
 	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
 	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
 		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
 		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
-			aroundPointPos[i].z, true, 2500, 20, true,
+			aroundPointPos[i].z, true, 3400, 20, true,
 			0.15, 1.001);
-	}
-
-	/*テスト部分も含む*/
-	/*エフェクト生成ポイント*/
-	//for (int i = 0; i < 5; i++) {
-	//	bubbleStartPoint[i] = ET.CopyFromCreateBubble();
-	//	bubbleStartPoint[i].InifCoordinate(100, 0, true, 1250, 20, true,
-	//		0.15, 1.001);
-	//}
-	//bubbleStartPoint[1].InifCoordinate(-14, -13, true, 3800, 20, true,
-	//	0.15, 1.001);
-	//bubbleStartPoint[2].InifCoordinate(-14, 13, true, 3800, 20, true,
-	//	0.15, 1.001);
-
-	//bubbleStartPoint[3].InifCoordinate(-78, -6, true, 3800, 20, true,
-	//	0.15, 1.001);
-	//bubbleStartPoint[4].InifCoordinate(-78, 6, true, 3800, 20, true,
-	//	0.15, 1.001);
+	}//泡生成ポイントを設置
 
 	for (int i = 0; i < 2; i++) {
 		smokeStartPoint[i] = ET.CopyFromCreateSmoke();
