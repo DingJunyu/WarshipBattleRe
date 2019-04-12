@@ -12,7 +12,7 @@ public:
 		sleep_time(10) {}
 	~FrameControl();
 
-	void Wait();
+	bool Wait();
 	void Reset() { next_game_tick = GetTickCount(); }
 
 private:

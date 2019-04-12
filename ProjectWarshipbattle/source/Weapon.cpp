@@ -32,7 +32,7 @@ Ammo Weapon::Shoot(double x, double z,double r) {
 }
 
 bool Weapon::ReferShootable() {
-	if (lastShootedTime + reloadTime < GetTickCount()) {
+	if (lastShootedTime + reloadTime < GetTickCount()) {//‘O‰ñŽËŒ‚‚ÌŽžŠÔ‚Æ¡‚ÌŽžŠÔ‚ðÆ‡
 		return true;
 	}
 	return false;

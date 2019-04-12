@@ -7,19 +7,20 @@ IngameDataManagement::~IngameDataManagement()
 
 /*メインルート*/
 void IngameDataManagement::Update() {
-	CUI.SetNormalStatus();/*ここはテストバージョン*/
+	if (FC.Wait()) {
+		CUI.SetNormalStatus();/*ここはテストバージョン*/
 
-	MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
-	Control();//コマンドを受け取って、船の状態を変更する
-	GetNewEffect();//エフェクトを生成する
-	MoveAll();//船の状態による座標を変更する
-	SimpleHitDecision();
-//	CrashDecision();//船の間のあたり判定
-//	HitDecision();//砲弾と船の間のあたり判定
-	DeleteUseless();//入らないものを消す
-	CheckAndPlaySound();
-	DrawAll();//全部更新した後画面を描く
-	FC.Wait();//60フレームに合わせるように待つ
+		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
+		Control();//コマンドを受け取って、船の状態を変更する
+		GetNewEffect();//エフェクトを生成する
+		MoveAll();//船の状態による座標を変更する
+		SimpleHitDecision();
+		//	CrashDecision();//船の間のあたり判定
+		//	HitDecision();//砲弾と船の間のあたり判定
+		DeleteUseless();//入らないものを消す
+		CheckAndPlaySound();
+		DrawAll();//全部更新した後画面を描く
+	}
 }
 
 /*ゲームコントロール*/
@@ -259,6 +260,7 @@ void IngameDataManagement::TEST() {
 	ship->NewCoordX(2200);//新しい座標をあげる
 	ship->NewCoordZ(1500);
 	ship->NewCoordY(0);
+	ship->SetRadianOnZ(0);
 	ship->SetLength(PL.ReferShipSizeX());//サイズを設定
 	ship->SetWidth(PL.ReferShipSizeZ());
 	ship->TEST();//テスト関数をロードする
@@ -650,10 +652,10 @@ void IngameDataManagement::CheckTeamA(std::vector<ShipMain> *shipList) {
 			ship++) {
 			if (!ship->ReferAlive()) {
 				sinkingShip.push_back(*ship);
-				shipList->erase(ship);
+				ship = shipList->erase(ship);
 			}
 			if (shipList->empty() || ship == shipList->end())
-				break;
+				return;
 		}
 	}
 }

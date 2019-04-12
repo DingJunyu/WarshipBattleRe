@@ -20,7 +20,7 @@ public:
 
 		/*テスト部分*/
 		hitPoint = 200;
-		shipMainCrash = { 100,30,20 };
+		shipMainCrash = { 100,30,12 };
 	}
 	~ShipMain();
 
@@ -111,6 +111,8 @@ private:
 
 	EffectPoint * bubbleStartPoint;//水泡生成ポイント
 	int bubblePointCount;//水泡生成ポイントの数
+	Coordinate2D<int> bubblePointPos[24];
+	void FindThosePoint();
 
 	EffectPoint * smokeStartPoint;
 	int smokePointCount;

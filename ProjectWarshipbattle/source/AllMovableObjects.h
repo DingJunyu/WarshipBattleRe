@@ -11,6 +11,7 @@ public:
 	AllMovableObjects(bool Flyable, bool Plane, bool Point,bool Crashable) :
 		flyable(Flyable),
 		plane(Plane), alive(true), point(Point), crashable(Crashable) {
+		alive = true;
 		radianChangePerFrame = 0;
 		airResistanceActive = false;
 		airResistance = 0.001;

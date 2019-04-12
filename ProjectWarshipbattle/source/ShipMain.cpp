@@ -40,6 +40,10 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH ,int ShipNum,
 		0.06, 1.005);
 }
 
+void ShipMain::FindThosePoint() {
+	int sx, sz;
+}
+
 /*出力パーセンテージ変更*/
 void ShipMain::ChangeAccPercentage(bool up) {
 	if (up&&currentAccPercentage < 1.0f) {
@@ -114,12 +118,11 @@ void ShipMain::TEST() {
 
 	/*エンジン状態の初期化*/
 	mainEngine.Inif(30, 0.75);
-	SetMaxOutput(10);
+	SetMaxOutput(mainEngine.ReferMaxOutput());
 	SetMaxSpeedOnZ(0.8);
 
 	/*移動関連*/
 	SetSpeed(0);
-	SetRadianOnZ(0);
 	maxRadian = MathAndPhysics::PI / 10;
 	radianChangePerFrame = MathAndPhysics::PI / 1800;
 	currentRadian = 0;

@@ -25,14 +25,6 @@ void Effect::Draw(int x,int z) {
 	offsetOnX = zoomMutliple * zoomMutliple * graphX * 0.25 ;//‚wÀ•W‚Ì•ÎˆÚ‚ğŒvZ
 	offsetOnZ = zoomMutliple * zoomMutliple * graphZ * 0.25 ;//‚yÀ•W‚Ì•ÎˆÚ‚ğŒvZ
 
-	//rotateX = (double)graphX;
-	//rotateZ = (double)graphZ;
-
-	//double realX = cos(radian) * rotateX -
-	//	sin(radian) * rotateZ;
-	//double realZ = cos(radian) * rotateZ +
-	//	sin(radian) * rotateX;
-
 	DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
 		(int)coordZ - z - (int)offsetOnZ,
 		0, 0,
@@ -60,6 +52,7 @@ void Effect::Check() {
 }
 
 void Effect::Move() {
+	//ˆÚ“®‚·‚é‘O‚ÉŠp“x‚ğƒ‰ƒ“ƒ_ƒ€‚É•Ï‚í‚é
 	if (rand()%2==0)
 		radian += (double)((rand() % 2) / 180.0f) * MathAndPhysics::PI;
 	else

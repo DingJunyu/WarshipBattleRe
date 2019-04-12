@@ -357,3 +357,9 @@ namespace RandomDataWhenShoot {
 	const double radianOnY = MathAndPhysics::PI * (1.0 / 180.0);
 	const double speed = 2;
 }
+
+struct GameDataStatisticsForEveryShip {
+	int shoot;
+	int hit;
+	int kill;
+};

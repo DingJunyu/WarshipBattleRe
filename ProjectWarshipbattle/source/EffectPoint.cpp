@@ -35,6 +35,7 @@ void EffectPoint::InifCoordinate(double RCX, double RCZ, bool MA, int CT,
 	zoomRate = ZoomRate;
 }
 
+/*‰Šú‰»*/
 void EffectPoint::Inif(int ET, int *Handle) {
 	effectType = ET;
 	graphHandle = Handle;
@@ -48,6 +49,7 @@ void EffectPoint::TestDraw(double r, double x, double z,double CX,double CZ) {
 	double newZ = relativeCoordZ;
 	double realX;
 	double realZ;
+	/*–{“–‚ÌÀ•W‚ğŒvZ‚·‚é*/
 	realX = cos(r) * newX - sin(r) * newZ + x;
 	realZ = cos(r) * newZ + sin(r) * newX + z;
 

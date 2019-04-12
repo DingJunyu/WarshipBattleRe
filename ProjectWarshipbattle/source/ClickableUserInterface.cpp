@@ -91,6 +91,7 @@ int ClickableUserInterface::CheckChoice() {
 
 	for (int i = CommandSerial::INCREASE_OUTPUT; i <= CommandSerial::EXIT; i++) {
 		if(buttonPosition[i][SaveForCUI::SHOW] == 0)
+			/*マウスの座標とボタンの範囲を照合する*/
 		if (mouseX > buttonPosition[i][SaveForCUI::COORD_X] * Screen::SCREEN_X &&
 			mouseX < buttonPosition[i][SaveForCUI::COORD_X] *
 			Screen::SCREEN_X + buttonPosition[i][SaveForCUI::SIZE_X] *
@@ -100,8 +101,9 @@ int ClickableUserInterface::CheckChoice() {
 			Screen::SCREEN_Z + buttonPosition[i][SaveForCUI::SIZE_Z] *
 			buttonPosition[i][SaveForCUI::MULTIPLE]) {
 
-			BC.buttonContainer[i].ChangePressed();
+			BC.buttonContainer[i].ChangePressed();//画像を押された状態に変更
 
+			/*押されたら選択しを返す*/
 			if (pressed) {
 				answer = i;
 			}
@@ -128,23 +130,24 @@ void ClickableUserInterface::Draw() {
 	}
 }
 
+/*初めてボタンを初期化時表すべきボタンをオンにする*/
 void ClickableUserInterface::SetNormalStatus() {
-	buttonPosition[CommandSerial::MENU][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::SHOOT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::INCREASE_OUTPUT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::DECREASE_OUTPUT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURN_RIGHT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURN_LEFT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURN_RETURN][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURRET_TURN_RIGHT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURRET_TURN_LEFT][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURRET_PULLUP][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
-	buttonPosition[CommandSerial::TURRET_PULLDOWN][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
+	buttonPosition[CommandSerial::MENU][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::SHOOT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::INCREASE_OUTPUT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::DECREASE_OUTPUT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURN_RIGHT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURN_LEFT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURN_RETURN][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURRET_TURN_RIGHT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURRET_TURN_LEFT][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURRET_PULLUP][SaveForCUI::SHOW] = 0;
+	buttonPosition[CommandSerial::TURRET_PULLDOWN][SaveForCUI::SHOW] = 0;
 }
 
 void ClickableUserInterface::LetMeSeeMenu() {
 	for (int i = CommandSerial::CONTINUE; i <= CommandSerial::EXIT; i++) {
-		buttonPosition[i][SaveForCUI::SHOW] = SaveForCUI::COORD_X;
+		buttonPosition[i][SaveForCUI::SHOW] = 0;
 	}
 	menuOpened = true;
 }

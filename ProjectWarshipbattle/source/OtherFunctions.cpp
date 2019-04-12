@@ -32,3 +32,9 @@ bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	//‚»‚êˆÈŠO‚Ífalse‚ð•Ô‚·
 	return false;
 }
+
+bool crash3Dto3D(Coordinate<double>A, Coordinate<double> B,
+	CrashSize3d<double> ACrash, CrashSize3d<double> BCrash,
+	double radianA, double radianB) {
+	return false;
+}
