@@ -5,6 +5,7 @@ AllMovableObjects::~AllMovableObjects()
 }
 
 void AllMovableObjects::Move() {
+	oldCoord = coord;
 	SpeedDownbyAirResistance();//空気抵抗の影響で速度が落とす
 	//2Dゲームですが、Y軸の移動も考える
 	if (flyable) {//これは飛べるものか
@@ -54,6 +55,10 @@ void AllMovableObjects::Move() {
 	//移動した座標を計算する
 	coord.x += speedOnZ * cos(radianOnZ);
 	coord.z += speedOnZ * sin(radianOnZ);
+}
+
+void AllMovableObjects::Unmove() {
+	coord = oldCoord;//前の座上に戻る
 }
 
 void AllMovableObjects::FallingDown() {//重力の影響で落下

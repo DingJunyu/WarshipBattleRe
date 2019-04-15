@@ -45,6 +45,7 @@ public:
 
 	//移動関数
 	void Move();
+	void Unmove();
 	void FallingDown();
 	void SpeedDownbyAirResistance();
 
@@ -84,6 +85,7 @@ public:
 private:
 	/*XZは水平座標、Yは高さ*/
 	Coordinate<double> coord;
+	Coordinate<double> oldCoord;
 	/*スピードは水平と垂直に分ける*/
 	double speedOnZ;
 	double speedOnY;
