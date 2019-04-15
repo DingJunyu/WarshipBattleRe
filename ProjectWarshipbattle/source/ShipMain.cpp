@@ -45,6 +45,8 @@ void ShipMain::FindThosePoint() {
 	unsigned int Cr = GetPixel(1, 1);//透過色
 	bool flg = false;
 	int num = 0;//配列番号
+
+
 	//初期化
 	for (int i = 0; i < AROUND_POINT; i++) {
 		aroundPointPos[i].x = aroundPointPos[i].z = 0;
@@ -78,6 +80,7 @@ void ShipMain::FindThosePoint() {
 		}
 		if (flg) break;	// 配列をオーバーしたらやめる
 	}
+	pointCount = num;
 }
 
 /*出力パーセンテージ変更*/

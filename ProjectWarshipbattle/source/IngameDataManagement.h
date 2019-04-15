@@ -93,8 +93,9 @@ private:
 	void SIMPLE_USER_INTERFACE();//ステータスを文字にして表示する
 	bool GameOver;//ゲーム終了マーク
 
-	//データ操作
+	//あたり判定など
 	void CrashDecision();//あたり判定-船と船の間
+	bool PointsToCollisionbox(ShipMain *ship1,ShipMain *ship2);
 	void HitDecision();//ゲームコントローラーに当たる数を返す
 	void SimpleHitDecision();
 	void CheckThisTeamDecision(std::vector<ShipMain> *shipList, Ammo *shell);

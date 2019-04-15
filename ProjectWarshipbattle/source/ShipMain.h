@@ -19,8 +19,8 @@ public:
 		returnToCenter = false;
 
 		/*テスト部分*/
-		hitPoint = 200;
-		shipMainCrash = { 100,30,12 };
+		hitPoint = 100000;
+		shipMainCrash = { 245, 30, 24 };
 	}
 	~ShipMain();
 
@@ -53,23 +53,24 @@ public:
 	void SufferDamage(int damage);
 
 	//問い合わせ
+	/*移動関連*/
 	bool ReferReturnOn() { return returnToCenter; }
 	double ReferChangingRadian() { return currentRadian; }
 	double ReferOutPutRate() { return currentAccPercentage; }
+	/*武器関連*/
 	int ReferWeaponCount(bool Main) { 
 		if (Main)
 			return MainWeaponCount;
 		else
 			return SubWeaponCount;
 	}
-	double ReferShipCrashR() { return shipCrashR; }
-	CrashSize3d<double> ReferShipCrashSize() { return shipMainCrash; }
-	int ReferSerialNumber() { return serialNumber; }
 	double ReferMainWeaponRadianOnZ() {
 		return MainWeapon[0].ReferRadianOnZ();
 	}
-	double ReferMainWeaponCD() { return
-		GetTickCount() - MainWeapon[0].ReferLastShootedTime(); }
+	double ReferMainWeaponCD() {
+		return
+			GetTickCount() - MainWeapon[0].ReferLastShootedTime();
+	}
 	double ReferMainWeaponCoolDownTime() {
 		return MainWeapon[0].ReferReloadTime();
 	}
@@ -79,6 +80,15 @@ public:
 	double ReferMainMaxWeaponRadianOnY() {
 		return MainWeapon[0].ReferMaxRadianOnY();
 	}
+	/*collision関連*/
+	double ReferShipCrashR() { return shipCrashR; }
+	CrashSize3d<double> ReferShipCrashSize() { return shipMainCrash; }
+	int ReferCollisionPointAmount() { return pointCount; }
+	Coordinate2D<double> ReferCollisionPoint(int num) {
+		return aroundPointPos[num];
+	}
+	/*番号*/
+	int ReferSerialNumber() { return serialNumber; }
 	//エンジン関連
 	double ReferEngineOutput() { return mainEngine.ReferOutput(); }
 	double ReferEngineMaxOutput() { return mainEngine.ReferMaxOutput(); }
@@ -115,6 +125,7 @@ private:
 
 	/*あたり判定・泡生成用点*/
 	Coordinate2D<double> aroundPointPos[AUTO_SHIP_DATA::AROUND_POINT];
+	int pointCount;
 	void FindThosePoint();
 
 	EffectPoint * smokeStartPoint;

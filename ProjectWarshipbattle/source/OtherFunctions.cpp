@@ -12,11 +12,12 @@ bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	double aMaxX, aMaxY, aMaxZ;
 	double BX, BZ, BY;
 	//ù‰ñŒã‚Ì‰~‚Ì’†SÀ•W‚ğŒvZ‚·‚é
-	BX = cos(radian)*(B.x - A.x) - sin(radian)*(B.y - A.y) + A.x;
-	BZ = sin(radian)*(B.z - A.z) + cos(radian)*(B.y - A.y) + A.y;
+	BX = A.x - cos(radian)*(B.x - A.x) + sin(radian)*(B.y - A.y);
+	BZ = A.y - sin(radian)*(B.z - A.z) - cos(radian)*(B.y - A.y);
 
 	//À‘Ì‚Ì”ÍˆÍ‚ğŒvZ‚·‚é
 	aMinX = A.x - ACrash.x / 2;
+	aMinX = cos(radian)*aMinx - sin(radian)*aMiny;
 	aMaxX = A.x + ACrash.x / 2;
 	aMinY = A.y;
 	aMaxY = A.y + ACrash.y;

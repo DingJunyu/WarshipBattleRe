@@ -14,9 +14,7 @@ void IngameDataManagement::Update() {
 		Control();//コマンドを受け取って、船の状態を変更する
 		GetNewEffect();//エフェクトを生成する
 		MoveAll();//船の状態による座標を変更する
-		SimpleHitDecision();
-		//	CrashDecision();//船の間のあたり判定
-		//	HitDecision();//砲弾と船の間のあたり判定
+
 		DeleteUseless();//入らないものを消す
 		CheckAndPlaySound();
 		DrawAll();//全部更新した後画面を描く
@@ -403,6 +401,9 @@ void IngameDataManagement::MoveAll() {
 	MoveShips();//船を移動する
 	MoveEffects();//エフェクトを移動する
 	MoveAmmo();//弾を移動する
+
+	SimpleHitDecision();//弾と船のあたり判定
+	CrashDecision();//船の間のあたり判定
 }
 
 void IngameDataManagement::CheckShipListStatus(std::vector<ShipMain> *shipList) {
@@ -469,8 +470,6 @@ void IngameDataManagement::Inif() {
 	CT.Inif(&SL);//キーボードコントローラー初期化
 	CUI.IngameInif(&PL,&SL);//マウスコントローラー初期化
 	TEST();
-	hOffScreen = MakeScreen(3200, 1966);
-	SetDrawScreen(hOffScreen);
 }
 
 /*使ったメモリを解放する*/
@@ -613,6 +612,46 @@ void IngameDataManagement::DeleteUselessAmmo() {
 /****************************************************/
 /*                     あたり判定                   */
 /****************************************************/
+void IngameDataManagement::CrashDecision() {
+	if (!alliesFleet.empty() && !enemyFleet.empty()) {
+		for (auto ship1 = alliesFleet.begin();
+			ship1 != alliesFleet.end();
+			ship1++) {
+			for (auto ship2 = enemyFleet.begin();
+				ship2 != enemyFleet.end();
+				ship2++) {
+				if (PointsToCollisionbox(&*ship1, &*ship2)) {
+					ship1->Unmove();
+					ship2->Unmove();
+				}
+			}
+		}
+	}
+}
+
+bool IngameDataManagement::PointsToCollisionbox(ShipMain *ship1, ShipMain *ship2) {
+	for (int i = 0; i < ship1->ReferCollisionPointAmount(); i++) {
+		Coordinate<double> temp;
+		Coordinate2D<double> temp2D;
+		temp = ship1->ReferCoord();
+		temp2D = ship1->ReferCollisionPoint(i);
+
+		temp.x = temp.x - cos(ship1->ReferRadianOnZ())
+			* temp2D.x + sin(ship1->ReferRadianOnZ()) * temp2D.z;
+		temp.z = temp.z - cos(ship1->ReferRadianOnZ())
+			* temp2D.z - sin(ship1->ReferRadianOnZ()) * temp2D.x;
+		temp.y = 5;
+
+
+		if (crash3DtoPoint(ship2->ReferCoord(),
+			temp, ship2->ReferShipCrashSize(),
+			ship2->ReferRadianOnZ())) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void IngameDataManagement::SimpleHitDecision() {
 	if (!shellList.empty())
 		for (auto shell = shellList.begin();
@@ -622,6 +661,8 @@ void IngameDataManagement::SimpleHitDecision() {
 		CheckThisTeamDecision(&enemyFleet, &*shell);//敵のチェック
 	}
 }
+
+
 
 void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList,
 	Ammo *shell) {
