@@ -23,6 +23,7 @@
     <ClInclude Include="source\AllMovableObjects.h" />
     <ClInclude Include="source\Ammo.h" />
     <ClInclude Include="source\AntiAir.h" />
+    <ClInclude Include="source\ArtificialIntelligence.h" />
     <ClInclude Include="source\Attacker.h" />
     <ClInclude Include="source\Bomb.h" />
     <ClInclude Include="source\BombLoader.h" />
@@ -65,6 +66,7 @@
     <ClCompile Include="source\AllMovableObjects.cpp" />
     <ClCompile Include="source\Ammo.cpp" />
     <ClCompile Include="source\AntiAir.cpp" />
+    <ClCompile Include="source\ArtificialIntelligence.cpp" />
     <ClCompile Include="source\Attacker.cpp" />
     <ClCompile Include="source\Bomb.cpp" />
     <ClCompile Include="source\BombLoader.cpp" />

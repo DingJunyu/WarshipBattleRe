@@ -331,6 +331,16 @@ struct FiringData {
 	bool selected[50];
 };
 
+enum FIRE_DISTANCE {
+	ANGLE_TYPE_AMOUNT = 6,
+	ANGLE_100_P = 0,
+	ANGLE_80_P,
+	ANGLE_60_P,
+	ANGLE_40_P,
+	ANGLE_20_P,
+	ANGLE_0_P
+};
+
 /*各種類の船の数*/
 namespace COUNT_OF_EVERYTYPE {
 	const int DESTROYER_TYPE_COUNT = 0;
@@ -350,12 +360,13 @@ namespace ShipSerial {
 
 /*数学&物理定義*/
 namespace MathAndPhysics {
-	const double GRAVITATIONAL_ACCELERATION = 0.0980665 * 2;
+	const double GRAVITATIONAL_ACCELERATION = 0.0980665;
 	const int GRAVITATIONAL_ACCELERATION_INT = 10;
 	const double MIN_AIR_RESISTANCE = 0.0005;
 	const double PI = 3.14159265358;
 	const double OneDegree = 1.0 / 180.0;
 	const double MAX_SPEED_FOR_SHIP = 1.30;
+	const double RANGE_ERROR = 10;//角度探す関数が正常に動作しない時に適度に上がってみよう
 }
 
 namespace MapSize {

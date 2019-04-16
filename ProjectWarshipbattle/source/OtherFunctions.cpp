@@ -6,6 +6,10 @@ double Distance3D(Coordinate<double> A, Coordinate<double> B) {
 	return Distance;
 }
 
+double Distance2D(Coordinate<double> A, Coordinate<double> B) {
+	return sqrt(pow(A.x - B.x, 2) + pow(A.z - B.z, 2));
+}
+
 bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	CrashSize3d<double> ACrash, double radian) {
 	double aMinX, aMinY, aMinZ;

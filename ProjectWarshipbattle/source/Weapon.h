@@ -15,7 +15,7 @@ public:
 		ammoHandle(AmmoHandle), initialSpeed(InitialSpeed), high(High), 
 		serialNumber(SerialNumber) {
 		lastShootedTime = 0;
-		maxRadianOnY = MathAndPhysics::PI * 0.40;
+		maxRadianOnY = MathAndPhysics::PI * 0.25;
 	}
 	~Weapon();
 

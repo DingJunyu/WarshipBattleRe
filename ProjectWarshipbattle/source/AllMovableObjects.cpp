@@ -6,17 +6,16 @@ AllMovableObjects::~AllMovableObjects()
 
 void AllMovableObjects::Move() {
 	oldCoord = coord;
-	SpeedDownbyAirResistance();//空気抵抗の影響で速度が落とす
 	//2Dゲームですが、Y軸の移動も考える
 	if (flyable) {//これは飛べるものか
 		if (!plane) {//飛行機ではない場合
 			FallingDown();//自由落下
+			SpeedDownbyAirResistance();//空気抵抗で速度が落とす
 		}
 		coord.y += speedOnY;//Y座標の移動
 	}
 
 	if (!flyable) {
-		//後退はまだやってない！
 		if (input != 0) {
 			if (abs(speedOnZ) < abs(maxSpeedOnZ * (input / maxInput))) {
 				speedOnZ += input / mass * (1 - abs(speedOnZ / maxSpeedOnZ)) * 0.5;

@@ -7,9 +7,9 @@ public:
 	Lock();
 	~Lock();
 
+	void CalTheDistance(ShipMain *shipA,ShipMain *shipB);
+
 private:
-	ShipMain *myShip;
-	ShipMain *target;
 	double radian;
 	double distance;
 	int discoverStatus;

@@ -14,7 +14,7 @@ public:
 		alive = true;
 		radianChangePerFrame = 0;
 		airResistanceActive = false;
-		airResistance = 0.001;
+		airResistance = 0.00001;
 		speedOnZ = 0;
 	}
 	virtual ~AllMovableObjects();

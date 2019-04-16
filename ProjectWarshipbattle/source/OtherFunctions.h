@@ -10,6 +10,7 @@
 #include "DefinedData.h"
 #include <cmath>
 double Distance3D(Coordinate<double> A, Coordinate<double> B);
+double Distance2D(Coordinate<double> A, Coordinate<double> B);
 
 bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	CrashSize3d<double> ACrash, double radian);

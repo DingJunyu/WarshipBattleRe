@@ -306,6 +306,9 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 		MainWeapon[i] = Weapon;
 		MainWeapon[i].SetCoolDownTime(3200);//3200
 	}
+	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());
+	//速度を読み込み、初期化する
+	fireControllerMain.InifDistance(MainWeapon[0].ReferMaxRadianOnY(), 0);
 }
 
 void ShipMain::ShowMePointOfImpact(Camera camera) {
@@ -334,11 +337,13 @@ void ShipMain::CalThePoint() {
 }
 
 void ShipMain::CalMainPoint() {
-	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());
 	fireControllerMain.SetCoord(MainWeapon[0].ReferRealCoord(ReferCoord(),
 		ReferRadianOnZ()));
 	fireControllerMain.SetRadian(MainWeapon[0].ReferRadian());
 	fireControllerMain.CalTheAnswer();
+
+	/*角度計算関数テスト*/
+	double test = fireControllerMain.CalDistanceAndTellMeRadianOnY(400);
 }
 
 void ShipMain::DrawMainPoint(Camera camera) {
