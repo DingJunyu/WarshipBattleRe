@@ -112,28 +112,47 @@ void AllMovableObjects::Draw(Camera CM) {
 	xOnScreen = Screen::SCREEN_X / 2;
 	zOnScreen = Screen::SCREEN_Z / 2;
 
-	//影を描く
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
-	DrawRotaGraph3((int)xOnScreen + shadowDistanceOnX, 
-		(int)zOnScreen + shadowDistanceOnZ, (int)(length / 2), 
-		(int)(width) / 2, multiple, multiple,
-		radianOnZ, *shadowHandle, TRUE, FALSE);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//描画モードをもとに戻る
-
 	//本体を描く
 	DrawRotaGraph3((int)xOnScreen, (int)zOnScreen, (int)(length / 2), 
 		(int)(width) / 2, multiple, multiple,
 		radianOnZ, *pictureHandle, TRUE, FALSE);
+}
 
-	/*テスト*/
-	//unsigned int Cr = GetColor(255, 0, 0);
-	//DrawCircleAA((float)xOnScreen,
-	//	(float)zOnScreen, 100, 20, Cr, FALSE, 2.0f);
+void AllMovableObjects::DrawShadow(Camera CM) {
+	double xOnScreen;
+	double zOnScreen;
+	//船から影への距離
+	int shadowDistanceOnX = 2;
+	int shadowDistanceOnZ = 2;
+	//中心座標を取る
+	xOnScreen = Screen::SCREEN_X / 2;
+	zOnScreen = Screen::SCREEN_Z / 2;
+
+	//影を描く
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
+	DrawRotaGraph3((int)xOnScreen + shadowDistanceOnX,
+		(int)zOnScreen + shadowDistanceOnZ, (int)(length / 2),
+		(int)(width) / 2, multiple, multiple,
+		radianOnZ, *shadowHandle, TRUE, FALSE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//描画モードをもとに戻る
 }
 
 //自機以外のはこの関数を使う
 //自機以外では自機に対して座標を利用して描く
 void AllMovableObjects::DrawSub(Camera CM) {
+	/*シャドーの距離計算はまだ*/
+	int shadowDistanceOnX = 2;
+	int shadowDistanceOnZ = 2;
+
+	//本体を描く
+	DrawRotaGraph3((int)(coord.x - CM.ReferRealCameraX()),
+		(int)(coord.z - CM.ReferRealCameraZ()),
+		(int)(length / 2), (int)(width / 2),
+		multiple, multiple, radianOnZ,
+		*pictureHandle, TRUE, FALSE);
+}
+
+void AllMovableObjects::DrawSubShadow(Camera CM) {
 	/*シャドーの距離計算はまだ*/
 	int shadowDistanceOnX = 2;
 	int shadowDistanceOnZ = 2;
@@ -147,10 +166,4 @@ void AllMovableObjects::DrawSub(Camera CM) {
 		multiple, multiple, radianOnZ,
 		*shadowHandle, TRUE, FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//描画モードをもとに戻る
-	//本体を描く
-	DrawRotaGraph3((int)(coord.x - CM.ReferRealCameraX()),
-		(int)(coord.z - CM.ReferRealCameraZ()),
-		(int)(length / 2), (int)(width / 2),
-		multiple, multiple, radianOnZ,
-		*pictureHandle, TRUE, FALSE);
 }

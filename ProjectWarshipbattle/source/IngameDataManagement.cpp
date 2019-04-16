@@ -85,6 +85,28 @@ void IngameDataManagement::DrawShips() {
 	}
 }
 
+void IngameDataManagement::DrawShipsShadow() {
+	//友軍を描画する 
+	//コントロールしている船が友軍艦隊の一番にする
+	if (!alliesFleet.empty())
+		for (auto mark = alliesFleet.begin();
+			mark != alliesFleet.end(); mark++) {
+		if (mark->ReferAlive()) {
+			if (mark == alliesFleet.begin())
+				mark->DrawShadow(MainCamera);//自分だけが画面中心に映す
+			else
+				mark->DrawSubShadow(MainCamera);//それ以外のは相対座標を利用して描く
+		}
+	}
+	if (!enemyFleet.empty())
+		for (auto ship = enemyFleet.begin();
+			ship != enemyFleet.end(); ship++) {
+		if (ship->ReferAlive()) {
+			ship->DrawSubShadow(MainCamera);//敵軍は全部相対座標を利用して描く
+		}
+	}
+}
+
 void IngameDataManagement::DrawShipsOnMiniMap() {
 	//友軍艦隊
 	if(!alliesFleet.empty())
@@ -206,18 +228,20 @@ void IngameDataManagement::DrawThisList(std::list<Effect> *effectList) {
 
 /*船の下にあるエフェクトを描く*/
 void IngameDataManagement::DrawEffectUnderShips() {
+	DrawShipsShadow();//船の影を描く
 	/*水泡演出*/
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 30);//透明度を下がる
 	DrawThisList(&bubbleList);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);//透明度を下がる
 	DrawThisList(&rippleList);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
 }
 
 /*船の上にあるエフェクトを描く*/
 void IngameDataManagement::DrawEffectBeyondShips() {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 240);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);//透明度を下がる
 	DrawThisList(&smokeList);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//透明度を下がる
 	DrawThisList(&explosionList);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
 }

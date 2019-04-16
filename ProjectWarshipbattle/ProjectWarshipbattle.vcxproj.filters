@@ -132,6 +132,9 @@
     <ClInclude Include="source\Lamp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="source\FireController.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\AirWeapon.cpp">
@@ -240,6 +243,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="source\Lamp.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FireController.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

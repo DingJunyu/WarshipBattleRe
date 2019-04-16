@@ -309,9 +309,9 @@ struct Coordinate {
 
 template<typename T>
 struct CrashSize3d {
-	T x;
-	T y;
-	T z;
+	T x;//’·‚³
+	T y;//c‚Ì’·‚³
+	T z;//‰¡‚Ì’·‚³
 };
 
 /*2DÀ•W•Û‘¶*/
@@ -319,6 +319,11 @@ template <typename T>
 struct Coordinate2D {
 	T x;
 	T z;
+};
+
+struct RadianNeededIn3D {
+	double z;//•½–ÊŠp“x
+	double y;//c–ÊŠp“x
 };
 
 struct FiringData {

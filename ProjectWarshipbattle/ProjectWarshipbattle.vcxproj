@@ -36,6 +36,7 @@
     <ClInclude Include="source\EffectPoint.h" />
     <ClInclude Include="source\EffectTemplate.h" />
     <ClInclude Include="source\Engine.h" />
+    <ClInclude Include="source\FireController.h" />
     <ClInclude Include="source\FrameControl.h" />
     <ClInclude Include="source\FunctionsForCal.h" />
     <ClInclude Include="source\HeaderForIngameDataManagement.h" />
@@ -76,6 +77,7 @@
     <ClCompile Include="source\EffectPoint.cpp" />
     <ClCompile Include="source\EffectTemplate.cpp" />
     <ClCompile Include="source\Engine.cpp" />
+    <ClCompile Include="source\FireController.cpp" />
     <ClCompile Include="source\FrameControl.cpp" />
     <ClCompile Include="source\FunctionsForCal.cpp" />
     <ClCompile Include="source\GameMain.cpp" />

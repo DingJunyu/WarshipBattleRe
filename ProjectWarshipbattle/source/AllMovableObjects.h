@@ -53,7 +53,9 @@ public:
 	void SetPictureHandle(int *p) { pictureHandle = p; }
 	void SetShadowHandle(int *p) { shadowHandle = p; }
 	void Draw(Camera CM);
+	void DrawShadow(Camera CM);
 	void DrawSub(Camera CM);
+	void DrawSubShadow(Camera CM);
 
 	//状態設置関数
 	//ステータス設定関数

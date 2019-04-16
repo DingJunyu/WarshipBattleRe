@@ -61,6 +61,7 @@ private:
 	void TEST_DRAW();
 	void DrawSea();
 	void DrawShips();
+	void DrawShipsShadow();
 	void DrawShipsOnMiniMap();
 	void DrawPlanes();
 	void DrawAmmo();
