@@ -70,6 +70,7 @@ private:
 	void DrawThisList(std::list<Effect> *effectList);
 	void DrawEffectUnderShips();
 	void DrawEffectBeyondShips();
+	void DrawPointOfImpact();
 
 	//ˆÚ“®ŠÖ”
 	void MoveAll();

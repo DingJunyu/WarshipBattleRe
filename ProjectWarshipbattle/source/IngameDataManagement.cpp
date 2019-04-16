@@ -49,6 +49,8 @@ void IngameDataManagement::DrawAll() {
 	DrawAmmo();
 //	DrawBomb();
 
+	DrawPointOfImpact();//砲弾落下予測地点描画
+
 	/*UI関連*/
 	auto ship = alliesFleet.begin();//イテレータで操作している船のステータスを取る
 	UI.DrawUI();//普通のUIを描画する
@@ -241,9 +243,15 @@ void IngameDataManagement::DrawEffectUnderShips() {
 void IngameDataManagement::DrawEffectBeyondShips() {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);//透明度を下がる
 	DrawThisList(&smokeList);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);//透明度を下がる
 	DrawThisList(&explosionList);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
+}
+
+void IngameDataManagement::DrawPointOfImpact() {
+	auto ship = alliesFleet.begin();
+
+	ship->ShowMePointOfImpact(MainCamera);
 }
 
 void IngameDataManagement::DrawAmmo() {
@@ -284,7 +292,7 @@ void IngameDataManagement::TEST() {
 		PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);//初期化
 	ship->NewCoordX(640);//新しい座標をあげる
 	ship->NewCoordZ(380);
-	ship->NewCoordY(0);
+	ship->NewCoordY(-10);
 	ship->SetRadianOnZ(0);
 	ship->SetLength(PL.ReferShipSizeX());//サイズを設定
 	ship->SetWidth(PL.ReferShipSizeZ());
@@ -303,7 +311,7 @@ void IngameDataManagement::TEST() {
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
 		enemyShip->NewCoordX(890 + i * (rand() % 400));
 		enemyShip->NewCoordZ(200 - i * (rand() % 400));
-		enemyShip->NewCoordY(0);
+		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
 		enemyShip->SetLength(PL.ReferShipSizeX());
 		enemyShip->SetWidth(PL.ReferShipSizeZ());
@@ -428,8 +436,7 @@ void IngameDataManagement::CheckShipListStatus(std::vector<ShipMain> *shipList) 
 		for (auto ship = shipList->begin();
 			ship != shipList->end();
 			ship++) {
-		ship->CalSpeed();//速度更新
-		ship->Alignment();//舵はもとに戻る
+		ship->Update();//速度更新
 	}
 }
 
@@ -547,9 +554,10 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 }
 
 void IngameDataManagement::NewExplosion(Coordinate2D<double> Coord) {
-	double radian = (double)(rand() % 180) / 180.0*MathAndPhysics::PI;
+	double radian = (double)(rand() % 180) * 1.0 / 180.0 * MathAndPhysics::PI;
 	Effect effect(false, 500, radian, 0, 0, 0, Coord.x, Coord.z,
-		PL.ReferEffectList(TypeOfEffect::EXPLOSION), true, 0.08, 1.05);
+		PL.ReferEffectList(TypeOfEffect::EXPLOSION), true,
+		0.02 * (double)(rand()%4), 1.05);
 
 	explosionList.push_back(effect);
 }
@@ -638,7 +646,7 @@ void IngameDataManagement::CrashDecision() {
 				ship2 != enemyFleet.end();
 				ship2++) {
 				if (PointsToCollisionbox(&*ship1, &*ship2)) {
-					ship1->Unmove(); ship1->ResetStatus();
+					ship1->Unmove(); ship1->ResetStatus();//船を停止する
 					ship2->Unmove(); ship2->ResetStatus();
 				}
 			}
@@ -653,6 +661,7 @@ bool IngameDataManagement::PointsToCollisionbox(ShipMain *ship1, ShipMain *ship2
 		temp = ship1->ReferCoord();
 		temp2D = ship1->ReferCollisionPoint(i);
 
+		/*本物の座標を計算する*/
 		temp.x = temp.x - cos(ship1->ReferRadianOnZ())
 			* temp2D.x + sin(ship1->ReferRadianOnZ()) * temp2D.z;
 		temp.z = temp.z - cos(ship1->ReferRadianOnZ())

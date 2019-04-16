@@ -6,7 +6,7 @@ Ammo::~Ammo()
 
 void Ammo::CheckAlive() {
 	//ŠC‚É—Ž‚¿‚½‚çŽg‚¦‚È‚¢‚æ‚¤‚É‚·‚é
-	if (ReferCoordY() <= 0) {
+	if (ReferCoordY() <= -3) {
 		isUsable = false;
 	}
 }

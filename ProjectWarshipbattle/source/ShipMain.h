@@ -1,15 +1,16 @@
 #pragma once
-#include"AllMovableObjects.h"
-#include"ShipCrashParts.h"
-#include"DefinedData.h"
+#include"AllMovableObjects.h"//基底クラス
+#include"ShipCrashParts.h"//ＨＰ計算用パーツ
+#include"DefinedData.h"//定数
 #include"IncludeForAll.h"
-#include"Weapon.h"
-#include"Camera.h"
-#include"EffectPoint.h"
+#include"Weapon.h"//武器
+#include"Camera.h"//カメラ
+#include"EffectPoint.h"//エフェクト生成器
 #include"ShipData.h"
-#include"Engine.h"
-#include"EffectTemplate.h"
-#include"SoundLoader.h"
+#include"Engine.h"//エンジン
+#include"EffectTemplate.h"//エフェクト生成器初期化容器
+#include"SoundLoader.h"//音声ローダー
+#include"FireController.h"//射撃管理
 class ShipMain :
 	public AllMovableObjects
 {
@@ -20,7 +21,7 @@ public:
 
 		/*テスト部分*/
 		hitPoint = 100000;
-		shipMainCrash = { 180, 30, 18 };
+		shipMainCrash = { 180, 40, 18 };
 	}
 	~ShipMain();
 
@@ -38,6 +39,9 @@ public:
 
 	//コントロール
 	void ControlThisShip(int Command);
+
+	//更新
+	void Update();
 
 	//移動関連
 	void ChangeAccPercentage(bool up);
@@ -110,7 +114,7 @@ public:
 	int HowManyWeaponYouHave() { return MainWeaponCount; }
 	bool IsThisOneUsable(int Num, bool Main);
 	Ammo Shoot(int Num, bool Main);
-
+	void ShowMePointOfImpact(Camera camera);
 
 
 private:
@@ -147,6 +151,13 @@ private:
 	bool TurnMainWeapon(bool right);
 	bool PullMainWeapon(bool up);
 
+	/*射撃管理*/
+	void CalThePoint();
+	void CalMainPoint();
+
+	void DrawMainPoint(Camera camera);
+	void DrawSubPoint(Camera camera);
+
 	double draft;//喫水:魚雷を使う時に使うデータです。
 	int shipType;
 
@@ -174,4 +185,8 @@ private:
 
 	/*簡単化した戦闘部分*/
 	int hitPoint;
+
+	/*射撃*/
+	FireController fireControllerMain;
+	FireController fireControllerSub;
 };

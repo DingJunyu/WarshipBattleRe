@@ -8,6 +8,16 @@ Weapon::~Weapon()
 {
 }
 
+Coordinate<double> Weapon::ReferRealCoord(Coordinate<double> Coord, double r) {
+	Coordinate<double> temp;
+	temp.x = cos(radianOnZ + r) * relativeCoordX -
+		sin(radianOnZ + r) * relativeCoordZ + Coord.x;
+	temp.z= cos(radianOnZ + r) * relativeCoordZ +
+		sin(radianOnZ + r) * relativeCoordX + Coord.z;
+	temp.y = high;
+	return temp;
+}
+
 Ammo Weapon::Shoot(double x, double z,double r) {
 	lastShootedTime = GetTickCount();
 
@@ -42,7 +52,7 @@ bool Weapon::ReferShootable() {
 bool Weapon::Pull(bool up) {
 	if (up) {
 		if (radianOnY <= maxRadianOnY) {
-			radianOnY += MathAndPhysics::PI*(double)(1.0 / 180.0);
+			radianOnY += MathAndPhysics::PI*(double)(0.25 / 180.0);
 			return false;
 		}
 		radianOnY = maxRadianOnY;
@@ -50,7 +60,7 @@ bool Weapon::Pull(bool up) {
 	}
 	else {
 		if (radianOnY >= 0) {
-			radianOnY -= MathAndPhysics::PI*(double)(1.0 / 180.0);
+			radianOnY -= MathAndPhysics::PI*(double)(0.25 / 180.0);
 			return false;
 		}
 		radianOnY = 0;

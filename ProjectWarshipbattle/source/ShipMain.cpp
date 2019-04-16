@@ -151,6 +151,12 @@ void ShipMain::ControlThisShip(int Command) {;
 	}
 }
 
+void ShipMain::Update() {
+	CalSpeed();
+	Alignment();
+	CalThePoint();
+}
+
 void ShipMain::TEST() {
 	/*ここに入れたものは最後全部shipdataに統合する*/
 	SetMass(30000);
@@ -295,11 +301,15 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 	
 	for (int i = 0; i < MainWeaponCount; i++) {
 		Weapon Weapon(20.0, 8.0 - i * 2, 10.0, 10.0,
-			0.0, 1.0, 100,
+			0.0, 0.2, 100,
 			50, 12, PL->ReferAmmoHandle(0), 17, 20,serialNumber);
 		MainWeapon[i] = Weapon;
 		MainWeapon[i].SetCoolDownTime(3200);//3200
 	}
+}
+
+void ShipMain::ShowMePointOfImpact(Camera camera) {
+	DrawMainPoint(camera);
 }
 
 //メイン武器の角度を変更
@@ -317,6 +327,27 @@ bool ShipMain::PullMainWeapon(bool up) {
 		end = MainWeapon[i].Pull(up);
 	}
 	return end;
+}
+
+void ShipMain::CalThePoint() {
+	CalMainPoint();
+}
+
+void ShipMain::CalMainPoint() {
+	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());
+	fireControllerMain.SetCoord(MainWeapon[0].ReferRealCoord(ReferCoord(),
+		ReferRadianOnZ()));
+	fireControllerMain.SetRadian(MainWeapon[0].ReferRadian());
+	fireControllerMain.CalTheAnswer();
+}
+
+void ShipMain::DrawMainPoint(Camera camera) {
+	Coordinate<double> point = fireControllerMain.ReferAnswer();
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
+	DrawCircleAA(point.x - camera.ReferRealCameraX(),
+		point.z-camera.ReferRealCameraZ(),
+		15,16,GetColor(255,0,0),0,0.5);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//透明度を下がる
 }
 
 /*戦闘部分*/

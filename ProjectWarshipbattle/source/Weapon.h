@@ -35,6 +35,13 @@ public:
 	double ReferMaxHP() { return maxHeartPoint; }
 	double ReferArmorOntheSide() { return armorOntheSide; }
 	double ReferArmorOntheTop() { return armorOntheTop; }
+	double ReferInitialSpeed() { return initialSpeed; }
+	Coordinate<double> ReferRealCoord(Coordinate<double> Coord, double r);
+	RadianNeededIn3D ReferRadian() {
+		RadianNeededIn3D temp;
+		temp.y = radianOnY; temp.z = radianOnZ;
+		return temp;
+	}
 
 	void SetCoolDownTime(int time) { reloadTime = time; }
 	void Turn(bool right) {
