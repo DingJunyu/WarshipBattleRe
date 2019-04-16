@@ -7,6 +7,9 @@ IngameDataManagement::~IngameDataManagement()
 
 /*メインルート*/
 void IngameDataManagement::Update() {
+	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
+	ClearDrawScreen();
+
 	if (FC.Wait()) {
 		CUI.SetNormalStatus();/*ここはテストバージョン*/
 
@@ -32,8 +35,7 @@ bool IngameDataManagement::TeamDestroyed() {
 /*                     描画関連                     */
 /****************************************************/
 void IngameDataManagement::DrawAll() {
-	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
-	ClearDrawScreen();
+
 
 	/*海を描く*/
 	DrawSea();
@@ -256,8 +258,8 @@ void IngameDataManagement::TEST() {
 	ship->SetMultiple(0.125);
 	ship->InifThisShip(PL.ReferBattleCrusierHandle(4000), 
 		PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);//初期化
-	ship->NewCoordX(2200);//新しい座標をあげる
-	ship->NewCoordZ(1500);
+	ship->NewCoordX(640);//新しい座標をあげる
+	ship->NewCoordZ(380);
 	ship->NewCoordY(0);
 	ship->SetRadianOnZ(0);
 	ship->SetLength(PL.ReferShipSizeX());//サイズを設定
@@ -275,8 +277,8 @@ void IngameDataManagement::TEST() {
 		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
-		enemyShip->NewCoordX(2600 + i * (rand() % 400));
-		enemyShip->NewCoordZ(1350 + i * (rand() % 400));
+		enemyShip->NewCoordX(890 + i * (rand() % 400));
+		enemyShip->NewCoordZ(200 - i * (rand() % 400));
 		enemyShip->NewCoordY(0);
 		enemyShip->SetRadianOnZ(radian);
 		enemyShip->SetLength(PL.ReferShipSizeX());
@@ -365,32 +367,23 @@ void IngameDataManagement::Control() {
 	auto ship = alliesFleet.begin();
 	ship->ControlThisShip(answer);
 	
-
-	/*射撃*/
-	if (answer == CommandSerial::SHOOT) {
-		TestShoot();
-	}
-
-	/*UI関連*/
-	if (answer == CommandSerial::MENU) {
+	switch (answer) {
+	case CommandSerial::SHOOT:TestShoot(); break;/*射撃*/
+	case CommandSerial::MENU: {
 		if (!CUI.CheckMenuOpened()) {
 			CUI.LetMeSeeMenu();//メニューを開く
 		}
 		else {
 			CUI.CloseMenu();//メニューを閉じる
 		}
+	}break;
+	case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*テストビュー*/
+	case CommandSerial::TEST_INCREASE_FRAME:FC.SetFrame(true); break;
+	case CommandSerial::TEST_DECREASE_FRAME:FC.SetFrame(false); break;
+	case CommandSerial::EXIT:GameOver = true; break;	/*ゲーム終了*/
 	}
 
-	/*テストビュー*/
-	if (answer == CommandSerial::TEST_VIEW_ON)
-		TEST_SHOW_ON = !TEST_SHOW_ON;
-
-	/*ゲーム終了*/
-	if (answer == CommandSerial::EXIT) {
-		GameOver = true;
-	}
-
-	CUI.SetClickTime();
+	CUI.SetClickTime();//クリックした時間を記録する
 }
 
 /****************************************************/
@@ -621,8 +614,8 @@ void IngameDataManagement::CrashDecision() {
 				ship2 != enemyFleet.end();
 				ship2++) {
 				if (PointsToCollisionbox(&*ship1, &*ship2)) {
-					ship1->Unmove();
-					ship2->Unmove();
+					ship1->Unmove(); ship1->ResetStatus();
+					ship2->Unmove(); ship2->ResetStatus();
 				}
 			}
 		}

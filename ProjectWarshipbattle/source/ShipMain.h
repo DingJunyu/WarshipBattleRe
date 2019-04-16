@@ -20,7 +20,7 @@ public:
 
 		/*テスト部分*/
 		hitPoint = 100000;
-		shipMainCrash = { 245, 30, 24 };
+		shipMainCrash = { 180, 30, 18 };
 	}
 	~ShipMain();
 
@@ -80,12 +80,18 @@ public:
 	double ReferMainMaxWeaponRadianOnY() {
 		return MainWeapon[0].ReferMaxRadianOnY();
 	}
+
 	/*collision関連*/
 	double ReferShipCrashR() { return shipCrashR; }
 	CrashSize3d<double> ReferShipCrashSize() { return shipMainCrash; }
 	int ReferCollisionPointAmount() { return pointCount; }
 	Coordinate2D<double> ReferCollisionPoint(int num) {
 		return aroundPointPos[num];
+	}
+	void ResetStatus() {
+		currentRadian = 0;
+		currentAccPercentage = 0;
+		mainEngine.SetOutPutPercentage(currentAccPercentage);
 	}
 	/*番号*/
 	int ReferSerialNumber() { return serialNumber; }

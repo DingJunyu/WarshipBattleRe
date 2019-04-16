@@ -298,7 +298,7 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 			0.0, 1.0, 100,
 			50, 12, PL->ReferAmmoHandle(0), 17, 20,serialNumber);
 		MainWeapon[i] = Weapon;
-		MainWeapon[i].SetCoolDownTime(3200);
+		MainWeapon[i].SetCoolDownTime(3200);//3200
 	}
 }
 

@@ -10,24 +10,30 @@ bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	CrashSize3d<double> ACrash, double radian) {
 	double aMinX, aMinY, aMinZ;
 	double aMaxX, aMaxY, aMaxZ;
-	double BX, BZ, BY;
+	double BX, BZ;
 	//旋回後の円の中心座標を計算する
-	BX = A.x - cos(radian)*(B.x - A.x) + sin(radian)*(B.y - A.y);
-	BZ = A.y - sin(radian)*(B.z - A.z) - cos(radian)*(B.y - A.y);
+	BX = cos(-radian)*(B.x) - sin(-radian)*(B.z);
+	BZ = sin(-radian)*(B.x) + cos(-radian)*(B.z);
 
 	//実体の範囲を計算する
-	aMinX = A.x - ACrash.x / 2;
-	aMinX = cos(radian)*aMinx - sin(radian)*aMiny;
-	aMaxX = A.x + ACrash.x / 2;
+	//再検証必要がある
+	double tempX, tempZ;
+	tempX = cos(-radian) * A.x - sin(-radian) * A.z;//旋回後の中心座標を計算する
+	tempZ = sin(-radian) * A.x + cos(-radian) * A.z;
+
+	//箱の範囲を計算する
+	aMinX = tempX - ACrash.x / 2;
+	aMinZ = tempZ - ACrash.z / 2;
+	aMaxX = tempX + ACrash.x / 2;
+	aMaxZ = tempZ + ACrash.z / 2;
+
 	aMinY = A.y;
 	aMaxY = A.y + ACrash.y;
-	aMinZ = A.z - ACrash.z / 2;
-	aMaxZ = A.z + ACrash.z / 2;
 
-	//範囲内に入ったらtrueを返す
-	if (B.x >= aMinX && B.x <= aMaxX &&
+	//箱に入ったらtrueを返す
+	if (BX >= aMinX && BX <= aMaxX &&
 		B.y >= aMinY && B.y <= aMaxY &&
-		B.z >= aMinZ && B.z <= aMaxZ) {
+		BZ >= aMinZ && BZ <= aMaxZ) {
 		return true;
 	}
 	//それ以外はfalseを返す

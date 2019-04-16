@@ -14,10 +14,19 @@ public:
 
 	bool Wait();
 	void Reset() { next_game_tick = GetTickCount(); }
+	void SetFrame(bool up) { 
+		if (up) FRAMES_PER_SECOND += 60;
+		else FRAMES_PER_SECOND -= 60;
+		if (FRAMES_PER_SECOND < 60)
+			FRAMES_PER_SECOND = 60;
+		if (FRAMES_PER_SECOND > 240)
+			FRAMES_PER_SECOND = 240;
+		SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+	}
 
 private:
-	const int FRAMES_PER_SECOND;
-	const int SKIP_TICKS;
+	int FRAMES_PER_SECOND;
+	int SKIP_TICKS;
 	unsigned long next_game_tick;
 	int sleep_time;
 };

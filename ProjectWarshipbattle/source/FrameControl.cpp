@@ -12,6 +12,6 @@ bool FrameControl::Wait() {
 		Sleep(sleep_time);//‘Ò‚Â
 		return true;
 	}
-	if(sleep_time<=0)
+	else
 		return false;
 }

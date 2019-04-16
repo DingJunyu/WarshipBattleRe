@@ -26,7 +26,10 @@ enum CommandSerial {
 	SETTING,
 	EXIT,
 	CHOOSE_MAIN,
-	CHOOSE_SUB
+	CHOOSE_SUB,
+
+	TEST_INCREASE_FRAME,
+	TEST_DECREASE_FRAME
 };
 
 //CUIÇÃíÜÇ…ï€ë∂Ç≥ÇÍÇΩÇ‡ÇÃÇ∆ÇªÇÃî‘çÜ
@@ -234,7 +237,7 @@ namespace USER_INTERFACE_POSITION {
 
 	const double ARROW_RED_A_MULTI = .036;
 	const double ARROW_RED_A_X = .6928;
-	const double ARROW_RED_A_Z = .8342;
+	const double ARROW_RED_A_Z = .8345;
 
 	const double ARROW_WHITE_SPEED_MULTI = .08;
 	const double ARROW_WHITE_SPEED_X = .14;

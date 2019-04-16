@@ -62,7 +62,7 @@ void AllMovableObjects::Unmove() {
 }
 
 void AllMovableObjects::FallingDown() {//d—Í‚Ì‰e‹¿‚Å—Ž‰º
-	if (coord.z > 0 && flyable && !plane) {
+	if (coord.y > 0 && flyable && !plane) {
 		speedOnY -= MathAndPhysics::GRAVITATIONAL_ACCELERATION;
 	}
 }
