@@ -122,6 +122,8 @@ private:
 
 	/*ゲームコントロール*/
 	void DeleteUseless();
+	void DestroyShips();
+	void DestroyThisTeam(std::vector<ShipMain> *shipList);
 	void TEST_WIN();
 
 	std::vector<ShipMain> alliesFleet;//自軍艦隊

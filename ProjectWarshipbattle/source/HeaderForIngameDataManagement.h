@@ -17,7 +17,6 @@
 #include"ShipData.h"
 #include"FrameControl.h"
 #include"Controller.h"
-#include"FunctionsForCal.h"
 #include"EffectTemplate.h"
 #include"Effect.h"
 #include"SoundLoader.h"

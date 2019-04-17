@@ -16,8 +16,9 @@ void IngameDataManagement::Update() {
 		if (!alliesFleet.empty() && !enemyFleet.empty()) {
 			auto ship1 = alliesFleet.begin();
 			auto ship2 = enemyFleet.begin();
-			ship1->TestLock(&*ship2);
+			ship1->TestLock(&*ship2);//船２を目標にしてロックする
 		}
+		/**************/
 
 		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
 		Control();//コマンドを受け取って、船の状態を変更する
@@ -504,16 +505,32 @@ void IngameDataManagement::Inif() {
 
 /*使ったメモリを解放する*/
 void IngameDataManagement::Free() {
-	PL.FREE_FOR_GAME();
-	SL.FreeAll();
-	CUI.Free();
+	PL.FREE_FOR_GAME();//動的メモリを解放、メモリ中のデータを削除
+	SL.FreeAll();//動的メモリを解放、メモリ中のデータを削除
+	CUI.Free();//ＵＩ部分の動的メモリを解放する
+	DestroyShips();//船が利用した動的メモリを解放する
 }
 
 /*制限時間超えたものを消す*/
 void IngameDataManagement::DeleteUseless() {
 	DeleteUselessEffect();//時間切りエフェクトを消す
 	DeleteUselessAmmo();//海に落ちた砲弾を消す
-	RemoveDestroyedShip();
+	RemoveDestroyedShip();//沈んだ船を沈むリストに追加する
+}
+
+void IngameDataManagement::DestroyShips() {
+	DestroyThisTeam(&alliesFleet);
+	DestroyThisTeam(&enemyFleet);
+}
+
+void IngameDataManagement::DestroyThisTeam(std::vector<ShipMain> *shipList) {
+	if (!shipList->empty()) {
+		for (auto ship = shipList->begin();
+			ship != shipList->end();
+			ship++) {
+			ship->DestroyMemory();//メモリ解放
+		}
+	}
 }
 
 void IngameDataManagement::CheckAndPlaySound() {
