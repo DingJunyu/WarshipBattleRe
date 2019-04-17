@@ -530,6 +530,7 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 		for (auto ship = alliesFleet.begin();
 			ship != alliesFleet.end();
 			ship++) {
+			if(ship->ReferAlive())
 			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 3 == 0
 				&& rand() % 100 > ship->ReferSpeedOnZ() * 10) {//一定の速度があれば、確率で生成する
 				//for(int i = 0; i < ship->ReferBubbleCount(); i++)
@@ -541,6 +542,7 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 		for (auto ship = alliesFleet.begin();
 			ship != alliesFleet.end();
 			ship++) {
+			if (ship->ReferAlive())
 			if (ship->ReferOutPutRate() != 0) {
 				if ((rand() % 8 < abs(ship->ReferSpeedOnZ()) * 10)
 					&& rand() % 4 == 0) {//確率で生成する
@@ -642,9 +644,11 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = alliesFleet.begin();
 			ship1 != alliesFleet.end();
 			ship1++) {
+			if (ship1->ReferAlive())
 			for (auto ship2 = enemyFleet.begin();
 				ship2 != enemyFleet.end();
 				ship2++) {
+				if (ship2->ReferAlive())
 				if (PointsToCollisionbox(&*ship1, &*ship2)) {
 					ship1->Unmove(); ship1->ResetStatus();//船を停止する
 					ship2->Unmove(); ship2->ResetStatus();
@@ -668,7 +672,7 @@ bool IngameDataManagement::PointsToCollisionbox(ShipMain *ship1, ShipMain *ship2
 			* temp2D.z - sin(ship1->ReferRadianOnZ()) * temp2D.x;
 		temp.y = 5;
 
-
+		if (ship2->ReferAlive())
 		if (crash3DtoPoint(ship2->ReferCoord(),
 			temp, ship2->ReferShipCrashSize(),
 			ship2->ReferRadianOnZ())) {
@@ -701,13 +705,12 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 				shell->ReferCoord(),ship->ReferShipCrashSize(),
 				ship->ReferRadianOnZ()))
 			if(ship->ReferAlive()){
-				//当たったらほかの関数を呼び出す
-				//未完成
-				ship->SufferDamage(shell->ReferDamage());
+				//当たったら
+				ship->SufferDamage((int)shell->ReferDamage());//ダメージを与える
 				Coordinate2D<double> C2D = { shell->ReferCoordX(),
 				shell->ReferCoordZ() };
-				NewExplosion(C2D);
-				shell->Unusable();
+				NewExplosion(C2D);//当たったところに爆発エフェクトを生成
+				shell->Unusable();//弾が使えなくなる
 				return;
 			}
 		}
@@ -719,18 +722,15 @@ void IngameDataManagement::RemoveDestroyedShip() {
 	CheckTeamA(&enemyFleet);
 }
 
+/*この関数は船が撃沈した後に沈む演出を正常に行うために作りました*/
 void IngameDataManagement::CheckTeamA(std::vector<ShipMain> *shipList) {
 	if(!shipList->empty()){
 		for (auto ship = shipList->begin();
 			ship != shipList->end();
 			ship++) {
 			if (!ship->ReferAlive()) {
-				sinkingShip.push_back(*ship);
-				ship->DestroyMemory();//メモリ解放
-				ship = shipList->erase(ship);
+				sinkingShip.push_back(*ship);//沈んでいるリストに追加する
 			}
-			if (shipList->empty() || ship == shipList->end())
-				return;
 		}
 	}
 }

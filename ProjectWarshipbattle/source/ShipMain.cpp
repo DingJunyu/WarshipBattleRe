@@ -337,20 +337,25 @@ void ShipMain::CalThePoint() {
 }
 
 void ShipMain::CalMainPoint() {
-	fireControllerMain.SetCoord(MainWeapon[0].ReferRealCoord(ReferCoord(),
-		ReferRadianOnZ()));
-	fireControllerMain.SetRadian(MainWeapon[0].ReferRadian());
-	fireControllerMain.CalTheAnswer();
-
 	/*角度計算関数テスト*/
 	double test = fireControllerMain.CalDistanceAndTellMeRadianOnY(400);
+
+	/*射撃データは計算部分に使われるため、本番の計算は最後にすう*/
+	fireControllerMain.SetCoord(MainWeapon[0].ReferRealCoord(ReferCoord(),
+		ReferRadianOnZ()));//船の座標を設定
+	RadianNeededIn3D temp = MainWeapon[0].ReferRadian();
+	temp.z += ReferRadianOnZ();//本番の角度に設定する
+	fireControllerMain.SetRadian(temp);//今砲塔の角度を設定
+	fireControllerMain.CalTheAnswer();//目標座標を計算する
+
 }
+
 
 void ShipMain::DrawMainPoint(Camera camera) {
 	Coordinate<double> point = fireControllerMain.ReferAnswer();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
-	DrawCircleAA(point.x - camera.ReferRealCameraX(),
-		point.z-camera.ReferRealCameraZ(),
+	DrawCircleAA((float)(point.x - camera.ReferRealCameraX()),
+		(float)(point.z-camera.ReferRealCameraZ()),
 		15,16,GetColor(255,0,0),0,0.5);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//透明度を下がる
 }

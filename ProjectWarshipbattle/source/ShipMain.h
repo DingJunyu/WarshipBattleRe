@@ -20,7 +20,7 @@ public:
 		returnToCenter = false;
 
 		/*ƒeƒXƒg•”•ª*/
-		hitPoint = 100000;
+		hitPoint = 1000;
 		shipMainCrash = { 180, 40, 18 };
 	}
 	~ShipMain();

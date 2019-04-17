@@ -37,6 +37,8 @@ void FireController::CalTheAnswer() {
 	answer = testAmmo.ReferCoord();//落下座標を記録する
 }
 
+/*この関数について：
+まだすべての状況の検証は完成しなかったため、問題が起こる可能性が予想できる*/
 double FireController::CalDistanceAndTellMeRadianOnY(double Distance) {
 	for (int i = FIRE_DISTANCE::ANGLE_100_P; i < FIRE_DISTANCE::ANGLE_0_P; i++) {
 		/*もしこの距離はこの範囲内であれば*/
@@ -68,6 +70,7 @@ double FireController::FindTheDistance(double Distance,
 
 	double result = tempDistance - Distance;//差を計算する
 
+	/*予想では*/
 	if (abs(result) < MathAndPhysics::RANGE_ERROR)//誤差範囲内に入ったら返す
 		return realRadian;
 
