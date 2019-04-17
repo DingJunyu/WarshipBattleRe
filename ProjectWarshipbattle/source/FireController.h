@@ -11,6 +11,7 @@ public:
 	FireController();
 	~FireController();
 
+	/*設置など*/
 	void SetSpeed(double Speed) { 
 		speed = Speed;
 	}//速度を設置
@@ -23,10 +24,13 @@ public:
 		testAmmo.SetCoord(Coord);
 	}//座標を設置
 
+	/*問い合わせ関数*/
 	Coordinate<double> ReferAnswer() { return answer; }
+	double ReferMaxRange() { return distance[FIRE_DISTANCE::ANGLE_100_P]; }
+	double ReferMinRange() { return distance[FIRE_DISTANCE::ANGLE_0_P]; }
 
+	/*計算関数*/
 	void InifDistance(double MaxRadian,double MinRadian);
-
 	void CalTheAnswer();
 
 	double CalDistanceAndTellMeRadianOnY(double Distance);
@@ -48,4 +52,3 @@ private:
 	Coordinate<double> originPoint;
 	Coordinate<double> answer;//落下地点の座標
 };
-

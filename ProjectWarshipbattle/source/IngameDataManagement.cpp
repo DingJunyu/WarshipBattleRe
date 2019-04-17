@@ -315,7 +315,7 @@ void IngameDataManagement::TEST() {
 		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
-		enemyShip->NewCoordX(290/* - i * (rand() % 400)*/);
+		enemyShip->NewCoordX(100/* - i * (rand() % 400)*/);
 		enemyShip->NewCoordZ(500/* + i * (rand() % 400)*/);
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);

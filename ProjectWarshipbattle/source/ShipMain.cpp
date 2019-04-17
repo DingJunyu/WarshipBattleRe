@@ -380,13 +380,13 @@ void ShipMain::TestLock(ShipMain *ship) {
 		targetRadianOnZforMain = targetRadianOnZforMain;
 	}
 	else if (x1 > x2 && z1 > z2) {//“G‚Í‘æ“ñÛŒÀ‚É‚¢‚é
-		targetRadianOnZforMain = -targetRadianOnZforMain;
+		targetRadianOnZforMain = targetRadianOnZforMain;
 	}
 	else if (x1 < x2 && z1 > z2) {//“G‚Í‘æOÛŒÀ‚É‚¢‚é
 		targetRadianOnZforMain = targetRadianOnZforMain + MathAndPhysics::PI;
 	}
 	else {//“G‚Í‘ælÛŒÀ‚É‚¢‚é
-		targetRadianOnZforMain = MathAndPhysics::PI - targetRadianOnZforMain;
+		targetRadianOnZforMain = MathAndPhysics::PI + targetRadianOnZforMain;
 	}
 
 	//targetRadianOnZforMain = asin((z2 - z1) / sqrt((pow(z2 - z1, 2) + pow(x2 - x1, 2))));
