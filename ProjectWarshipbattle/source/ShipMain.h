@@ -20,7 +20,7 @@ public:
 		returnToCenter = false;
 
 		/*ƒeƒXƒg•”•ª*/
-		hitPoint = 1000;
+		hitPoint = 5000;
 		shipMainCrash = { 180, 40, 18 };
 	}
 	~ShipMain();
@@ -117,6 +117,10 @@ public:
 	void ShowMePointOfImpact(Camera camera);
 
 
+	void TestLock(ShipMain *ship);
+
+
+
 private:
 	ShipCrashParts * MainParts;
 	ShipCrashParts * SubParts;
@@ -189,4 +193,11 @@ private:
 	/*ŽËŒ‚*/
 	FireController fireControllerMain;
 	FireController fireControllerSub;
+	double targetRadianForMain;
+	double targetRadianForSub;
+
+	void CalDistance(ShipMain *ship);
+
+	double distance;
+	double targetRadianOnZforMain;
 };

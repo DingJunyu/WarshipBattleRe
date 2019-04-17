@@ -369,6 +369,10 @@ namespace MathAndPhysics {
 	const double RANGE_ERROR = 10;//Šp“x’T‚·ŠÖ”‚ª³í‚É“®ì‚µ‚È‚¢‚É“K“x‚Éã‚ª‚Á‚Ä‚İ‚æ‚¤
 }
 
+namespace GameDefine {
+	const int MAX_UNIT_A_TEAM = 10;
+}
+
 namespace MapSize {
 	const int xSize = 20000;
 	const int zSize = 20000;

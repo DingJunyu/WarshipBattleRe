@@ -337,9 +337,6 @@ void ShipMain::CalThePoint() {
 }
 
 void ShipMain::CalMainPoint() {
-	/*角度計算関数テスト*/
-	double test = fireControllerMain.CalDistanceAndTellMeRadianOnY(400);
-
 	/*射撃データは計算部分に使われるため、本番の計算は最後にすう*/
 	fireControllerMain.SetCoord(MainWeapon[0].ReferRealCoord(ReferCoord(),
 		ReferRadianOnZ()));//船の座標を設定
@@ -347,7 +344,6 @@ void ShipMain::CalMainPoint() {
 	temp.z += ReferRadianOnZ();//本番の角度に設定する
 	fireControllerMain.SetRadian(temp);//今砲塔の角度を設定
 	fireControllerMain.CalTheAnswer();//目標座標を計算する
-
 }
 
 
@@ -365,4 +361,58 @@ void ShipMain::SufferDamage(int damage) {
 	hitPoint -= damage;
 	if (hitPoint <= 0)
 		Killed();
+}
+
+/*ロック管理*/
+void ShipMain::TestLock(ShipMain *ship) {
+	CalDistance(ship);//距離を計算する
+
+	double x1, x2, z1, z2;
+	x1 = ship->ReferCoordX();
+	x2 = ReferCoordX();
+	z1 = ship->ReferCoordZ();
+	z2 = ReferCoordZ();
+
+	//逆三角関数を利用してラジアンを計算する
+	targetRadianOnZforMain = atan((z2 - z1) / (x2 - x1));
+
+	if (x1 > x2 && z1 < z2) {//敵は第一象限にいる
+		targetRadianOnZforMain = targetRadianOnZforMain;
+	}
+	else if (x1 > x2 && z1 > z2) {//敵は第二象限にいる
+		targetRadianOnZforMain = -targetRadianOnZforMain;
+	}
+	else if (x1 < x2 && z1 > z2) {//敵は第三象限にいる
+		targetRadianOnZforMain = targetRadianOnZforMain + MathAndPhysics::PI;
+	}
+	else {//敵は第四象限にいる
+		targetRadianOnZforMain = MathAndPhysics::PI - targetRadianOnZforMain;
+	}
+
+	//targetRadianOnZforMain = asin((z2 - z1) / sqrt((pow(z2 - z1, 2) + pow(x2 - x1, 2))));
+
+	/*垂直角度の計算*/
+	targetRadianForMain = fireControllerMain.CalDistanceAndTellMeRadianOnY(distance);
+
+	/*メイン武器の調整*/
+	/*垂直*/
+	if (MainWeapon[0].ReferRadianOnY() - targetRadianForMain > 0.03) {
+		PullMainWeapon(false);
+	}
+	else if (MainWeapon->ReferRadianOnY() - targetRadianForMain < 0.03) {
+		PullMainWeapon(true);
+	}
+	/*水平*/
+	if (MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ() -
+		targetRadianOnZforMain > 0.03) {
+		TurnMainWeapon(false);
+	}
+	else if (MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ() -
+		targetRadianOnZforMain < 0.03) {
+		TurnMainWeapon(true);
+	}
+}
+
+void ShipMain::CalDistance(ShipMain *ship) {
+	distance = Distance2D(ship->ReferCoord(), ReferCoord());
 }

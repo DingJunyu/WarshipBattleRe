@@ -9,14 +9,20 @@ IngameDataManagement::~IngameDataManagement()
 void IngameDataManagement::Update() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
 	ClearDrawScreen();
+	CUI.SetNormalStatus();/*ここはテストバージョン*/
 
 	if (FC.Wait()) {
-		CUI.SetNormalStatus();/*ここはテストバージョン*/
+		/*ロックテスト*/
+		if (!alliesFleet.empty() && !enemyFleet.empty()) {
+			auto ship1 = alliesFleet.begin();
+			auto ship2 = enemyFleet.begin();
+			ship1->TestLock(&*ship2);
+		}
 
 		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
 		Control();//コマンドを受け取って、船の状態を変更する
 		GetNewEffect();//エフェクトを生成する
-		MoveAll();//船の状態による座標を変更する
+		MoveAll();//移動、状態更新
 
 		DeleteUseless();//入らないものを消す
 		CheckAndPlaySound();
@@ -309,8 +315,8 @@ void IngameDataManagement::TEST() {
 		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
-		enemyShip->NewCoordX(890 + i * (rand() % 400));
-		enemyShip->NewCoordZ(200 - i * (rand() % 400));
+		enemyShip->NewCoordX(290/* - i * (rand() % 400)*/);
+		enemyShip->NewCoordZ(500/* + i * (rand() % 400)*/);
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
 		enemyShip->SetLength(PL.ReferShipSizeX());
