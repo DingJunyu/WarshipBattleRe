@@ -9,6 +9,7 @@ void ClickableUserInterface::MemorySecure(int Count) {
 	buttonPosition = new double *[Count];
 	for (int i = 0; i < Count; i++) {
 		buttonPosition[i] = new double[7];
+		buttonPosition[i][SaveForCUI::SHOW] = 1;
 	}
 }
 
@@ -125,7 +126,7 @@ void ClickableUserInterface::SetThisOne(int num, double x, double z, double mt) 
 
 void ClickableUserInterface::Draw() {
 	for (int i = CommandSerial::INCREASE_OUTPUT; i <= CommandSerial::EXIT; i++) {
-		if (buttonPosition[i][SaveForCUI::SHOW] == SaveForCUI::COORD_X)
+		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
 			BC.buttonContainer[i].DrawThisButton();
 	}
 }

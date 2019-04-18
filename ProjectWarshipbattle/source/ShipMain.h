@@ -11,6 +11,7 @@
 #include"EffectTemplate.h"//エフェクト生成器初期化容器
 #include"SoundLoader.h"//音声ローダー
 #include"FireController.h"//射撃管理
+#include"Lock.h"//ロックする時に関わる操作やデータ
 class ShipMain :
 	public AllMovableObjects
 {
@@ -200,4 +201,6 @@ private:
 
 	double distance;
 	double targetRadianOnZforMain;
+	/*ロック*/
+	Lock fireDataFigureUp;
 };

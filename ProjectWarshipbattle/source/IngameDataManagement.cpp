@@ -11,21 +11,24 @@ void IngameDataManagement::Update() {
 	ClearDrawScreen();
 	CUI.SetNormalStatus();/*ここはテストバージョン*/
 
+	
+	/*ロックテスト*/
+	if (!alliesFleet.empty() && !enemyFleet.empty()) {
+		auto ship1 = alliesFleet.begin();
+		auto ship2 = enemyFleet.begin();
+		ship1->TestLock(&*ship2);//船２を目標にしてロックする
+	}
+	/**************/
+
+	MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
+	Control();//コマンドを受け取って、船の状態を変更する
+	GetNewEffect();//エフェクトを生成する
+	MoveAll();//移動、状態更新
+
+	DeleteUseless();//入らないものを消す
+
+	//時間の余裕がなければ描画をスキップする
 	if (FC.Wait()) {
-		/*ロックテスト*/
-		if (!alliesFleet.empty() && !enemyFleet.empty()) {
-			auto ship1 = alliesFleet.begin();
-			auto ship2 = enemyFleet.begin();
-			ship1->TestLock(&*ship2);//船２を目標にしてロックする
-		}
-		/**************/
-
-		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
-		Control();//コマンドを受け取って、船の状態を変更する
-		GetNewEffect();//エフェクトを生成する
-		MoveAll();//移動、状態更新
-
-		DeleteUseless();//入らないものを消す
 		CheckAndPlaySound();
 		DrawAll();//全部更新した後画面を描く
 	}

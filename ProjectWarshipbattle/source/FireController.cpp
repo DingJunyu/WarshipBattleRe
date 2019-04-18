@@ -1,6 +1,6 @@
 #include "FireController.h"
 
-FireController::FireController():testAmmo(true,false,true,true)
+FireController::FireController() :testAmmo(true, false, true, true)
 {
 }
 

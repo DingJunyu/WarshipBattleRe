@@ -391,8 +391,9 @@ void ShipMain::TestLock(ShipMain *ship) {
 
 	//targetRadianOnZforMain = asin((z2 - z1) / sqrt((pow(z2 - z1, 2) + pow(x2 - x1, 2))));
 
-	/*‚’¼Šp“x‚ÌŒvZ*/
-	targetRadianForMain = fireControllerMain.CalDistanceAndTellMeRadianOnY(distance);
+	/*‚’¼Šp“x‚ÌŒvZEC³*/
+	targetRadianForMain = fireControllerMain.CalDistanceAndTellMeRadianOnY(distance)
+		+ fireDataFigureUp.Refercorrection().y;
 
 	/*ƒƒCƒ“•Ší‚Ì’²®*/
 	/*‚’¼*/

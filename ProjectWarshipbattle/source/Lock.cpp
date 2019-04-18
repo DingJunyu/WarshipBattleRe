@@ -2,12 +2,27 @@
 
 Lock::Lock()
 {
+	correction = { 0,0 };
 }
 
 Lock::~Lock()
 {
 }
 
-void Lock::CalTheDistance(ShipMain *shipA, ShipMain *shipB) {
-	distance = Distance2D(shipA->ReferCoord(), shipB->ReferCoord());
+void Lock::Set_IntialLead_Seconds(bool up) {
+	initialLead_Seconds = up ? +1 : -1;
+}
+
+void Lock::ChangeCorrection_Distance(bool up) {
+	double changeRadian = (0.5 / 180.0) * MathAndPhysics::PI;
+	correction.y = up ? +changeRadian : -changeRadian;
+}
+
+void Lock::CalNextPosition(Coordinate<double> coord, double speed, double radian) {
+	double distance = initialLead_Seconds * 60/*フレーム数*/ * speed + coord.x;
+
+	/*次の位置を計算する*/
+	nextPosition.x = coord.x + distance * cos(radian);
+	nextPosition.z = coord.z + distance * sin(radian);
+	nextPosition.y = coord.y;
 }

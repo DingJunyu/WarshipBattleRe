@@ -29,7 +29,9 @@ enum CommandSerial {
 	CHOOSE_SUB,
 
 	TEST_INCREASE_FRAME,
-	TEST_DECREASE_FRAME
+	TEST_DECREASE_FRAME,
+
+	SELECT = 100
 };
 
 //CUIÇÃíÜÇ…ï€ë∂Ç≥ÇÍÇΩÇ‡ÇÃÇ∆ÇªÇÃî‘çÜ
@@ -106,6 +108,7 @@ enum SerialNumberOfShipHandle {
 	SHIP_SHADOW_HANDLE,
 	SHIP_SIDEVIEW_HANDLE,
 	SHIP_SINKING,
+	SHIP_CARD,
 	ARRAY_SIZE = 20
 };
 
@@ -141,7 +144,7 @@ enum ButtonEvent {
 };
 
 enum UI_LIST {
-	AMOUNT = 12,
+	AMOUNT = 20,
 
 	RADAR = 0,
 	ARROW_RED,
@@ -154,7 +157,10 @@ enum UI_LIST {
 	TEXT_BAR_SPEED,
 	TEXT_BAR_TURRET,
 	SPEED_PAN,
-	ENGINE_PAN
+	ENGINE_PAN,
+
+	SHIP_CARD_BASE_TEMPLATE,
+	SHIP_CARD_TYPE_BATTLECRUSIER
 };
 
 enum LAMP_LIST {

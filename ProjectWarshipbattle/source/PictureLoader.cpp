@@ -67,6 +67,9 @@ void PictureLoader::LoadShips() {
 	battleCruiserHandle[0][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_Shadow/BattleCrusier/BattleCrusier_Shadow_01_Lvtzow.png");
+	battleCruiserHandle[0][SerialNumberOfShipHandle::SHIP_CARD] =
+		LoadGraph(
+			"GraphicData/Interactive_User_Interface/Ships_Mark/Battle_Crusier/BattleCrusier_Mark_001_Gneisenau.png");
 }
 
 void PictureLoader::LoadSea() {
@@ -108,6 +111,7 @@ void PictureLoader::LoadUserInterfaceInGame() {
 		"GraphicData/User_Interface/Speed_Pan.png");
 	UIList[UI_LIST::ENGINE_PAN] = LoadGraph(
 		"GraphicData/User_Interface/Engine_Pan.png");
+
 	/*ミニマップ*/
 	miniMapMatHandle = LoadGraph(
 		"GraphicData/User_Interface/MiniMap_Mat.jpg");
