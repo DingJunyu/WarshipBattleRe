@@ -15,8 +15,10 @@ void IngameDataManagement::Update() {
 	/*ロックテスト*/
 	if (!alliesFleet.empty() && !enemyFleet.empty()) {
 		auto ship1 = alliesFleet.begin();
-		auto ship2 = enemyFleet.begin();
-		ship1->TestLock(&*ship2);//船２を目標にしてロックする
+		if (ship1->fireDataFigureUp.ReferLockOn()) {
+			ship1->TestLock(&enemyFleet[ship1->fireDataFigureUp.ReferTarget()]);
+			//船２を目標にしてロックする
+		}
 	}
 	/**************/
 
@@ -27,11 +29,10 @@ void IngameDataManagement::Update() {
 
 	DeleteUseless();//入らないものを消す
 
-	//時間の余裕がなければ描画をスキップする
-	if (FC.Wait()) {
-		CheckAndPlaySound();
-		DrawAll();//全部更新した後画面を描く
-	}
+
+	CheckAndPlaySound();
+	DrawAll();//全部更新した後画面を描く
+	FC.Wait();
 }
 
 /*ゲームコントロール*/
@@ -307,10 +308,11 @@ void IngameDataManagement::TEST() {
 	ship->SetLength(PL.ReferShipSizeX());//サイズを設定
 	ship->SetWidth(PL.ReferShipSizeZ());
 	ship->TEST();//テスト関数をロードする
+	ship->SetSerialNumber(1);
 	ship->SetWeaponTest(&PL);//武器をロードする
 
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 3; i++) {
 		enemyFleet.push_back(ShipMain());//テスト用敵船を生成する
 		auto enemyShip = enemyFleet.end();//イテレータで船を選ぶ
 		enemyShip--;
@@ -319,8 +321,8 @@ void IngameDataManagement::TEST() {
 		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
-		enemyShip->NewCoordX(100/* - i * (rand() % 400)*/);
-		enemyShip->NewCoordZ(500/* + i * (rand() % 400)*/);
+		enemyShip->NewCoordX(1200 - (rand() % 400) * 3);
+		enemyShip->NewCoordZ(400 -  (rand() % 400));
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
 		enemyShip->SetLength(PL.ReferShipSizeX());
@@ -403,29 +405,35 @@ void IngameDataManagement::Control() {
 	if (answer == CommandSerial::NONE_COMMAND)
 		return;
 
-
-
 	/*船を操作*/
 	auto ship = alliesFleet.begin();
 	ship->ControlThisShip(answer);
 	
-	switch (answer) {
-	case CommandSerial::SHOOT:TestShoot(); break;/*射撃*/
-	case CommandSerial::MENU: {
-		if (!CUI.CheckMenuOpened()) {
-			CUI.LetMeSeeMenu();//メニューを開く
+	if (answer < CommandSerial::SELECT) {
+		CUI.SetClickTime();//クリックした時間を記録する
+		switch (answer) {
+		case CommandSerial::SHOOT:TestShoot(); break;/*射撃*/
+		case CommandSerial::MENU: {
+			if (!CUI.CheckMenuOpened()) {
+				CUI.LetMeSeeMenu();//メニューを開く
+			}
+			else {
+				CUI.CloseMenu();//メニューを閉じる
+			}
+		}break;
+		case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*テストビュー*/
+		case CommandSerial::TEST_INCREASE_FRAME:FC.SetFrame(true); break;
+		case CommandSerial::TEST_DECREASE_FRAME:FC.SetFrame(false); break;
+		case CommandSerial::EXIT:GameOver = true; break;	/*ゲーム終了*/
 		}
-		else {
-			CUI.CloseMenu();//メニューを閉じる
-		}
-	}break;
-	case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*テストビュー*/
-	case CommandSerial::TEST_INCREASE_FRAME:FC.SetFrame(true); break;
-	case CommandSerial::TEST_DECREASE_FRAME:FC.SetFrame(false); break;
-	case CommandSerial::EXIT:GameOver = true; break;	/*ゲーム終了*/
 	}
 
-	CUI.SetClickTime();//クリックした時間を記録する
+	else {
+		CUI.SetClickTime();//クリックした時間を記録する
+		ship->fireDataFigureUp.SetNumber(answer -
+			CommandSerial::SELECT - CommandSerial::SELECT_RANGE);
+		ship->fireDataFigureUp.LockOn_Switch();
+	}
 }
 
 /****************************************************/
@@ -504,6 +512,8 @@ void IngameDataManagement::Inif() {
 	CT.Inif(&SL);//キーボードコントローラー初期化
 	CUI.IngameInif(&PL,&SL);//マウスコントローラー初期化
 	TEST();
+	CUI.InifShipList(&enemyFleet,false);
+	CUI.InifShipList(&alliesFleet, true);
 }
 
 /*使ったメモリを解放する*/

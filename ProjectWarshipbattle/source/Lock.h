@@ -9,6 +9,8 @@ public:
 	/*–â‚¢‡‚í‚¹ŠÖ”*/
 	Coordinate<double> ReferNextPosition() { return nextPosition; }
 	RadianNeededIn3D Refercorrection() { return correction; }
+	bool ReferLockOn() { return lockOn; }
+	int ReferTarget() { return targetNumber; }
 
 	/*İ’uŠÖ”*/
 	/*–Ú•W‚Ì”Ô†‚ğİ’u‚·‚é*/

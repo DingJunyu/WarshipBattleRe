@@ -3,6 +3,8 @@
 Lock::Lock()
 {
 	correction = { 0,0 };
+	lockOn = false;
+	targetNumber = 1;
 }
 
 Lock::~Lock()

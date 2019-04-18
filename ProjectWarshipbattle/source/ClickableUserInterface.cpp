@@ -25,7 +25,8 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 	MemorySecure(CommandSerial::COUNT);
 	BC.InifForUserInterface(PL);
 
-	for (int i = CommandSerial::INCREASE_OUTPUT; i <= CommandSerial::EXIT; i++) {
+	for (int i = CommandSerial::INCREASE_OUTPUT; 
+		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE; i++) {
 		for (int j = 0; j < 6; j++)
 			buttonPosition[i][j] = 1;
 	}
@@ -66,12 +67,50 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 		BUTTON_POSITION_INGAME::TURN_RETURN_Z, BUTTON_POSITION_INGAME::TURN_RETURN_MULTI);
 
 
-	for (int i = CommandSerial::INCREASE_OUTPUT; i <= CommandSerial::EXIT; i++)
+	for (int i = CommandSerial::INCREASE_OUTPUT;
+		i <= CommandSerial::EXIT; i++)
 		BC.buttonContainer[i].SetXZ(
 			buttonPosition[i][SaveForCUI::COORD_X],
 			buttonPosition[i][SaveForCUI::COORD_Z],
 			buttonPosition[i][SaveForCUI::MULTIPLE]
 		);
+}
+
+void ClickableUserInterface::InifShipList(std::vector<ShipMain> *shipList, bool left) {
+	double count = 0;
+	
+	if (!shipList->empty())
+		for (auto ship = shipList->begin();
+			ship != shipList->end();
+			ship++) {
+		if (!left) {
+			SetThisOne(CommandSerial::SELECT + (int)count + CommandSerial::SELECT_RANGE,
+				BUTTON_POSITION_INGAME::SHIP_MARK_RIGHT_X,
+				BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
+				BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
+			BC.buttonContainer[SELECT + (int)count + CommandSerial::SELECT_RANGE].SetXZ(
+				buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::COORD_X],
+				buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::COORD_Z],
+				buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::MULTIPLE]);
+			buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::SHOW] = 0;
+		}
+		else {
+			SetThisOne(CommandSerial::SELECT + (int)count,
+				BUTTON_POSITION_INGAME::SHIP_MARK_LEFT_X,
+				BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
+				BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
+			BC.buttonContainer[SELECT + (int)count].SetXZ(
+				buttonPosition[SELECT + (int)count][SaveForCUI::COORD_X],
+				buttonPosition[SELECT + (int)count][SaveForCUI::COORD_Z],
+				buttonPosition[SELECT + (int)count][SaveForCUI::MULTIPLE]);
+			buttonPosition[SELECT + (int)count][SaveForCUI::SHOW] = 0;
+		}
+		count++;
+	}
+}
+
+void ClickableUserInterface::CheckShipList(std::vector<ShipMain> *shipList, bool left) {
+
 }
 
 void ClickableUserInterface::Free() {
@@ -90,7 +129,9 @@ int ClickableUserInterface::CheckChoice() {
 		pressed = true;
 	}
 
-	for (int i = CommandSerial::INCREASE_OUTPUT; i <= CommandSerial::EXIT; i++) {
+	for (int i = CommandSerial::INCREASE_OUTPUT;
+		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2;
+		i++) {
 		if(buttonPosition[i][SaveForCUI::SHOW] == 0)
 			/*マウスの座標とボタンの範囲を照合する*/
 		if (mouseX > buttonPosition[i][SaveForCUI::COORD_X] * Screen::SCREEN_X &&
@@ -125,7 +166,8 @@ void ClickableUserInterface::SetThisOne(int num, double x, double z, double mt) 
 }
 
 void ClickableUserInterface::Draw() {
-	for (int i = CommandSerial::INCREASE_OUTPUT; i <= CommandSerial::EXIT; i++) {
+	for (int i = CommandSerial::INCREASE_OUTPUT;
+		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2; i++) {
 		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
 			BC.buttonContainer[i].DrawThisButton();
 	}

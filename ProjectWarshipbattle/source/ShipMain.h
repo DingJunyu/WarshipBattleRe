@@ -120,7 +120,8 @@ public:
 
 	void TestLock(ShipMain *ship);
 
-
+	/*ロック*/
+	Lock fireDataFigureUp;
 
 private:
 	ShipCrashParts * MainParts;
@@ -201,6 +202,4 @@ private:
 
 	double distance;
 	double targetRadianOnZforMain;
-	/*ロック*/
-	Lock fireDataFigureUp;
 };

@@ -8,7 +8,7 @@ namespace Screen {
 
 //コントローラー用指令集
 enum CommandSerial {
-	COUNT = 30,//コマンドの数
+	COUNT = 50,//コマンドの数
 	NONE_COMMAND = -1,//命令なし
 	TEST_VIEW_ON = 0,//デバッグモードon
 	INCREASE_OUTPUT = 1,
@@ -28,10 +28,12 @@ enum CommandSerial {
 	CHOOSE_MAIN,
 	CHOOSE_SUB,
 
+	SELECT,/*いつも最後に設置する*/
+
 	TEST_INCREASE_FRAME,
 	TEST_DECREASE_FRAME,
 
-	SELECT = 100
+	SELECT_RANGE = 10
 };
 
 //CUIの中に保存されたものとその番号
@@ -157,10 +159,7 @@ enum UI_LIST {
 	TEXT_BAR_SPEED,
 	TEXT_BAR_TURRET,
 	SPEED_PAN,
-	ENGINE_PAN,
-
-	SHIP_CARD_BASE_TEMPLATE,
-	SHIP_CARD_TYPE_BATTLECRUSIER
+	ENGINE_PAN
 };
 
 enum LAMP_LIST {
@@ -234,6 +233,12 @@ namespace BUTTON_POSITION_INGAME {
 	const double DECREASE_OUTPUT_MULTI = .06;
 	const double DECREASE_OUTPUT_X = 0.025;
 	const double DECREASE_OUTPUT_Z = 0.86;
+
+	const double SHIP_MARK_MULTI = .13;
+	const double SHIP_MARK_LEFT_X = .002;
+	const double SHIP_MARK_RIGHT_X = .943;
+	const double SHIP_MARK_START_Z = .02;
+	const double SHIP_MARK_NEXT_Z = .04;
 }
 
 namespace USER_INTERFACE_POSITION {

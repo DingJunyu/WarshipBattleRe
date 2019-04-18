@@ -4,7 +4,9 @@
 #include"PictureLoader.h"
 #include"DxLib.h"
 #include"SoundLoader.h"
+#include"ShipMain.h"
 #include<cmath>
+#include<vector>
 /*今回のゲームでは、すべての操作をマウスでできるようにしたいです。
 メインメニューにも、ゲーム画面にも使えるクラスです。
 目標としては同じ構造を利用して、
@@ -24,6 +26,8 @@ public:
 	~ClickableUserInterface();
 
 	void IngameInif(PictureLoader *PL, SoundLoader *SL);
+	void InifShipList(std::vector<ShipMain> *shipList, bool left);
+	void CheckShipList(std::vector<ShipMain> *shipList, bool left);
 	
 	/*マウスの座標を取ってコマンドを取る*/
 	int CheckChoice();
@@ -59,7 +63,7 @@ private:
 
 	bool menuOpened;
 	unsigned int lastClickTime;
-	const int inputDelay = 150;
+	const int inputDelay = 200;
 
 	ButtonCollection BC;
 

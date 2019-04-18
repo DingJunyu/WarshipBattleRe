@@ -111,7 +111,6 @@ void PictureLoader::LoadUserInterfaceInGame() {
 		"GraphicData/User_Interface/Speed_Pan.png");
 	UIList[UI_LIST::ENGINE_PAN] = LoadGraph(
 		"GraphicData/User_Interface/Engine_Pan.png");
-
 	/*ミニマップ*/
 	miniMapMatHandle = LoadGraph(
 		"GraphicData/User_Interface/MiniMap_Mat.jpg");
@@ -233,6 +232,9 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/buttons/endgame_normal.png");
 	buttonPressedIntheGame[CommandSerial::EXIT] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/endgame_pressed.png");
+
+	buttonIntheGame[CommandSerial::SELECT] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/Ships_Mark/Ship_Unknown.png");
 }
 
 void PictureLoader::FreePicture() {
