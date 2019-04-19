@@ -48,16 +48,19 @@ public:
 	}
 	
 private:
-	double penetrateDepth;
-	double damage;
+	double penetrateDepth;//貫通できるアーマーの最大厚さ
+	double damage;//ダメージ
 
 	bool isUsable;//まだつけえるか
 
+	/*画像サイズ*/
 	int graphX;
 	int graphZ;
 
+	/*画像ハンドル*/
 	int *ammoHandle;
 
+	/*識別番号*/
 	int serialNumber;
 };
 

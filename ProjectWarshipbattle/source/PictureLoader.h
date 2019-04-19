@@ -1,7 +1,7 @@
 #pragma once
 #include"DxLib.h"
 #include"DefinedData.h"
-
+/*すべての音声データを管理するクラス*/
 class PictureLoader
 {
 public:
@@ -10,11 +10,13 @@ public:
 
 	/*初期化関数*/
 	void AllInif() { MemorySecure(); LoadPicture(); }
+	/*メインメニュー用インターフェース*/
 	void InifForMainMenu() {
 		MemorySecure();
 		LoadMainMenu();
 		LoadButtonInMainMenu();
 	}
+	/*ゲーム用インターフェース*/
 	void InifForGame() {
 		MemorySecure();
 		LoadShips();

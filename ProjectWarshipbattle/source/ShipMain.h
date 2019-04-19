@@ -118,7 +118,7 @@ public:
 	void ShowMePointOfImpact(Camera camera);
 
 
-	void TestLock(ShipMain *ship);
+	void TestLock(ShipMain *ship,bool render);
 
 	/*ロック*/
 	Lock fireDataFigureUp;
@@ -141,11 +141,11 @@ private:
 
 	/*あたり判定・泡生成用点*/
 	Coordinate2D<double> aroundPointPos[AUTO_SHIP_DATA::AROUND_POINT];
-	int pointCount;
+	int pointCount;//エフェクト発生ポイントの数
 	void FindThosePoint();
 
 	EffectPoint * smokeStartPoint;
-	int smokePointCount;
+	int smokePointCount;//雲発生ポイントの数
 
 	void MemorySecure();
 

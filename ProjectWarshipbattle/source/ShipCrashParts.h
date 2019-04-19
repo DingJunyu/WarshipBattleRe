@@ -1,4 +1,5 @@
 #pragma once
+/*細かいあたり判定を行う時に使うクラス*/
 class ShipCrashParts
 {
 public:

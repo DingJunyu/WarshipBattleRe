@@ -1,5 +1,6 @@
 #pragma once
 #include "AllMovableObjects.h"
+/*爆弾クラス*/
 class Bomb :
 	public AllMovableObjects
 {
@@ -8,7 +9,7 @@ public:
 	~Bomb();
 
 private:
-	double damageRange;
-	double damage;
+	double damageRange;//爆発範囲
+	double damage;//ダメージ
 };
 

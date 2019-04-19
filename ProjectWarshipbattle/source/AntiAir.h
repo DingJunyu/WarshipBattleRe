@@ -1,4 +1,5 @@
 #pragma once
+/*船に乗せた対空武器を実装するためのクラス*/
 class AntiAir
 {
 public:
@@ -16,7 +17,7 @@ private:
 	double horizontalRange;
 	double verticalRange;
 
-	int ammoRemain;
-	double hitRate;
+	int ammoRemain;//残弾数
+	double hitRate;//射撃速度
 };
 

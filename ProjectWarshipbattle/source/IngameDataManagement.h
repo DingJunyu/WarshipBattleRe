@@ -7,6 +7,8 @@ public:
 	IngameDataManagement() :MainCamera(CameraType::MAIN) {
 		TEST_SHOW_ON = false;
 		GameOver = false;
+		counter = 0;
+		shouldIRender = false;
 	}
 	~IngameDataManagement();
 
@@ -55,6 +57,10 @@ private:
 	EffectTemplate ET;//エフェクトテンプレート
 	SoundLoader SL;//音声ローダー
 	ClickableUserInterface CUI;//クリックできるUI
+
+	/*描画処理関連*/
+	long long counter;//60までカウントする
+	bool shouldIRender;//探索状況更新スイッチ
 
 	//描く関数
 	void DrawAll();

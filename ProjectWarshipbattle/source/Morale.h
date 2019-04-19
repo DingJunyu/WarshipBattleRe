@@ -3,6 +3,7 @@
 #define MORALE_DOWN_AFTER_MAINPARTDAMAGECOUNT 5
 #define MORALE_DOWN_WITH_SUBPARTDAMAGE 5
 #define MORALE_DOWN_AFTER_SUBPARTDAMAGECOUNT 10
+/*士気を実現するためのクラス*/
 class Morale
 {
 public:
@@ -15,7 +16,7 @@ public:
 
 private:
 	int morale;
-	bool movable;
+	bool movable;//士気が足らないと船は動かない
 	int mainPartDamageCount;
 	int subPartDamageCount;
 };

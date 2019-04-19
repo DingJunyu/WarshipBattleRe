@@ -364,8 +364,9 @@ void ShipMain::SufferDamage(int damage) {
 }
 
 /*ƒƒbƒNŠÇ—*/
-void ShipMain::TestLock(ShipMain *ship) {
-	CalDistance(ship);//‹——£‚ðŒvŽZ‚·‚é
+void ShipMain::TestLock(ShipMain *ship, bool render) {
+	if (render)
+		CalDistance(ship);//‹——£‚ðŒvŽZ‚·‚é
 
 	double x1, x2, z1, z2;
 	x1 = ship->ReferCoordX();

@@ -2,6 +2,7 @@
 #include"AllMovableObjects.h"
 #include"AirWeapon.h"
 #include"DefinedData.h"
+/*すべての飛行機の基底クラス*/
 class Plane :
 	public AllMovableObjects
 {

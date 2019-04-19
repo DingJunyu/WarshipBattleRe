@@ -25,7 +25,7 @@ private:
 	unsigned int colorWhenOn;//オンにする時の色
 	unsigned int colorWhenOff;//オフにする時の色
 
-	Coordinate2D<float> coord;
-	float radius;
+	Coordinate2D<float> coord;//座標
+	float radius;//半径
 };
 

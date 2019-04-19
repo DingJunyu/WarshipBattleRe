@@ -11,12 +11,18 @@ void IngameDataManagement::Update() {
 	ClearDrawScreen();
 	CUI.SetNormalStatus();/*ここはテストバージョン*/
 
-	
+	counter++;
+	if (counter >= 60)
+		counter = counter % 60;
+
+	shouldIRender = counter % 20 == 0 ? true : false;
+
 	/*ロックテスト*/
 	if (!alliesFleet.empty() && !enemyFleet.empty()) {
 		auto ship1 = alliesFleet.begin();
 		if (ship1->fireDataFigureUp.ReferLockOn()) {
-			ship1->TestLock(&enemyFleet[ship1->fireDataFigureUp.ReferTarget()]);
+			ship1->TestLock(&enemyFleet[ship1->fireDataFigureUp.ReferTarget()],
+				shouldIRender);
 			//船２を目標にしてロックする
 		}
 	}

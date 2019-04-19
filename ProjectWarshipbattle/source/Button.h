@@ -1,6 +1,8 @@
 #pragma once
 #include"DxLib.h"
 #include"DefinedData.h"
+/*クリックできるボタンの動作を実現するためのクラス*/
+/*メニュークラスとＵＩ部分に使わる*/
 class Button {
 public:
 	Button() {
@@ -9,14 +11,17 @@ public:
 	}
 	~Button();
 
+	/*初期化関数と設置関数*/
 	void Inif(int *bH, int *bPH);
 	void SetXZ(double xP, double zP, double zM);
 	void CheckXZ();
 
+	/*処理関数*/
 	void DrawThisButton();
 	void CheckMousePosition(int mouseX, int mouseZ);
 	void ChangePressed() { pressed = !pressed; }
 
+	/*問い合わせ関数*/
 	int ReferGraphSizeX() { return graphSizeX; }
 	int ReferGraphSizeZ() { return graphSizeZ; }
 

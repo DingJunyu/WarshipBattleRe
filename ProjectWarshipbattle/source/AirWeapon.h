@@ -1,4 +1,5 @@
 #pragma once
+/*飛行機に乗せた武器を実装するためのクラス*/
 class AirWeapon
 {
 public:
@@ -18,7 +19,7 @@ public:
 private:
 	int weaponType;//継承先で直接定義する
 
-	int ammoRemain;
-	int maxAmmo;
+	int ammoRemain;//残弾数
+	int maxAmmo;//最大弾数
 };
 

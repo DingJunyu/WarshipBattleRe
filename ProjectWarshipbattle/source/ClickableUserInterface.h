@@ -61,9 +61,9 @@ private:
 	/*提示の点滅用カウント*/
 	int countForTitle;
 
-	bool menuOpened;
-	unsigned int lastClickTime;
-	const int inputDelay = 200;
+	bool menuOpened;//メニューの状態を保存する
+	unsigned int lastClickTime;//前回押された時間を記録
+	const int inputDelay = 200;//連続押すを防止
 
 	ButtonCollection BC;
 

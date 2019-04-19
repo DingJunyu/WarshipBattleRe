@@ -15,20 +15,25 @@ void AllMovableObjects::Move() {
 		coord.y += speedOnY;//Y座標の移動
 	}
 
-	if (!flyable) {
-		if (input != 0) {
-			if (abs(speedOnZ) < abs(maxSpeedOnZ * (input / maxInput))) {
-				speedOnZ += input / mass * (1 - abs(speedOnZ / maxSpeedOnZ)) * 0.5;
-			}
+	if (input != 0) {//出力がある場合に速度を計算する
+		/*加速の部分*/
+		if (abs(speedOnZ) < abs(maxSpeedOnZ * (input / maxInput))) {
+			speedOnZ += input / mass * (1 - abs(speedOnZ / maxSpeedOnZ)) * 0.5;
 		}
-		if (speedOnZ > 0																				) {
+	}
+
+	/*出力が可能なものは速度が足らない場合に速度が落とす*/
+	if (!flyable) {
+		/*前進する場合*/
+		if (speedOnZ > 0) {
 			if (speedOnZ > maxSpeedOnZ * (input / maxInput)) {
-				speedOnZ -= (speedOnZ / maxSpeedOnZ > 0.5) ? 0.0015: 0.00075;
+				speedOnZ -= (speedOnZ / maxSpeedOnZ > 0.5) ? 0.0015 : 0.00075;
 				//スピードが速いのほうが影響が高いようにしました。
 				if (speedOnZ < 0)
 					speedOnZ = 0;
 			}
 		}
+		/*後退する場合*/
 		if (speedOnZ < 0) {
 			if (speedOnZ < maxSpeedOnZ * (input / maxInput)) {
 				speedOnZ += (speedOnZ / maxSpeedOnZ > 0.5) ? 0.0015 : 0.00075;
@@ -60,7 +65,7 @@ void AllMovableObjects::Unmove() {
 	coord = oldCoord;//前の座上に戻る
 }
 
-void AllMovableObjects::FallingDown() {//重力の影響で落下
+void AllMovableObjects::FallingDown() {//重力の影響で落とす
 	if (coord.y > 0 && flyable && !plane) {
 		speedOnY -= MathAndPhysics::GRAVITATIONAL_ACCELERATION;
 	}

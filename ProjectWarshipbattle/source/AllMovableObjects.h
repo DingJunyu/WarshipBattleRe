@@ -16,6 +16,7 @@ public:
 		airResistanceActive = false;
 		airResistance = 0.00001;
 		speedOnZ = 0;
+		input = 0;
 	}
 	virtual ~AllMovableObjects();
 
@@ -112,6 +113,7 @@ private:
 	/*長方形を利用して簡単な当たり判定を行う*/
 	/*継承先で値を与える*/
 	bool point;//点と判断する時は長さなどを使わない
+	/*サイズ*/
 	double length;
 	double width;
 

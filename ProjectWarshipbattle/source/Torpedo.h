@@ -1,5 +1,6 @@
 #pragma once
 #include "AllMovableObjects.h"
+/*‹›—‹‚ðŽÀŒ»‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX*/
 class Torpedo :
 	public AllMovableObjects
 {

@@ -2,6 +2,8 @@
 #include"Button.h"
 #include"PictureLoader.h"
 #include"SoundLoader.h"
+/*このクラスはボタンを保存するためのクラス、
+ボタンを使いたい場合はこのクラスを宣言する*/
 class ButtonCollection{
 public:
 	ButtonCollection() {}

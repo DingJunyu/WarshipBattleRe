@@ -45,8 +45,8 @@ private:
 
 	double distance[FIRE_DISTANCE::ANGLE_TYPE_AMOUNT];
 	
-	double maxRadian;
-	double minRadian;
+	double maxRadian;//‚’¼Å‘åŠp“x
+	double minRadian;//‚’¼Å¬Šp“x
 	double radianRange;
 
 	Coordinate<double> originPoint;

@@ -42,7 +42,7 @@ private:
 	double radianChangePerFrame;//毎フレームの変更角度
 	double coordX;
 	double coordZ;
-	double speed;
+	double speed;//移動速度
 	bool right;//右に移動するか
 	//画像データ
 	int *graphicHandle;
@@ -53,7 +53,7 @@ private:
 	int endTime;
 	bool timeUp;
 
-	bool spread;
+	bool spread;//自分が拡大できるか
 	double zoomMutliple;//倍率
 	double zoomRate;//フレームごとの拡大率
 };

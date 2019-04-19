@@ -1,4 +1,5 @@
 #pragma once
+/*爆弾と飛行機を繋がるクラス*/
 #include "AirWeapon.h"
 #include"DefinedData.h"
 #include"Bomb.h"
@@ -17,6 +18,6 @@ public:
 		SetAmmo(Amount); }
 
 private:
-	Bomb bombOnThisPlane;
+	Bomb bombOnThisPlane;//爆弾を宣言する
 };
 
