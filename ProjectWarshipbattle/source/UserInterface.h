@@ -5,6 +5,7 @@
 #include"ButtonCollection.h"
 #include"ShipMain.h"
 #include"Lamp.h"
+#include"Camera.h"
 #include<cmath>
 class UserInterface
 {
@@ -13,13 +14,17 @@ public:
 		matStartX(0), matStartZ(Screen::SCREEN_Z / 4.25),
 		leftSCMStartX(0), leftSCMStartZ(0),
 		rightSCMStartX(0), rightSCMStartZ(0), mapMatSize(Screen::SCREEN_X / 8),
-		mapPaperSize(mapMatSize - 10) {}
+		mapPaperSize(mapMatSize - 10) {
+		radian_returnTheLockCircle = 0;
+	}
 	~UserInterface();
 
 	void InifUI(PictureLoader *PL);
 
 	void DrawUI();
 	void DrawUINeedInput(ShipMain *ship);
+
+	void DrawUIUnderShip(bool lock,Coordinate2D<int> coord,Camera camera);
 
 	void DrawShipOnTheMap(double X, double Z, bool enemy);
 
@@ -32,6 +37,9 @@ private:
 	void DrawPictureByCenter(int SN, double X, double Z, double Multiple);
 	void DrawRotatePicture(int SN, double X, double Z, double Multiple,
 		double Radian);
+	void DrawRotatePicture2(int SN, double X, double Z, double Multiple,
+		double Radian);
+	
 
 	/*UIの背景部分*/
 	int *mat;
@@ -50,6 +58,10 @@ private:
 	/*UIの背景部分のサイズ*/
 	double mapMatSize;
 	double mapPaperSize;
+	
+	/*○を回すようにするradian*/
+	double radian_returnTheLockCircle;
+	void DrawCircle(Coordinate2D<int> coord, Camera camera);
 
 	/*各パーツのハンドル*/
 	int *handleList[UI_LIST::AMOUNT];

@@ -152,7 +152,7 @@ int ClickableUserInterface::CheckChoice() {
 		}
 	}
 
-	return answer;
+	return answer;//選択したもの対応した番号を返す
 }
 
 void ClickableUserInterface::SetThisOne(int num, double x, double z, double mt) {
@@ -189,10 +189,13 @@ void ClickableUserInterface::SetNormalStatus() {
 }
 
 void ClickableUserInterface::LetMeSeeMenu() {
+	menuOpened = !menuOpened;
+
+	int choice = menuOpened ? 0 : 1;
+
 	for (int i = CommandSerial::CONTINUE; i <= CommandSerial::EXIT; i++) {
-		buttonPosition[i][SaveForCUI::SHOW] = 0;
+		buttonPosition[i][SaveForCUI::SHOW] = choice;
 	}
-	menuOpened = true;
 }
 
 void ClickableUserInterface::CloseMenu() {
@@ -200,4 +203,34 @@ void ClickableUserInterface::CloseMenu() {
 		buttonPosition[i][SaveForCUI::SHOW] = 1;
 	}
 	menuOpened = false;
+}
+
+void ClickableUserInterface::SetShootMenu(bool status) {
+	int choice = status ? 1 : 0; //ロックがオンの時に消します
+	for (int i = CommandSerial::TURRET_TURN_RIGHT;
+		i <= CommandSerial::TURRET_PULLDOWN; i++) {
+		buttonPosition[i][SaveForCUI::SHOW] = choice;
+	}
+}
+
+void ClickableUserInterface::DrawNeedInput(bool lock, int num) {
+	DrawChoosedShip(lock, num);
+}
+
+void ClickableUserInterface::DrawChoosedShip(bool lock, int num) {
+	if (!lock)
+		return;
+
+	int buttonNum = num + CommandSerial::SELECT + CommandSerial::SELECT_RANGE;
+
+	Coordinate2D<int> coord = BC.buttonContainer[buttonNum].ReferCoord();
+
+	DrawBoxAA((float)(coord.x),
+		(float)(coord.z),
+		(float)(coord.x + BC.buttonContainer[buttonNum].ReferGraphSizeX()*
+		BC.buttonContainer[buttonNum].ReferZoomMultiple()),
+		(float)(coord.z + BC.buttonContainer[buttonNum].ReferGraphSizeZ()*
+		BC.buttonContainer[buttonNum].ReferZoomMultiple()),
+		GetColor(255, 0, 0), FALSE, 2.0f
+	);
 }

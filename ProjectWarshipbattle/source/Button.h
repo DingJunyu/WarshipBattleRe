@@ -24,6 +24,8 @@ public:
 	/*ñ‚Ç¢çáÇÌÇπä÷êî*/
 	int ReferGraphSizeX() { return graphSizeX; }
 	int ReferGraphSizeZ() { return graphSizeZ; }
+	double ReferZoomMultiple() { return zoomMultiple; }
+	Coordinate2D<int> ReferCoord() { return Coordinate2D<int> {coordX, coordZ}; }
 
 private:
 	/*ç¿ïW*/

@@ -9,7 +9,6 @@ IngameDataManagement::~IngameDataManagement()
 void IngameDataManagement::Update() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
 	ClearDrawScreen();
-	CUI.SetNormalStatus();/*ここはテストバージョン*/
 
 	counter++;
 	if (counter >= 60)
@@ -52,13 +51,15 @@ bool IngameDataManagement::TeamDestroyed() {
 /*                     描画関連                     */
 /****************************************************/
 void IngameDataManagement::DrawAll() {
-
+	auto ship = alliesFleet.begin();//イテレータで操作している船のステータスを取る
 
 	/*海を描く*/
 	DrawSea();
 
 	/*移動できるパーツを描く*/
 	DrawEffectUnderShips();
+	UI.DrawUIUnderShip(ship->fireDataFigureUp.ReferLockOn(),
+		enemyFleet[ship->fireDataFigureUp.ReferTarget()].ReferCoord2D(), MainCamera);
 //	DrawTorpedo();
 	DrawShips();
 	DrawEffectBeyondShips();
@@ -69,11 +70,12 @@ void IngameDataManagement::DrawAll() {
 	DrawPointOfImpact();//砲弾落下予測地点描画
 
 	/*UI関連*/
-	auto ship = alliesFleet.begin();//イテレータで操作している船のステータスを取る
 	UI.DrawUI();//普通のUIを描画する
 	UI.DrawUINeedInput(&*ship);//船のステータスに関係があるUIを描画する
 	DrawShipsOnMiniMap();//ミニマップを描く
 	CUI.Draw();//ボタンを描く
+	CUI.DrawNeedInput(ship->fireDataFigureUp.ReferLockOn(), 
+		ship->fireDataFigureUp.ReferTarget());
 
 	/*テストインフォメーション*/
 	if (TEST_SHOW_ON)
@@ -268,7 +270,8 @@ void IngameDataManagement::DrawEffectBeyondShips() {
 void IngameDataManagement::DrawPointOfImpact() {
 	auto ship = alliesFleet.begin();
 
-	ship->ShowMePointOfImpact(MainCamera);
+	if (!ship->fireDataFigureUp.ReferLockOn())
+		ship->ShowMePointOfImpact(MainCamera);
 }
 
 void IngameDataManagement::DrawAmmo() {
@@ -318,7 +321,7 @@ void IngameDataManagement::TEST() {
 	ship->SetWeaponTest(&PL);//武器をロードする
 
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		enemyFleet.push_back(ShipMain());//テスト用敵船を生成する
 		auto enemyShip = enemyFleet.end();//イテレータで船を選ぶ
 		enemyShip--;
@@ -399,7 +402,8 @@ void IngameDataManagement::Control() {
 	if (answer == CommandSerial::INCREASE_OUTPUT ||
 		answer == CommandSerial::DECREASE_OUTPUT ||
 		answer == CommandSerial::MENU ||
-		answer == CommandSerial::TURN_RETURN)
+		answer == CommandSerial::TURN_RETURN||
+		answer >= CommandSerial::SELECT)
 		if (!CUI.ReferClickable())
 			return;
 
@@ -414,31 +418,25 @@ void IngameDataManagement::Control() {
 	/*船を操作*/
 	auto ship = alliesFleet.begin();
 	ship->ControlThisShip(answer);
+
+	CUI.SetClickTime();//クリックした時間を記録する
 	
+	/*select以前のコマンドの処理*/
 	if (answer < CommandSerial::SELECT) {
-		CUI.SetClickTime();//クリックした時間を記録する
 		switch (answer) {
 		case CommandSerial::SHOOT:TestShoot(); break;/*射撃*/
-		case CommandSerial::MENU: {
-			if (!CUI.CheckMenuOpened()) {
-				CUI.LetMeSeeMenu();//メニューを開く
-			}
-			else {
-				CUI.CloseMenu();//メニューを閉じる
-			}
-		}break;
+		case CommandSerial::MENU:CUI.LetMeSeeMenu();break;/*メニュー状態変更*/
 		case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*テストビュー*/
-		case CommandSerial::TEST_INCREASE_FRAME:FC.SetFrame(true); break;
-		case CommandSerial::TEST_DECREASE_FRAME:FC.SetFrame(false); break;
 		case CommandSerial::EXIT:GameOver = true; break;	/*ゲーム終了*/
 		}
 	}
 
 	else {
-		CUI.SetClickTime();//クリックした時間を記録する
+	
 		ship->fireDataFigureUp.SetNumber(answer -
 			CommandSerial::SELECT - CommandSerial::SELECT_RANGE);
 		ship->fireDataFigureUp.LockOn_Switch();
+		CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());
 	}
 }
 
@@ -520,6 +518,7 @@ void IngameDataManagement::Inif() {
 	TEST();
 	CUI.InifShipList(&enemyFleet,false);
 	CUI.InifShipList(&alliesFleet, true);
+	CUI.SetNormalStatus();/*ここはテストバージョン*/
 }
 
 /*使ったメモリを解放する*/

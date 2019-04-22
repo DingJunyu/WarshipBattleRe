@@ -111,6 +111,9 @@ void PictureLoader::LoadUserInterfaceInGame() {
 		"GraphicData/User_Interface/Speed_Pan.png");
 	UIList[UI_LIST::ENGINE_PAN] = LoadGraph(
 		"GraphicData/User_Interface/Engine_Pan.png");
+	UIList[UI_LIST::LOCK_CIRCLE] = LoadGraph(
+		"GraphicData/User_Interface/Lock.png");
+
 	/*ミニマップ*/
 	miniMapMatHandle = LoadGraph(
 		"GraphicData/User_Interface/MiniMap_Mat.jpg");

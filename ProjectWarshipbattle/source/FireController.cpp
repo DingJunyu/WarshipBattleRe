@@ -60,6 +60,7 @@ double FireController::FindTheDistance(double Distance,
 
 	double realRadian = (MaxRadian - MinRadian) / 2 + MinRadian;//二分法で計算する
 	
+	/*テストデータを設置する*/
 	testAmmo.SetSpeed(speed);
 	testAmmo.SetRadianOnY(realRadian);
 	testAmmo.SetCoord(originPoint);

@@ -159,7 +159,8 @@ enum UI_LIST {
 	TEXT_BAR_SPEED,
 	TEXT_BAR_TURRET,
 	SPEED_PAN,
-	ENGINE_PAN
+	ENGINE_PAN,
+	LOCK_CIRCLE
 };
 
 enum LAMP_LIST {
@@ -294,6 +295,8 @@ namespace USER_INTERFACE_POSITION {
 	const double ENGINE_PAN_MULTI = .08;
 	const double ENGINE_PAN_X = .26;
 	const double ENGINE_PAN_Z = .88;
+
+	const double LOCK_CIRCLE = .4;
 }
 
 namespace LAMP_POSITION {

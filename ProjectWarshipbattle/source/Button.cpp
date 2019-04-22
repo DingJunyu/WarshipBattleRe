@@ -21,7 +21,7 @@ void Button::SetXZ(double xP, double zP, double zM) {
 	coordX = (int)(xP * Screen::SCREEN_X);
 	coordZ = (int)(zP * Screen::SCREEN_Z);
 
-	zoomMultiple = zM;
+	zoomMultiple = zM;//Šg‘å—¦‚ğİ’è‚·‚é
 }
 
 void Button::CheckXZ() {
@@ -36,7 +36,7 @@ void Button::CheckMousePosition(int mouseX, int mouseZ) {
 			pressed = true;
 		}
 	}
-	pressed = false;
+	pressed = false;//‰Ÿ‚³‚ê‚½ó‘Ô‚ğ‰ğœ‚·‚é
 }
 
 void Button::DrawThisButton() {

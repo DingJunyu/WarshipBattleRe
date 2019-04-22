@@ -34,6 +34,7 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
 		0.06, 1.005);
 }
 
+/*ファイル操作を入れたのため、初期化の速度が大幅早くなりました*/
 void ShipMain::FindThosePoint() {
 	using namespace AUTO_SHIP_DATA;
 

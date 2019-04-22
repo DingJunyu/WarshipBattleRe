@@ -33,8 +33,8 @@ int Controller::GetCommand() {
 		return CommandSerial::TEST_VIEW_ON;
 
 	//Debug
-	if (KeyBuf[KEY_INPUT_P])
-		WaitKey();
+//	if (KeyBuf[KEY_INPUT_P] && GetInputChar(TRUE))
+//		WaitKey();
 	if (KeyBuf[KEY_INPUT_NUMPAD9] && GetInputChar(TRUE))
 		return CommandSerial::TEST_INCREASE_FRAME;
 	if (KeyBuf[KEY_INPUT_NUMPAD6] && GetInputChar(TRUE))

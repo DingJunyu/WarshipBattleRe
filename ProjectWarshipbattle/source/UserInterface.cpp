@@ -11,7 +11,7 @@ void UserInterface::InifUI(PictureLoader *PL) {
 	miniMapMat = PL->ReferMiniMapMatHandle();
 	miniMapPaper = PL->ReferMiniMapPaperHandle();
 
-	for (int i = UI_LIST::RADAR; i <= UI_LIST::ENGINE_PAN; i++)
+	for (int i = UI_LIST::RADAR; i <= UI_LIST::LOCK_CIRCLE; i++)
 		handleList[i] = PL->ReferUIList(i);
 
 	Coordinate2D<float> coord;
@@ -216,6 +216,12 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].Draw();
 }
 
+void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<int> coord
+	, Camera camera) {
+	if (lock)
+		DrawCircle(coord,camera);
+}
+
 void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {
 	
 	unsigned int enemyCr = GetColor(255, 0, 0);
@@ -311,4 +317,26 @@ void UserInterface::DrawRotatePicture(int SN, double X, double Z, double Multipl
 		Multiple,
 		Radian, *handleList[SN], TRUE, FALSE
 	);
+}
+
+void UserInterface::DrawRotatePicture2(int SN, double X, double Z, double Multiple,
+	double Radian) {
+	int graphSizeX, graphSizeZ;
+
+	GetGraphSize(*handleList[SN], &graphSizeX, &graphSizeZ);
+
+	DrawRotaGraph3(
+		(int)X, (int)Z,
+		graphSizeX / 2, graphSizeZ / 2,
+		Multiple,
+		Multiple,
+		Radian, *handleList[SN], TRUE, FALSE
+	);
+}
+
+void UserInterface::DrawCircle(Coordinate2D<int> coord, Camera camera) {
+	DrawRotatePicture2(UI_LIST::LOCK_CIRCLE, coord.x - camera.ReferRealCameraX(), 
+		coord.z - camera.ReferRealCameraZ(),
+		USER_INTERFACE_POSITION::LOCK_CIRCLE, radian_returnTheLockCircle);
+	radian_returnTheLockCircle += MathAndPhysics::PI / 720;
 }

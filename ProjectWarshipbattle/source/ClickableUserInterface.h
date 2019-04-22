@@ -32,12 +32,16 @@ public:
 	/*マウスの座標を取ってコマンドを取る*/
 	int CheckChoice();
 	void Draw();
+	void DrawNeedInput(bool lock, int num);
 	/*最初に現るものを見えるように設定する*/
 	void SetNormalStatus();
 	/*メニューが使えるかのスイッチ*/
 	void LetMeSeeMenu();
 	void CloseMenu();
 	bool CheckMenuOpened() { return menuOpened; }
+	/*射撃部分ボタン*/
+	void SetShootMenu(bool status);
+	void DrawChoosedShip(bool lock, int num);
 
 	/*押された時間を記録*/
 	void SetClickTime() { lastClickTime = GetTickCount(); }

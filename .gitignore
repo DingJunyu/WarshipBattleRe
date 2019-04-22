@@ -36,6 +36,6 @@ Release/
 *.out
 *.app
 
-# log
+#log
 Log.txt
 
