@@ -148,12 +148,19 @@ void AllMovableObjects::DrawSub(Camera CM) {
 	int shadowDistanceOnX = 2;
 	int shadowDistanceOnZ = 2;
 
+	double coordX = coord.x - CM.ReferRealCameraX();
+	double coordZ = coord.z - CM.ReferRealCameraZ();
+
 	//–{‘Ì‚ð•`‚­
-	DrawRotaGraph3((int)(coord.x - CM.ReferRealCameraX()),
-		(int)(coord.z - CM.ReferRealCameraZ()),
-		(int)(length / 2), (int)(width / 2),
-		multiple, multiple, radianOnZ,
-		*pictureHandle, TRUE, FALSE);
+	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
+	if (coordX > 0 - 100 && coordX < Screen::SCREEN_X + 100 && coordZ>0 - 100 &&
+		coordZ < Screen::SCREEN_Z + 100) {
+		DrawRotaGraph3((int)(coordX),
+			(int)(coordZ),
+			(int)(length / 2), (int)(width / 2),
+			multiple, multiple, radianOnZ,
+			*pictureHandle, TRUE, FALSE);
+	}
 }
 
 void AllMovableObjects::DrawSubShadow(Camera CM) {
@@ -161,13 +168,20 @@ void AllMovableObjects::DrawSubShadow(Camera CM) {
 	int shadowDistanceOnX = 2;
 	int shadowDistanceOnZ = 2;
 
+	double coordX = coord.x - CM.ReferRealCameraX() + shadowDistanceOnX;
+	double coordZ = coord.z - CM.ReferRealCameraZ() + shadowDistanceOnZ;
+
 	//ƒJƒƒ‰‚ÌÀ•W‚ðŽæ‚Á‚Ä‰f‚·À•W‚ðŒvŽZ‚·‚é
 	//‰e‚ð•`‚­
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//“§–¾“x‚ð‰º‚ª‚é
-	DrawRotaGraph3((int)(coord.x - CM.ReferRealCameraX() + shadowDistanceOnX),
-		(int)(coord.z - CM.ReferRealCameraZ() + shadowDistanceOnZ),
-		(int)(length / 2), (int)(width / 2),
-		multiple, multiple, radianOnZ,
-		*shadowHandle, TRUE, FALSE);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//•`‰æƒ‚[ƒh‚ð‚à‚Æ‚É–ß‚é
+	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
+	if (coordX > 0 - 100 && coordX < Screen::SCREEN_X + 100 && coordZ>0 - 100 &&
+		coordZ < Screen::SCREEN_Z + 100) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//“§–¾“x‚ð‰º‚ª‚é
+		DrawRotaGraph3((int)(coordX),
+			(int)(coordZ),
+			(int)(length / 2), (int)(width / 2),
+			multiple, multiple, radianOnZ,
+			*shadowHandle, TRUE, FALSE);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	}//•`‰æƒ‚[ƒh‚ð‚à‚Æ‚É–ß‚é
 }

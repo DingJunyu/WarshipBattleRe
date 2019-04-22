@@ -16,9 +16,17 @@ void Ammo::SetData() {
 }
 
 void Ammo::Draw(int x,int z){
-	DrawRotaGraph3((int)ReferCoordX() - x,
-		(int)ReferCoordZ() - z,
-		graphX / 2, graphZ / 2,
-		0.05, 0.05, ReferRadianOnZ(),
-		*ammoHandle, TRUE, FALSE);
+	double realX, realZ;
+	realX = ReferCoordX() - x;
+	realZ = ReferCoordZ() - z;
+
+	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
+	if (realX > 0 && realX < Screen::SCREEN_X&&
+		realZ>0 && realZ < Screen::SCREEN_Z) {
+		DrawRotaGraph3((int)ReferCoordX() - x,
+			(int)ReferCoordZ() - z,
+			graphX / 2, graphZ / 2,
+			0.05, 0.05, ReferRadianOnZ(),
+			*ammoHandle, TRUE, FALSE);
+	}
 }

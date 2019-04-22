@@ -12,6 +12,7 @@
 #include"SoundLoader.h"//音声ローダー
 #include"FireController.h"//射撃管理
 #include"Lock.h"//ロックする時に関わる操作やデータ
+#include<stdio.h>
 class ShipMain :
 	public AllMovableObjects
 {
@@ -130,6 +131,7 @@ private:
 	CrashSize3d<double> shipMainCrash;
 	/*自分の弾が自分に当たらないように使用する番号です*/
 	int serialNumber;
+	int shipType;
 
 	Weapon * MainWeapon;//メイン武器
 	int MainWeaponCount;//メイン武器の数
@@ -165,7 +167,7 @@ private:
 	void DrawSubPoint(Camera camera);
 
 	double draft;//喫水:魚雷を使う時に使うデータです。
-	int shipType;
+	int thisShipType;
 
 	int *shipHandle[SerialNumberOfShipHandle::ARRAY_SIZE];
 

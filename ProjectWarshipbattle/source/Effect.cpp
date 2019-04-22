@@ -16,12 +16,21 @@ void Effect::Draw(int x,int z) {
 
 	offsetOnX = zoomMutliple * zoomMutliple * graphX * 0.25 ;//‚wÀ•W‚Ì•ÎˆÚ‚ðŒvŽZ
 	offsetOnZ = zoomMutliple * zoomMutliple * graphZ * 0.25 ;//‚yÀ•W‚Ì•ÎˆÚ‚ðŒvŽZ
+	
+	double realX, realZ;
 
-	DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
-		(int)coordZ - z - (int)offsetOnZ,
-		0, 0,
-		zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI/4,
-		*graphicHandle, TRUE, FALSE);
+	realX = coordX - x - offsetOnX;
+	realZ = coordZ - z - offsetOnZ;
+
+	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
+	if (realX > 0 && realX < Screen::SCREEN_X&&
+		realZ>0 && realZ < Screen::SCREEN_Z) {
+		DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
+			(int)coordZ - z - (int)offsetOnZ,
+			0, 0,
+			zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
+			*graphicHandle, TRUE, FALSE);
+	}
 
 	/*ƒeƒXƒg—p*/
 	/*unsigned int Cr = GetColor(0, 0, 255);

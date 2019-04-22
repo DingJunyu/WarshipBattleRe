@@ -1,7 +1,5 @@
 #include "Attacker.h"
-
-
-
+/*UŒ‚‹@‚ÌÀ‘•*/
 Attacker::Attacker()
 {
 }

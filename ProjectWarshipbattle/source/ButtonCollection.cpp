@@ -25,6 +25,7 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 			PL->ReferButtonIntheGame(i),
 			PL->ReferButtonPressedIntheGame(i)
 		);
+	/*敵リストと自機リスト*/
 	for (int i = CommandSerial::SELECT;
 		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2; i++) {
 		buttonContainer[i].Inif(

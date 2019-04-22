@@ -76,35 +76,35 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 		);
 }
 
+/*左と右の船リストを初期化する*/
 void ClickableUserInterface::InifShipList(std::vector<ShipMain> *shipList, bool left) {
 	double count = 0;
+
+	int number;
 	
 	if (!shipList->empty())
 		for (auto ship = shipList->begin();
 			ship != shipList->end();
 			ship++) {
-		if (!left) {
-			SetThisOne(CommandSerial::SELECT + (int)count + CommandSerial::SELECT_RANGE,
-				BUTTON_POSITION_INGAME::SHIP_MARK_RIGHT_X,
-				BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
-				BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
-			BC.buttonContainer[SELECT + (int)count + CommandSerial::SELECT_RANGE].SetXZ(
-				buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::COORD_X],
-				buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::COORD_Z],
-				buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::MULTIPLE]);
-			buttonPosition[SELECT + (int)count + CommandSerial::SELECT_RANGE][SaveForCUI::SHOW] = 0;
-		}
-		else {
-			SetThisOne(CommandSerial::SELECT + (int)count,
-				BUTTON_POSITION_INGAME::SHIP_MARK_LEFT_X,
-				BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
-				BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
-			BC.buttonContainer[SELECT + (int)count].SetXZ(
-				buttonPosition[SELECT + (int)count][SaveForCUI::COORD_X],
-				buttonPosition[SELECT + (int)count][SaveForCUI::COORD_Z],
-				buttonPosition[SELECT + (int)count][SaveForCUI::MULTIPLE]);
-			buttonPosition[SELECT + (int)count][SaveForCUI::SHOW] = 0;
-		}
+		/*右リスト・左リストに応じて番号を取る*/
+		if (!left)
+			number = CommandSerial::SELECT + (int)count + CommandSerial::SELECT_RANGE;
+		else
+			number = CommandSerial::SELECT + (int)count;
+
+
+		/*座標を設定する*/
+		SetThisOne(number,
+			BUTTON_POSITION_INGAME::SHIP_MARK_RIGHT_X,
+			BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
+			BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
+		/*設定されたデータをボタンクラスに更新する*/
+		BC.buttonContainer[number].SetXZ(
+			buttonPosition[number][SaveForCUI::COORD_X],
+			buttonPosition[number][SaveForCUI::COORD_Z],
+			buttonPosition[number][SaveForCUI::MULTIPLE]);
+		buttonPosition[number][SaveForCUI::SHOW] = 0;
+		
 		count++;
 	}
 }

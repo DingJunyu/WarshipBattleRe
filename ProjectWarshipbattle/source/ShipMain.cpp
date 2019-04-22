@@ -4,11 +4,12 @@ ShipMain::~ShipMain()
 {
 }
 
-void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH ,int ShipNum,
+void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
 	EffectTemplate ET, SoundLoader *SL) {
 	SetPictureHandle(ShipHandle);
 	SetShadowHandle(SShadowH);
 	//GetDataFromShipdata(ShipNum);
+	thisShipType = ShipNum;
 	MemorySecure();
 	LoadSound(SL);
 	FindThosePoint();//あたり判定用ポイントを取得する
@@ -22,7 +23,8 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH ,int ShipNum,
 	}//泡生成ポイントを設置
 
 	for (int i = 0; i < 2; i++) {
-		smokeStartPoint[i] = ET.CopyFromCreateSmoke();
+		smokeStartPoint[i] = ET.CopyFromCreateSmoke();//テンプレートからコピーする
+		/*初期化する*/
 		smokeStartPoint[i].InifCoordinate(4, 0, true, 3000, 20, true,
 			0.06, 1.005);
 	}
@@ -46,6 +48,23 @@ void ShipMain::FindThosePoint() {
 	bool flg = false;
 	int num = 0;//配列番号
 
+	FILE *filePointer;//ファイルポインター
+	char fileName[100];
+	sprintf_s(fileName, 100, ".//Data//Points//%d.txt", thisShipType);
+
+	/*もし保存されたデータがある場合はそのまま読み込む*/
+	if ((fopen_s(&filePointer, fileName, "r")) == 0) {
+		int j;
+		fscanf_s(filePointer, "%d\n", &j);
+		for (int i = 0; i < j; i++) {
+			fscanf_s(filePointer, "%lf %lf\n", &aroundPointPos[i].x, &aroundPointPos[i].z);
+			/*ここはエラー処理が必要だと思います*/
+		}
+		
+		pointCount = AROUND_POINT;
+		fclose(filePointer);
+		return;//読み込んだら関数を終了
+	}
 
 	//初期化
 	for (int i = 0; i < AROUND_POINT; i++) {
@@ -80,38 +99,46 @@ void ShipMain::FindThosePoint() {
 		}
 		if (flg) break;	// 配列をオーバーしたらやめる
 	}
+
+	/*もしファイルがいなかった場合は新たにファイルを作って、データを保存する*/
+	fopen_s(&filePointer, fileName, "w");
+	fprintf(filePointer, "%d\n", num);
+	for (int i = 0; i < AROUND_POINT; i++) {
+		fprintf(filePointer, "%lf %lf\n", aroundPointPos[i].x, aroundPointPos[i].z);
+	}
+	fclose(filePointer);
+
 	pointCount = num;
 }
 
 /*出力パーセンテージ変更*/
 void ShipMain::ChangeAccPercentage(bool up) {
-	if (up&&currentAccPercentage < 1.0f) {
-		currentAccPercentage += 0.25f;
-		mainEngine.SetOutPutPercentage(currentAccPercentage);
+	if (up&&currentAccPercentage < 1.0f) {//範囲内であれば
+		currentAccPercentage += 0.25f;	//増加する
 	}
-	if (!up&&currentAccPercentage > -0.25f) {
-		currentAccPercentage -= 0.25f;
-		mainEngine.SetOutPutPercentage(currentAccPercentage);
+	if (!up&&currentAccPercentage > -0.25f) {//範囲内であれば
+		currentAccPercentage -= 0.25f; //減少する
 	}
+	mainEngine.SetOutPutPercentage(currentAccPercentage);//今の出力を与える
 }
 
 void ShipMain::CalSpeed() {
 	/*物理演算に変わりました*/
-	mainEngine.Update();
-	SetOutput(mainEngine.ReferOutput());
+	mainEngine.Update();//エンジンのステータスを更新
+	SetOutput(mainEngine.ReferOutput());//更新された出力を設定する
 }
 
 /*進行方向変更*/
 void ShipMain::ChangeDirect(bool right) {
 	if (right) {
-		currentRadian += radianChangePerFrame;
+		currentRadian += radianChangePerFrame;//右旋回
 	}
 	else {
-		currentRadian -= radianChangePerFrame;
+		currentRadian -= radianChangePerFrame;//左旋回
 	}
-	if (currentRadian > maxRadian)
+	if (currentRadian > maxRadian)//右の範囲検査
 		currentRadian = maxRadian;
-	if (currentRadian < -maxRadian)
+	if (currentRadian < -maxRadian)//左の範囲検査
 		currentRadian = -maxRadian;
 }
 
@@ -119,20 +146,24 @@ void ShipMain::ChangeDirect(bool right) {
 void ShipMain::Alignment() {
 
 	if (returnToCenter == true) {
+		//舵が右にある時
 		if (currentRadian > MathAndPhysics::PI / 10000)
 			currentRadian -= MathAndPhysics::PI / 10000;
+		//舵が左にある時
 		if (currentRadian < -MathAndPhysics::PI / 10000)
 			currentRadian += MathAndPhysics::PI / 10000;
-		if ((currentRadian < MathAndPhysics::PI / 10000 
+		/*中心に近くなると中心に置くようにする*/
+		if ((currentRadian < MathAndPhysics::PI / 10000
 			&& currentRadian>0) ||
 			(currentRadian > -MathAndPhysics::PI / 10000 
 				&& currentRadian < 0)) {
 			currentRadian = 0;
 		}
+		/*舵が中心にある時に自動戻る状態を解除*/
 		if (currentRadian == 0)
 			returnToCenter = false;
 	}
-	SetRadianChangePerFrame(currentRadian);
+	SetRadianChangePerFrame(currentRadian);//今の状態を更新する
 }
 
 /*ここの処理はコマンドに関わるものだけです*/
@@ -218,6 +249,7 @@ void ShipMain::DestroyMemory() {
 Effect ShipMain::NewBubble(int num) {
 	double newRadian = ReferRadianOnZ() - MathAndPhysics::PI;
 
+	//バブルポイントから泡を生成する
 	return bubbleStartPoint[num].NewEffect(newRadian,
 		ReferSpeedOnZ(),
 		ReferCoordX(), ReferCoordZ());
@@ -304,8 +336,9 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 			0.0, 0.2, 100,
 			50, 12, PL->ReferAmmoHandle(0), 17, 20,serialNumber);
 		MainWeapon[i] = Weapon;
-		MainWeapon[i].SetCoolDownTime(3200);//3200
+		MainWeapon[i].SetCoolDownTime(3200);//射撃間隔を設定する
 	}
+	/*武器のステータスを射撃コントロールにあげる*/
 	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());
 	//速度を読み込み、初期化する
 	fireControllerMain.InifDistance(MainWeapon[0].ReferMaxRadianOnY(), 0);
@@ -368,6 +401,7 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 	if (render)
 		CalDistance(ship);//距離を計算する
 
+	/*自分と敵の座標を取る*/
 	double x1, x2, z1, z2;
 	x1 = ship->ReferCoordX();
 	x2 = ReferCoordX();
