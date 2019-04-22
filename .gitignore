@@ -4,9 +4,8 @@
 #folders
 .vs/
 Debug/
-
-
 Release/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -36,4 +35,7 @@ Release/
 *.exe
 *.out
 *.app
+
+# log
+Log.txt
 
