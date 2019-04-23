@@ -440,12 +440,18 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 		PullMainWeapon(true);
 	}
 	/*…•½*/
-	if (MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ() -
-		targetRadianOnZforMain > 0.03) {
+	double difference = MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ() -
+		targetRadianOnZforMain;
+
+	//‚¢‚Â‚àù‰ñŠp“x‚ª¬‚³‚¢‚È•ûŒü‚Ö‰ñ‚·
+	difference = fmod(difference, MathAndPhysics::PI);
+
+	/*¶‚Ö‰ñ‚·Žž*/
+	if (difference > 0.05) {
 		TurnMainWeapon(false);
 	}
-	else if (MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ() -
-		targetRadianOnZforMain < 0.03) {
+	/*‰E‚Ö‰ñ‚·Žž*/
+	else if (difference < 0.05) {
 		TurnMainWeapon(true);
 	}
 }
