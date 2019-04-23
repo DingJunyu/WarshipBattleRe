@@ -113,6 +113,8 @@ void PictureLoader::LoadUserInterfaceInGame() {
 		"GraphicData/User_Interface/Engine_Pan.png");
 	UIList[UI_LIST::LOCK_CIRCLE] = LoadGraph(
 		"GraphicData/User_Interface/Lock.png");
+	UIList[UI_LIST::MY_DIRECT] = LoadGraph(
+		"GraphicData/User_Interface/ShowPlayerDirect.png");
 
 	/*ミニマップ*/
 	miniMapMatHandle = LoadGraph(

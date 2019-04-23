@@ -38,6 +38,7 @@
     <ClInclude Include="source\EffectTemplate.h" />
     <ClInclude Include="source\Engine.h" />
     <ClInclude Include="source\FireController.h" />
+    <ClInclude Include="Source\FlagShipAI.h" />
     <ClInclude Include="source\FrameControl.h" />
     <ClInclude Include="source\HeaderForIngameDataManagement.h" />
     <ClInclude Include="source\HeaderForMain.h" />
@@ -80,6 +81,7 @@
     <ClCompile Include="source\EffectTemplate.cpp" />
     <ClCompile Include="source\Engine.cpp" />
     <ClCompile Include="source\FireController.cpp" />
+    <ClCompile Include="Source\FlagShipAI.cpp" />
     <ClCompile Include="source\FrameControl.cpp" />
     <ClCompile Include="source\GameMain.cpp" />
     <ClCompile Include="source\IngameDataManagement.cpp" />

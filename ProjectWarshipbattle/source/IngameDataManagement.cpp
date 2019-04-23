@@ -59,7 +59,8 @@ void IngameDataManagement::DrawAll() {
 	/*ˆÚ“®‚Å‚«‚éƒp[ƒc‚ð•`‚­*/
 	DrawEffectUnderShips();
 	UI.DrawUIUnderShip(ship->fireDataFigureUp.ReferLockOn(),
-		enemyFleet[ship->fireDataFigureUp.ReferTarget()].ReferCoord2D(), MainCamera);
+		enemyFleet[ship->fireDataFigureUp.ReferTarget()].ReferCoord2D(),
+		MainCamera, ship->ReferRadianOnZ() + ship->ReferChangingRadian());
 //	DrawTorpedo();
 	DrawShips();
 	DrawEffectBeyondShips();
@@ -330,8 +331,8 @@ void IngameDataManagement::TEST() {
 		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
-		enemyShip->NewCoordX(1200 - (rand() % 400) * 3);
-		enemyShip->NewCoordZ(400 -  (rand() % 400));
+		enemyShip->NewCoordX(1200 + (rand() % 400) * i);
+		enemyShip->NewCoordZ(400 +  (rand() % 400) * i);
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
 		enemyShip->SetLength(PL.ReferShipSizeX());

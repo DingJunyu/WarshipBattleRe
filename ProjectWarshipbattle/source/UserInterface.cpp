@@ -11,7 +11,7 @@ void UserInterface::InifUI(PictureLoader *PL) {
 	miniMapMat = PL->ReferMiniMapMatHandle();
 	miniMapPaper = PL->ReferMiniMapPaperHandle();
 
-	for (int i = UI_LIST::RADAR; i <= UI_LIST::LOCK_CIRCLE; i++)
+	for (int i = UI_LIST::RADAR; i <= UI_LIST::MY_DIRECT; i++)
 		handleList[i] = PL->ReferUIList(i);
 
 	Coordinate2D<float> coord;
@@ -217,9 +217,10 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 }
 
 void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<int> coord
-	, Camera camera) {
+	, Camera camera, double radian) {
 	if (lock)
 		DrawCircle(coord,camera);
+	DrawMyCircle(camera, radian);
 }
 
 void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {
@@ -339,4 +340,17 @@ void UserInterface::DrawCircle(Coordinate2D<int> coord, Camera camera) {
 		coord.z - camera.ReferRealCameraZ(),
 		USER_INTERFACE_POSITION::LOCK_CIRCLE, radian_returnTheLockCircle);
 	radian_returnTheLockCircle += MathAndPhysics::PI / 720;
+}
+
+void UserInterface::DrawMyCircle(Camera camera, double radian) {
+	int xOnScreen;
+	int zOnScreen;
+
+	xOnScreen = Screen::SCREEN_X / 2;
+	zOnScreen = Screen::SCREEN_Z / 2;
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);//“§–¾“x‚ð‰º‚ª‚é
+	DrawRotatePicture2(UI_LIST::MY_DIRECT,
+		xOnScreen, zOnScreen, USER_INTERFACE_POSITION::MY_DIRECT_MULTI, radian);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//“§–¾“x‚ð–ß‚é
 }
