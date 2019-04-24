@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\AirWeapon.h" />
+    <ClInclude Include="source\AI_Action.h" />
     <ClInclude Include="source\AllMovableObjects.h" />
     <ClInclude Include="source\Ammo.h" />
     <ClInclude Include="source\AntiAir.h" />

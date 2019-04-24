@@ -12,6 +12,12 @@ enum AI_MOVE_FLAGSHIP{
 	IN_BATTLE
 };
 
+enum AI_FLAGSHIP_SPEED {
+	BATTLE_SPEED_NORMAL,//普通に戦闘が行う時の速度
+	BATTLE_SPEED_ESCAPE_PURSUIT,//逃げる時の速度
+	PARTORL //パトロール時の速度
+};
+
 enum BATTLE_STATUS {
 	APPROACHING,//同航戦
 	GOING_FAR_AWAY//反航戦

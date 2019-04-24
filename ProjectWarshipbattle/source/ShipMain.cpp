@@ -402,30 +402,12 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 	if (render)
 		CalDistance(ship);//‹——£‚ğŒvZ‚·‚é
 
-	/*©•ª‚Æ“G‚ÌÀ•W‚ğæ‚é*/
-	double x1, x2, z1, z2;
-	x1 = ship->ReferCoordX();
-	x2 = ReferCoordX();
-	z1 = ship->ReferCoordZ();
-	z2 = ReferCoordZ();
+	//–Ú•Wƒ‰ƒWƒAƒ“
+	double difference;
 
-	//‹tOŠpŠÖ”‚ğ—˜—p‚µ‚Äƒ‰ƒWƒAƒ“‚ğŒvZ‚·‚é
-	targetRadianOnZforMain = atan((z2 - z1) / (x2 - x1));
-
-	if (x1 > x2 && z1 < z2) {//“G‚Í‘æˆêÛŒÀ‚É‚¢‚é
-		targetRadianOnZforMain = targetRadianOnZforMain;
-	}
-	else if (x1 > x2 && z1 > z2) {//“G‚Í‘æ“ñÛŒÀ‚É‚¢‚é
-		targetRadianOnZforMain = targetRadianOnZforMain;
-	}
-	else if (x1 < x2 && z1 > z2) {//“G‚Í‘æOÛŒÀ‚É‚¢‚é
-		targetRadianOnZforMain = targetRadianOnZforMain + MathAndPhysics::PI;
-	}
-	else {//“G‚Í‘ælÛŒÀ‚É‚¢‚é
-		targetRadianOnZforMain = MathAndPhysics::PI + targetRadianOnZforMain;
-	}
-
-	//targetRadianOnZforMain = asin((z2 - z1) / sqrt((pow(z2 - z1, 2) + pow(x2 - x1, 2))));
+	//–Ú•Wƒ‰ƒWƒAƒ“‚ğŒvZ‚·‚é
+	difference = CalRadianBetweenPoints(ship->ReferCoord2D_d(), ReferCoord2D_d(),
+		MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ());
 
 	/*‚’¼Šp“x‚ÌŒvZEC³*/
 	targetRadianForMain = fireControllerMain.CalDistanceAndTellMeRadianOnY(distance)
@@ -439,19 +421,13 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 	else if (MainWeapon->ReferRadianOnY() - targetRadianForMain < 0.03) {
 		PullMainWeapon(true);
 	}
-	/*…•½*/
-	double difference = MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ() -
-		targetRadianOnZforMain;
-
-	//‚¢‚Â‚àù‰ñŠp“x‚ª¬‚³‚¢‚È•ûŒü‚Ö‰ñ‚·
-	difference = fmod(difference, MathAndPhysics::PI);
 
 	/*¶‚Ö‰ñ‚·*/
-	if (difference > 0.05) {
+	if (difference > 0.03) {
 		TurnMainWeapon(false);
 	}
 	/*‰E‚Ö‰ñ‚·*/
-	else if (difference < 0.05) {
+	else if (difference < 0.03) {
 		TurnMainWeapon(true);
 	}
 }

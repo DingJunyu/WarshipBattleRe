@@ -49,3 +49,32 @@ bool crash3Dto3D(Coordinate<double>A, Coordinate<double> B,
 	double radianA, double radianB) {
 	return false;
 }
+
+double CalRadianBetweenPoints(Coordinate2D<double> A, Coordinate2D<double> B,
+	double radian) {
+	double targetRadianOnZforMain;
+
+	//‹tOŠpŠÖ”‚ğ—˜—p‚µ‚Äƒ‰ƒWƒAƒ“‚ğŒvZ‚·‚é
+	targetRadianOnZforMain = atan((B.z - A.z) / (B.x - A.x));
+
+	if (A.x > B.x && A.z < B.z) {//“G‚Í‘æˆêÛŒÀ‚É‚¢‚é
+		targetRadianOnZforMain = targetRadianOnZforMain;
+	}
+	else if (A.x > B.x && A.z > B.z) {//“G‚Í‘æ“ñÛŒÀ‚É‚¢‚é
+		targetRadianOnZforMain = targetRadianOnZforMain;
+	}
+	else if (A.x < B.x && A.z > B.z) {//“G‚Í‘æOÛŒÀ‚É‚¢‚é
+		targetRadianOnZforMain = targetRadianOnZforMain + MathAndPhysics::PI;
+	}
+	else {//“G‚Í‘ælÛŒÀ‚É‚¢‚é
+		targetRadianOnZforMain = MathAndPhysics::PI + targetRadianOnZforMain;
+	}
+
+	/*…•½*/
+	double difference = radian -
+		targetRadianOnZforMain;
+	//‚¢‚Â‚àù‰ñŠp“x‚ª¬‚³‚¢‚È•ûŒü‚Ö‰ñ‚·
+	difference = fmod(difference, MathAndPhysics::PI);
+
+	return difference;
+}

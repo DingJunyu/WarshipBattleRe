@@ -335,6 +335,10 @@ template <typename T>
 struct Coordinate2D {
 	T x;
 	T z;
+
+	void ChangeX() { x = -x; }
+	void ChangeZ() { z = -z; }
+	void ChangeXandZ() { x = -x; z = -z; }
 };
 
 struct RadianNeededIn3D {

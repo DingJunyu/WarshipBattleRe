@@ -25,6 +25,8 @@ public:
 	double ReferCoordY() { return coord.y; }
 	double ReferCoordZ() { return coord.z; }
 	Coordinate<double> ReferCoord() { return coord; }
+	Coordinate2D<double> ReferCoord2D_d() { return Coordinate2D<double> 
+	{(double)coord.x, (double)coord.z}; }
 	Coordinate2D<int> ReferCoord2D() { return Coordinate2D<int> {(int)coord.x,(int)coord.z}; }
 	double ReferSpeedOnZ() { return speedOnZ; }
 	double ReferSpeedOnY() { return speedOnY; }
