@@ -392,6 +392,7 @@ namespace MathAndPhysics {
 	const double MIN_AIR_RESISTANCE = 0.0005;
 	const double PI = 3.14159265358;
 	const double OneDegree = 1.0 / 180.0;
+	const double OneDegreeRadian = PI * OneDegree;
 	const double MAX_SPEED_FOR_SHIP = 1.30;
 	const double RANGE_ERROR = 10;//Šp“x’T‚·ŠÖ”‚ª³í‚É“®ì‚µ‚È‚¢‚É“K“x‚Éã‚ª‚Á‚Ä‚İ‚æ‚¤
 }

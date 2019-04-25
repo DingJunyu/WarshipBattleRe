@@ -1,6 +1,7 @@
 #pragma once
 #include"DefinedData.h"
 #include"AI_Action.h"
+#include"ShipMain.h"
 #include"IncludeForAll.h"
 #include"OtherFunctions.h"
 class FlagShipAI
@@ -9,8 +10,10 @@ public:
 	FlagShipAI() :inBattle(false) {}
 	~FlagShipAI();
 
-	void LetUsGo();//移動関数-ステータスによって決めた行動を行う
+	void LetUsGo(ShipMain *ship);//移動関数-ステータスによって決めた行動を行う
 	void ShowMeTheTarget();//敵を指定する関数
+
+	double ReferRadianNeededNow() { return radianNeededNow; }
 
 private:
 	/*状態部分*/
@@ -24,11 +27,12 @@ private:
 	const int randRange = 1000;
 	const int nextPointFrame = 1800;//18秒後の位置をターゲットに設定する
 	/*関数部分*/
-	void SetMyPos(Coordinate2D<double> pos) { myPos = pos; }
+	void CalData(ShipMain *ship);
 	void SetWayPoint();//ウェイポイント設定関数
 	void SetWayPoint(Coordinate2D<double>, double radian, double speed);
 	void SetNowRadian(double rad) { nowRadian = rad; }
-	void CalTargetRadian();
+	void SetMyPos(Coordinate2D<double> pos) { myPos = pos; }
+	void CalTargetRadianAndSetRadianNeeded();
 	/*変数部分*/
 	Coordinate2D<double> wayPoint;
 	Coordinate2D<double> myPos;

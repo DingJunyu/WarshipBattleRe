@@ -22,3 +22,7 @@
 #include"SoundLoader.h"
 #include"OtherFunctions.h"
 #include"ClickableUserInterface.h"
+
+//AI
+#include"FlagShipAI.h"//敵フラグシープのAI
+#include"ArtificialIntelligence.h"//船別のAI

@@ -25,6 +25,32 @@ void FlagShipAI::SetWayPoint(Coordinate2D<double> targetPos, double radian, doub
 }
 
 /*–Ú•W‚Æ‚ÌŠp“x‚ðŒvŽZ‚·‚é*/
-void FlagShipAI::CalTargetRadian() {
+void FlagShipAI::CalTargetRadianAndSetRadianNeeded() {
+	using namespace MathAndPhysics;
+
 	targetRadian = CalRadianBetweenPoints(wayPoint, myPos, nowRadian);
+
+	if (targetRadian > 60 * OneDegreeRadian) {
+		radianNeededNow = 15 * OneDegreeRadian;
+	}
+	if (targetRadian <= 60 * OneDegreeRadian&&
+		targetRadian > 30 * OneDegreeRadian) {
+		radianNeededNow = 9 * OneDegreeRadian;
+	}
+	if (targetRadian <= 30 * OneDegreeRadian&&
+		targetRadian > 10 * OneDegreeRadian) {
+		radianNeededNow = 4 * OneDegreeRadian;
+	}
+	if (targetRadian <= 10 * OneDegreeRadian&&
+		targetRadian > 0) {
+		radianNeededNow = OneDegreeRadian;
+	}
+	if (targetRadian == 0) {
+		radianNeededNow = 0;
+	}
+	if (targetRadian < 0 &&
+		targetRadian >= -10 * OneDegreeRadian) {
+		radianNeededNow = -OneDegreeRadian;
+	}
 }
+
