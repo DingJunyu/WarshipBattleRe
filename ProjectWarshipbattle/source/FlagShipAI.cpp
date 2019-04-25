@@ -52,5 +52,6 @@ void FlagShipAI::CalTargetRadianAndSetRadianNeeded() {
 		targetRadian >= -10 * OneDegreeRadian) {
 		radianNeededNow = -OneDegreeRadian;
 	}
+
 }
 
