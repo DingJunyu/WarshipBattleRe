@@ -58,12 +58,6 @@ void UserInterface::DrawUI() {
 		Screen::SCREEN_X/2 + (int)mapPaperSize,
 		Screen::SCREEN_Z - 5, *miniMapPaper, FALSE);
 
-	/*レーダーA*/
-	DrawPictureByLeftUp(UI_LIST::RADAR,
-		USER_INTERFACE_POSITION::RADAR_A_X,
-		USER_INTERFACE_POSITION::RADAR_A_Z,
-		USER_INTERFACE_POSITION::RADAR_A_MULTI);
-
 	/*角度指示*/
 	DrawPictureByLeftUp(UI_LIST::SHOW_RADIAN_ON_Y,
 		USER_INTERFACE_POSITION::SHOW_RADIAN_ON_Y_X,
@@ -123,14 +117,39 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 
 	double radian;
 
-	/*レーダーの上の矢印*/
-	radian = ship->ReferMainWeaponRadianOnZ() + ship->ReferRadianOnZ()
-		- MathAndPhysics::PI/4;
-	DrawRotatePicture(UI_LIST::ARROW_RED,
-		USER_INTERFACE_POSITION::ARROW_RED_A_X,
-		USER_INTERFACE_POSITION::ARROW_RED_A_Z,
-		USER_INTERFACE_POSITION::ARROW_RED_A_MULTI,
-		radian);
+	/*ロック使ってない状態*/
+	if (!ship->fireDataFigureUp.ReferLockOn()) {
+		/*レーダーA*/
+		DrawPictureByLeftUp(UI_LIST::RADAR,
+			USER_INTERFACE_POSITION::RADAR_A_X,
+			USER_INTERFACE_POSITION::RADAR_A_Z,
+			USER_INTERFACE_POSITION::RADAR_A_MULTI);
+		/*レーダーの上の矢印*/
+		radian = ship->ReferMainWeaponRadianOnZ() + ship->ReferRadianOnZ()
+			- MathAndPhysics::PI / 4;
+		DrawRotatePicture(UI_LIST::ARROW_RED,
+			USER_INTERFACE_POSITION::ARROW_RED_A_X,
+			USER_INTERFACE_POSITION::ARROW_RED_A_Z,
+			USER_INTERFACE_POSITION::ARROW_RED_A_MULTI,
+			radian);
+	}
+	/*ロックを使っている状態*/
+	else {
+		/*knob*/
+		DrawPictureByLeftUp(UI_LIST::FORECAST_BUTTON,
+			USER_INTERFACE_POSITION::RADAR_A_X,
+			USER_INTERFACE_POSITION::RADAR_A_Z,
+			USER_INTERFACE_POSITION::RADAR_A_MULTI);
+		/*点*/
+		radian = ship->ReferForecastSecond() * MathAndPhysics::PI * 
+			MathAndPhysics::OneDegree * 6
+			- MathAndPhysics::PI * 0.75;
+		DrawRotatePicture(UI_LIST::FORECAST_POINT,
+			USER_INTERFACE_POSITION::ARROW_RED_A_X,
+			USER_INTERFACE_POSITION::ARROW_RED_A_Z,
+			USER_INTERFACE_POSITION::ARROW_RED_A_MULTI,
+			radian);
+	}
 
 	/*砲塔角度指示*/
 	Cr = GetColor(255, 0, 0);//色を設定する

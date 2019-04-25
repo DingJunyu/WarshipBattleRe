@@ -10,6 +10,10 @@ double Distance2D(Coordinate<double> A, Coordinate<double> B) {
 	return sqrt(pow(A.x - B.x, 2) + pow(A.z - B.z, 2));
 }
 
+double Distance2D(Coordinate2D<double> A, Coordinate2D<double> B) {
+	return sqrt(pow(A.x - B.x, 2) + pow(A.z - B.z, 2));
+}
+
 bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	CrashSize3d<double> ACrash, double radian) {
 	double aMinX, aMinY, aMinZ;
@@ -77,4 +81,17 @@ double CalRadianBetweenPoints(Coordinate2D<double> A, Coordinate2D<double> B,
 	difference = fmod(difference, MathAndPhysics::PI);
 
 	return difference;
+}
+
+/*座標予測関数*/
+void NextPoint(Coordinate2D<double> *coord, double radian, double speed, int frames) {
+	coord->x += (double)(speed * cos(radian) * frames);
+	coord->z += (double)(speed * sin(radian) * frames);
+}
+
+/*ランダムポイント*/
+void RandomPoint(Coordinate2D<double> *coord, double nextX, double nextZ,
+	int randRange) {
+	coord->x = nextX + (double)(rand() % randRange);
+	coord->z = nextZ + (double)(rand() % randRange);
 }

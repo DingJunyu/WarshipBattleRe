@@ -1,5 +1,9 @@
 #pragma once
 /*このヘッダーファイルに保存しているのはAIの行動指令表*/
+enum AI_WAYPOINT {
+	ON_X = 500,
+	ON_Z = 500
+};
 
 enum AI_MOVE_FLAGSHIP{
 	PATROL = 0,//パトロール//xunluo

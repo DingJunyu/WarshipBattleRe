@@ -21,6 +21,10 @@ enum CommandSerial {
 	TURRET_TURN_LEFT,
 	TURRET_PULLUP,
 	TURRET_PULLDOWN,
+	FORECAST_PLUS,
+	FORECAST_MINUS,
+	REVISE_RADIAN_ON_Z_PLUS,
+	REVISE_RADIAN_ON_Z_MINUS,
 	MENU,
 	CONTINUE,
 	SETTING,
@@ -149,6 +153,8 @@ enum UI_LIST {
 	AMOUNT = 20,
 
 	RADAR = 0,
+	FORECAST_BUTTON,
+	FORECAST_POINT,
 	ARROW_RED,
 	ARROW_RED_2,
 	ARROW_WHITE,
@@ -336,6 +342,7 @@ struct Coordinate2D {
 	T x;
 	T z;
 
+	/*インターフェイス*/
 	void ChangeX() { x = -x; }
 	void ChangeZ() { z = -z; }
 	void ChangeXandZ() { x = -x; z = -z; }

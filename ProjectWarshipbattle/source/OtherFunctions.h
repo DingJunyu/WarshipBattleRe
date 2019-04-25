@@ -12,6 +12,7 @@
 /*‹——£ŒvZŠÖ”*/
 double Distance3D(Coordinate<double> A, Coordinate<double> B);//‚R‚c‚Ì‹——£‚ğŒvZ‚·‚é
 double Distance2D(Coordinate<double> A, Coordinate<double> B);//‚Q‚c‚Ì‹——£‚ğŒvZ‚·‚é
+double Distance2D(Coordinate2D<double> A, Coordinate2D<double> B);
 
 /*‚ ‚½‚è”»’è*/
 bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
@@ -26,3 +27,7 @@ bool crash3Dto3D(Coordinate<double>A, Coordinate<double> B,
 /*–ß‚è’l‚Í¡‚ÌŒü‚«‚Æ–Ú•W‚ÖŒü‚«‚ÌŠp“x‚Ì·A•K‚¸‰sŠp‚ğ•Ô‚·*/
 double CalRadianBetweenPoints(Coordinate2D<double> A, Coordinate2D<double> B,
 	double radian);
+
+void NextPoint(Coordinate2D<double> *coord, double radian, double speed, int frames);
+void RandomPoint(Coordinate2D<double> *coord, double nextX, double nextZ,
+	int Range);

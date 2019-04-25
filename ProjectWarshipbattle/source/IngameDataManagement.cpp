@@ -340,6 +340,7 @@ void IngameDataManagement::TEST() {
 		enemyShip->TEST();
 		enemyShip->SetSerialNumber(2);
 		enemyShip->SetWeaponTest(&PL);
+		enemyShip->ChangeAccPercentage(true);
 	}
 }
 
@@ -437,6 +438,7 @@ void IngameDataManagement::Control() {
 		ship->fireDataFigureUp.SetNumber(answer -
 			CommandSerial::SELECT - CommandSerial::SELECT_RANGE);
 		ship->fireDataFigureUp.LockOn_Switch();
+		ship->ResetReviseData();//修正データをリセット
 		CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());
 	}
 }
@@ -568,9 +570,9 @@ void IngameDataManagement::GetNewEffect() {
 
 void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 	/*進行中の水泡生成*/
-	if (!alliesFleet.empty()) {
-		for (auto ship = alliesFleet.begin();
-			ship != alliesFleet.end();
+	if (!shipList.empty()) {
+		for (auto ship = shipList.begin();
+			ship != shipList.end();
 			ship++) {
 			if(ship->ReferAlive())
 			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 3 == 0
@@ -581,8 +583,8 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 					bubbleList.push_back(ship->NewBubble(i));//リストの末に追加する
 			}
 		}
-		for (auto ship = alliesFleet.begin();
-			ship != alliesFleet.end();
+		for (auto ship = shipList.begin();
+			ship != shipList.end();
 			ship++) {
 			if (ship->ReferAlive())
 			if (ship->ReferOutPutRate() != 0) {
@@ -669,7 +671,7 @@ void IngameDataManagement::DeleteUselessAmmo() {
 			shell != shellList.end();
 			shell++) {
 		if (shell->FallIntoWater()|| !shell->ReferUsable()) {
-			if (shell->FallIntoWater())
+			if (shell->FallIntoWater())//もし弾が水中に落ちったら
 				NewRipple(shell->ReferCoordX(), shell->ReferCoordZ());//弾を消す前に水泡を生成する
 			shell = shellList.erase(shell);//弾を消す
 		}

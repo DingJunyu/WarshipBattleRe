@@ -180,6 +180,10 @@ void ShipMain::ControlThisShip(int Command) {;
 	case CommandSerial::TURRET_TURN_LEFT:TurnMainWeapon(false); break;
 	case CommandSerial::TURRET_PULLUP:PullMainWeapon(true); break;
 	case CommandSerial::TURRET_PULLDOWN:PullMainWeapon(false); break;
+	case CommandSerial::FORECAST_PLUS:ChangeForecastSecond(true); break;
+	case CommandSerial::FORECAST_MINUS:ChangeForecastSecond(false); break;
+	case CommandSerial::REVISE_RADIAN_ON_Z_PLUS:ChangeReviseRadianOnY(true); break;
+	case CommandSerial::REVISE_RADIAN_ON_Z_MINUS:ChangeReviseRadianOnY(false); break;
 	}
 }
 
@@ -366,6 +370,7 @@ bool ShipMain::PullMainWeapon(bool up) {
 	return end;
 }
 
+/*落下地点を表示する*/
 void ShipMain::CalThePoint() {
 	CalMainPoint();
 }
@@ -380,7 +385,7 @@ void ShipMain::CalMainPoint() {
 	fireControllerMain.CalTheAnswer();//目標座標を計算する
 }
 
-
+/*砲弾落下地点を○で表示する*/
 void ShipMain::DrawMainPoint(Camera camera) {
 	Coordinate<double> point = fireControllerMain.ReferAnswer();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
@@ -396,17 +401,31 @@ void ShipMain::SufferDamage(int damage) {
 	if (hitPoint <= 0)
 		Killed();
 }
+/*ロックオン時の操作*/
+void ShipMain::ChangeForecastSecond(bool up) {
+	if (up && forecastSeconds <= maxForecastSecond)
+		forecastSeconds++;
+	if (!up&&forecastSeconds >= -maxForecastSecond)
+		forecastSeconds--;
+}
 
 /*ロック管理*/
 void ShipMain::TestLock(ShipMain *ship, bool render) {
-	if (render)
-		CalDistance(ship);//距離を計算する
+	if (render) {
+		if (forecastSeconds == 0)
+			CalDistance(ship);//距離を計算する
+		else
+			CalNextPos(ship);
+	}
 
 	//目標ラジアン
 	double difference;
 
 	//目標ラジアンを計算する
-	difference = CalRadianBetweenPoints(ship->ReferCoord2D_d(), ReferCoord2D_d(),
+	difference = CalRadianBetweenPoints(
+		(forecastSeconds == 0) ? ship->ReferCoord2D_d() : nextPos,
+		//予測を使う時は予測地点を使う、使わない時は敵の座標を使う
+		ReferCoord2D_d(),
 		MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ());
 
 	/*垂直角度の計算・修正*/
@@ -415,10 +434,12 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 
 	/*メイン武器の調整*/
 	/*垂直*/
-	if (MainWeapon[0].ReferRadianOnY() - targetRadianForMain > 0.03) {
+	if (MainWeapon[0].ReferRadianOnY() + reviseRadianOnZ 
+		- targetRadianForMain > 0.03) {
 		PullMainWeapon(false);
 	}
-	else if (MainWeapon->ReferRadianOnY() - targetRadianForMain < 0.03) {
+	else if (MainWeapon->ReferRadianOnY() + reviseRadianOnZ 
+		- targetRadianForMain < 0.03) {
 		PullMainWeapon(true);
 	}
 
@@ -434,4 +455,18 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 
 void ShipMain::CalDistance(ShipMain *ship) {
 	distance = Distance2D(ship->ReferCoord(), ReferCoord());
+}
+
+void ShipMain::CalNextPos(ShipMain *ship) {
+	nextPos = ship->ReferCoord2D_d();
+	NextPoint(&nextPos,ship->ReferRadianOnZ(), ship->ReferSpeedOnZ(),
+		forecastSeconds*framesCountInaSecond);
+	distance = Distance2D(nextPos, ReferCoord2D_d());
+}
+
+void ShipMain::ChangeReviseRadianOnY(bool up) {
+	if (reviseRadianOnZ <= maxReviseRadianOnZ && !up)
+		reviseRadianOnZ += MathAndPhysics::PI * MathAndPhysics::OneDegree * 0.25;
+	if (reviseRadianOnZ >= -maxReviseRadianOnZ && up)
+		reviseRadianOnZ -= MathAndPhysics::PI * MathAndPhysics::OneDegree * 0.25;
 }

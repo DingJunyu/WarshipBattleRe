@@ -89,6 +89,10 @@ void PictureLoader::LoadUserInterfaceInGame() {
 	GetGraphSize(shipCardMatHandle, &shipCardMatHandleX, &shipCardMatHandleZ);
 	UIList[UI_LIST::RADAR] = LoadGraph(
 		"GraphicData/User_Interface/Radar.png");
+	UIList[UI_LIST::FORECAST_BUTTON] = LoadGraph(
+		"GraphicData/User_Interface/knob.png");
+	UIList[UI_LIST::FORECAST_POINT] = LoadGraph(
+		"GraphicData/User_Interface/pointOnKnob.png");
 	UIList[UI_LIST::ARROW_RED] = LoadGraph(
 		"GraphicData/User_Interface/arrow_red.png");
 	UIList[UI_LIST::ARROW_RED_2] = LoadGraph(
@@ -220,6 +224,23 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/buttons/pull_down_normal.png");
 	buttonPressedIntheGame[CommandSerial::TURRET_PULLDOWN] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/pull_down_pressed.png");
+
+	buttonIntheGame[CommandSerial::FORECAST_PLUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/plus_1_second.png");
+	buttonPressedIntheGame[CommandSerial::FORECAST_PLUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/plus_1_second_pressed.png");
+	buttonIntheGame[CommandSerial::FORECAST_MINUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/minus_1_second.png");
+	buttonPressedIntheGame[CommandSerial::FORECAST_MINUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/minus_1_second_pressed.png");
+	buttonIntheGame[CommandSerial::REVISE_RADIAN_ON_Z_PLUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/revise_on_y_plus.png");
+	buttonPressedIntheGame[CommandSerial::REVISE_RADIAN_ON_Z_PLUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/revise_on_y_plus_pressed.png");
+	buttonIntheGame[CommandSerial::REVISE_RADIAN_ON_Z_MINUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/revise_on_y_minus.png");
+	buttonPressedIntheGame[CommandSerial::REVISE_RADIAN_ON_Z_MINUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/revise_on_y_minus_pressed.png");
 
 	buttonIntheGame[CommandSerial::MENU] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/menu_normal.png");

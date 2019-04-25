@@ -5,8 +5,8 @@ FlagShipAI::~FlagShipAI()
 }
 
 void FlagShipAI::SetWayPoint() {
-	wayPoint.x = nextPosOnMapX + (double)(rand() % randRange);
-	wayPoint.z = nextPosOnMapZ + (double)(rand() % randRange);
+	/*ランダムで次のターゲットを探す*/
+	RandomPoint(&wayPoint,nextPosOnMapX, nextPosOnMapZ, randRange);
 
 	if (myPos.x > 0 && myPos.z > 0) {
 		int target = rand() % 3;
@@ -16,4 +16,15 @@ void FlagShipAI::SetWayPoint() {
 		case 2:wayPoint.ChangeXandZ(); break;//第三象限に移す
 		}
 	}
+}
+
+/*敵の進行方向の前の点をターゲット点に設定する*/
+void FlagShipAI::SetWayPoint(Coordinate2D<double> targetPos, double radian, double speed) {
+	wayPoint = targetPos;
+	NextPoint(&wayPoint,radian, speed, nextPointFrame);
+}
+
+/*目標との角度を計算する*/
+void FlagShipAI::CalTargetRadian() {
+	targetRadian = CalRadianBetweenPoints(wayPoint, myPos, nowRadian);
 }

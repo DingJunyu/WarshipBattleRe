@@ -21,6 +21,9 @@ public:
 		currentAccPercentage = 0;
 		returnToCenter = false;
 
+		forecastSeconds = 0;
+		reviseRadianOnZ = 0;
+
 		/*テスト部分*/
 		hitPoint = 5000;
 		shipMainCrash = { 180, 40, 18 };
@@ -57,6 +60,13 @@ public:
 
 	/*簡単化した戦闘*/
 	void SufferDamage(int damage);
+	/*ロックオンの状態の操作*/
+	void ChangeForecastSecond(bool up);
+	void ChangeReviseRadianOnY(bool up);
+	void ResetReviseData() {
+		forecastSeconds = 0;
+		reviseRadianOnZ = 0;
+	}
 
 	//問い合わせ
 	/*移動関連*/
@@ -104,6 +114,8 @@ public:
 	//エンジン関連
 	double ReferEngineOutput() { return mainEngine.ReferOutput(); }
 	double ReferEngineMaxOutput() { return mainEngine.ReferMaxOutput(); }
+	/*ロック関係*/
+	int ReferForecastSecond() { return forecastSeconds; }
 
 	//エフェクト生成
 	Effect NewBubble(int num);
@@ -199,7 +211,14 @@ private:
 	FireController fireControllerSub;
 	double targetRadianForMain;
 	double targetRadianForSub;
+	const int framesCountInaSecond = 60;//毎秒フレーム数
+	const int maxForecastSecond = 15;
+	int forecastSeconds;//何秒後の位置を推測したい
+	Coordinate2D<double> nextPos;
+	double reviseRadianOnZ;
+	const double maxReviseRadianOnZ = MathAndPhysics::PI * (15.0 / 180.0);
 
+	void CalNextPos(ShipMain *ship);
 	void CalDistance(ShipMain *ship);
 
 	double distance;
