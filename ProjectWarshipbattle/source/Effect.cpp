@@ -19,6 +19,7 @@ void Effect::Draw(int x,int z) {
 	
 	double realX, realZ;
 
+	/*カメラの座標と偏移と今の座標を合わせて、書くべきところの座標を計算する*/
 	realX = coordX - x - offsetOnX;
 	realZ = coordZ - z - offsetOnZ;
 
@@ -42,16 +43,16 @@ void Effect::Check() {
 		zoomMutliple *= zoomRate;
 		if (zoomRate > 1)//拡大率がフレームごとに減る
 			zoomRate *= 0.99;
-		if (zoomRate <= 1)
+		if (zoomRate <= 1)//最小にしても１です
 			zoomRate = 1;
 	}
 
 	//目標角度になる前に回る
 	if (radian != targetRadian && abs(radian - targetRadian) >
 		radianChangePerFrame) {
-		if (radian < 0)
+		if (radian < 0)//0より小さい時は0に向かって旋回する
 			radian += radianChangePerFrame;
-		if (radian > 0)
+		if (radian > 0)//0より大きい時は0に向かって旋回する
 			radian -= radianChangePerFrame;
 	}
 
@@ -62,11 +63,12 @@ void Effect::Check() {
 
 void Effect::Move() {
 	//移動する前に角度をランダムに変わる
-	if (rand()%2==0)
+	if (rand() % 2 == 0)//確率は50%
 		radian += (double)((rand() % 2) / 180.0f) * MathAndPhysics::PI;
 	else
 		radian -= (double)((rand() % 2) / 180.0f) * MathAndPhysics::PI;
 
+	//移動する
 	coordX += cos(radian)*speed;
 	coordZ += sin(radian)*speed;
 }

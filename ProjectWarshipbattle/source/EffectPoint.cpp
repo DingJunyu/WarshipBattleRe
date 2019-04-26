@@ -17,6 +17,7 @@ Effect EffectPoint::NewEffect(double Radian, double Speed,
 	/*実際に生成すべきところの座標を計算する*/
 	realX = CoordX - cos(Radian) * newX + sin(Radian) * newZ;
 	realZ = CoordZ - cos(Radian) * newZ - sin(Radian) * newX;
+	/*エフェクトポイントに保存したデータを利用して新しいエフェクトを生成する*/
 	Effect E(movable,continueTime,Radian,Radian,0,Speed,realX,realZ,graphHandle,
 		spread,zoomMutliple, zoomRate);
 	return E;//正しいステータスを持っているエフェクトを返す
@@ -37,8 +38,8 @@ void EffectPoint::InifCoordinate(double RCX, double RCZ, bool MA, int CT,
 
 /*初期化*/
 void EffectPoint::Inif(int ET, int *Handle) {
-	effectType = ET;
-	graphHandle = Handle;
+	effectType = ET;//エフェクトタイプ
+	graphHandle = Handle;//画像ハンドル
 }
 
 /*デバッグモードオンにする時にエフェクトの生成場所を描画する*/

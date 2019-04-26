@@ -28,6 +28,8 @@ bool crash3Dto3D(Coordinate<double>A, Coordinate<double> B,
 double CalRadianBetweenPoints(Coordinate2D<double> A, Coordinate2D<double> B,
 	double radian);
 
+/*何フレーム後の位置を予測する*/
 void NextPoint(Coordinate2D<double> *coord, double radian, double speed, int frames);
+/*ランダムにポイントを生成する*/
 void RandomPoint(Coordinate2D<double> *coord, double nextX, double nextZ,
 	int Range);

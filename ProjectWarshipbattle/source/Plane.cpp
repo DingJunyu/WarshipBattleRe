@@ -3,7 +3,7 @@
 Plane::~Plane()
 {
 }
-
+/*飛行機の状態におおじて移動する*/
 void Plane::CalSpeed() {
 	switch (status) {
 	case FLYING:break;
@@ -14,6 +14,7 @@ void Plane::CalSpeed() {
 	}
 }
 
+/*最大速度、重量、出力を設定する*/
 void Plane::SetMSWeightPower(double Ms, double W, double P) {
 	maxSpeed = Ms;
 	weight = W;

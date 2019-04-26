@@ -3,6 +3,9 @@
 #include"DefinedData.h"
 #include"Camera.h"
 #include"DxLib.h"
+/*インターフェイスについて:
+一部分のインターフェイスはprivateに移したい
+*/
 
 class AllMovableObjects
 {
@@ -21,54 +24,49 @@ public:
 	virtual ~AllMovableObjects();
 
 	//データ問い合わせ関数
-	double ReferCoordX() { return coord.x; }
-	double ReferCoordY() { return coord.y; }
-	double ReferCoordZ() { return coord.z; }
-	Coordinate<double> ReferCoord() { return coord; }
+	double ReferCoordX() { return coord.x; }/*x座標*/
+	double ReferCoordY() { return coord.y; }//y座標
+	double ReferCoordZ() { return coord.z; }//z座標
+	Coordinate<double> ReferCoord() { return coord; }//3D座標
 	Coordinate2D<double> ReferCoord2D_d() { return Coordinate2D<double> 
-	{(double)coord.x, (double)coord.z}; }
-	Coordinate2D<int> ReferCoord2D() { return Coordinate2D<int> {(int)coord.x,(int)coord.z}; }
+	{(double)coord.x, (double)coord.z}; }//平面座標(double)
+	Coordinate2D<int> ReferCoord2D() { return Coordinate2D<int>
+	{(int)coord.x,(int)coord.z}; }/*平面座標(int)*/
 
-	double ReferSpeedOnZ() { return speedOnZ; }
-	double ReferSpeedOnY() { return speedOnY; }
-	double ReferAirResistance() { return airResistance; }
-	double ReferRadianOnZ() { return radianOnZ; }
-	double ReferRadianOnY() { return radianOnY; }
-	double ReferLength() { return length; }
-	double ReferWidth() { return width; }
-	double ReferMultiple() { return multiple; }
-
-	//当たり判定用問い合わせ
-	double ReferLeft() { return coord.x - width; }
-	double ReferRight() { return coord.x; }
-	double ReferUpper() { return coord.z - length; }
-	double ReferLower() { return coord.z; }
+	double ReferSpeedOnZ() { return speedOnZ; }//平面速度
+	double ReferSpeedOnY() { return speedOnY; }//垂直速度
+	double ReferAirResistance() { return airResistance; }//空気抵抗
+	double ReferRadianOnZ() { return radianOnZ; }//平面角度
+	double ReferRadianOnY() { return radianOnY; }//垂直角度
+	double ReferLength() { return length; }//長さ(画像)
+	double ReferWidth() { return width; }//幅(画像)
+	double ReferMultiple() { return multiple; }//拡大率
 
 	//状態問い合わせ関数
-	bool ReferAlive() { return alive; }
-	int *ReferGraphHandle() { return pictureHandle; }
+	bool ReferAlive() { return alive; }//生きる状況確認
+	int *ReferGraphHandle() { return pictureHandle; }//画像ハンドル
 
 	//移動関数
-	void Move();
-	void Unmove();
-	void FallingDown();
-	void SpeedDownbyAirResistance();
+	void Move();//移動
+	void Unmove();//前の状態に戻る
+	void FallingDown();//落下
+	void SpeedDownbyAirResistance();//空気抵抗の影響で速度が落とす
 
 	//描画関数
 	void SetPictureHandle(int *p) { pictureHandle = p; }
 	void SetShadowHandle(int *p) { shadowHandle = p; }
-	void Draw(Camera CM);
-	void DrawShadow(Camera CM);
-	void DrawSub(Camera CM);
-	void DrawSubShadow(Camera CM);
+	void Draw(Camera CM);//カメラの中心にある時使う描画関数
+	void DrawShadow(Camera CM);//影を描画する
+	void DrawSub(Camera CM);//他のところにある時に使う描画関数
+	void DrawSubShadow(Camera CM);//影を描画する
 
 	//状態設置関数
 	//ステータス設定関数
 	//トン単位
-	void SetMass(double Mass) { mass = Mass; }
+	void SetMass(double Mass) { mass = Mass; }//重量を設置する
 	//ニュートン単位ですが、現実とちょっと違う
-	void SetOutput(double Output) { input = Output; }
-	void SetMaxOutput(double MaxOutput) { maxInput = MaxOutput; }
+	void SetOutput(double Output) { input = Output; }//出力を設置する
+	void SetMaxOutput(double MaxOutput) { maxInput = MaxOutput; }//最大出力値を設置する
 	//新しい座標を設定する
 	void NewCoordX(double X) { coord.x = X; }
 	void NewCoordZ(double Z) { coord.z = Z; }
@@ -82,11 +80,11 @@ public:
 	void SetLength(double L) { length = L; }
 	void SetWidth(double W) { width = W; }
 	void SetMultiple(double M) { multiple = M; }
-	void Killed() { alive = false; }
-	void SetSpeed(double Spe);
-	void SetMaxSpeedOnZ(double Speed) { maxSpeedOnZ = Speed; }
-	void SetAirResistance(double AR) { airResistance = AR; }
-	void UnsetPlane() { plane = false; }
+
+	void Killed() { alive = false; }//状態を死亡に設置する
+	void SetSpeed(double Spe);//速度を設置
+	void SetMaxSpeedOnZ(double Speed) { maxSpeedOnZ = Speed; }//最大速度を設置
+	void UnsetPlane() { plane = false; }//飛行機が死んだら普通の飛ぶものに変える
 	
 
 private:

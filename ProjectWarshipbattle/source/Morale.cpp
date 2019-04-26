@@ -1,6 +1,5 @@
 #include "Morale.h"
-
-
+/*士気クラス*/
 
 Morale::Morale()
 {
@@ -15,6 +14,7 @@ Morale::~Morale()
 {
 }
 
+/*今の士気を確認して返す*/
 void Morale::CheckMorale() {
 	if (mainPartDamageCount % MORALE_DOWN_AFTER_MAINPARTDAMAGECOUNT ==
 		MORALE_DOWN_AFTER_MAINPARTDAMAGECOUNT - 1) {

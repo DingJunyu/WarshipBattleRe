@@ -10,10 +10,11 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
 	SetShadowHandle(SShadowH);
 	//GetDataFromShipdata(ShipNum);
 	thisShipType = ShipNum;
-	MemorySecure();
-	LoadSound(SL);
+	MemorySecure();//メモリ確保
+	LoadSound(SL);//音を読み込む
 	FindThosePoint();//あたり判定用ポイントを取得する
 
+	/*あたり判定用ポイントを利用して泡生成ポイントを作る*/
 	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
 	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
 		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
@@ -106,10 +107,11 @@ void ShipMain::FindThosePoint() {
 	fprintf(filePointer, "%d\n", num);
 	for (int i = 0; i < AROUND_POINT; i++) {
 		fprintf(filePointer, "%lf %lf\n", aroundPointPos[i].x, aroundPointPos[i].z);
+		//座標を記録する
 	}
-	fclose(filePointer);
+	fclose(filePointer);//ファイルを閉じる
 
-	pointCount = num;
+	pointCount = num;//数を記録する
 }
 
 /*出力パーセンテージ変更*/
@@ -187,10 +189,11 @@ void ShipMain::ControlThisShip(int Command) {;
 	}
 }
 
+/*フレームごとに更新する*/
 void ShipMain::Update() {
-	CalSpeed();
-	Alignment();
-	CalThePoint();
+	CalSpeed();//出力を計算する
+	Alignment();//角度を計算する
+	CalThePoint();//砲弾落下地点を計算する
 }
 
 void ShipMain::TEST() {
@@ -199,16 +202,16 @@ void ShipMain::TEST() {
 
 	/*エンジン状態の初期化*/
 	mainEngine.Inif(30, 0.75);
-	SetMaxOutput(mainEngine.ReferMaxOutput());
-	SetMaxSpeedOnZ(0.8);
+	SetMaxOutput(mainEngine.ReferMaxOutput());//最大出力をAllMovableObjectに設定する
+	SetMaxSpeedOnZ(0.8);//最大速度を設定する
 
 	/*移動関連*/
-	SetSpeed(0);
-	maxRadian = MathAndPhysics::PI / 10;
-	radianChangePerFrame = MathAndPhysics::PI / 1800;
-	currentRadian = 0;
+	SetSpeed(0);//今の速度を０に設定する
+	maxRadian = MathAndPhysics::PI / 10;//最大角度を18度に設定する
+	radianChangePerFrame = MathAndPhysics::PI / 1800;//舵旋回速度を設置
+	currentRadian = 0;//舵を原点に設定する
 
-	serialNumber = 1;
+	serialNumber = 1;//番号
 	shipCrashR = 200;
 
 	/*エフェクト関連*/
@@ -219,6 +222,7 @@ void ShipMain::TEST() {
 
 /*デバッグ用テスト関数*/
 void ShipMain::TestDraw(double x, double z) {
+	//生成ポイントを描画する
 	for (int i = 0; i < bubblePointCount; i++) {
 		bubbleStartPoint[i].TestDraw(ReferRadianOnZ(),ReferCoordX(),
 			ReferCoordZ(),x,z);
@@ -230,7 +234,7 @@ void ShipMain::TestDraw(double x, double z) {
 }
 
 void ShipMain::MemorySecure() {
-	MainParts = new ShipCrashParts [10];
+	MainParts = new ShipCrashParts[10];
 	SubParts = new ShipCrashParts[10];
 
 	MainWeapon = new Weapon[10];
@@ -252,6 +256,7 @@ void ShipMain::DestroyMemory() {
 
 //エフェクト生成
 Effect ShipMain::NewBubble(int num) {
+	/*船と正反対の方向に向く*/
 	double newRadian = ReferRadianOnZ() - MathAndPhysics::PI;
 
 	//バブルポイントから泡を生成する
@@ -261,6 +266,7 @@ Effect ShipMain::NewBubble(int num) {
 }
 
 Effect ShipMain::NewSmoke(int num) {
+	/*船と正反対の方向に向く*/
 	double newRadian = ReferRadianOnZ() - MathAndPhysics::PI;
 
 	//大体の方向が変わらないが、少しだけ変わるようにする
@@ -320,23 +326,24 @@ void ShipMain::CheckAndPlaySound() {
 
 /*武器の使える状態を確認*/
 bool ShipMain::IsThisOneUsable(int Num, bool Main) {
-	if (Main)
+	if (Main)//メイン武器
 		return MainWeapon[Num].ReferShootable();
-	else
+	else//サブ武器
 		return SubWeapon[Num].ReferShootable();
 }
 
 Ammo ShipMain::Shoot(int Num, bool Main) {
-	if (Main)
+	if (Main)//メイン武器
 		return MainWeapon[Num].Shoot(ReferCoordX(),ReferCoordZ(),ReferRadianOnZ());
-	else
+	else//サブ武器
 		return SubWeapon[Num].Shoot(ReferCoordX(),ReferCoordZ(), ReferRadianOnZ());
 }
 
 void ShipMain::SetWeaponTest(PictureLoader *PL) {
-	MainWeaponCount = 8;
+	MainWeaponCount = 8;//数を設定する
 	
 	for (int i = 0; i < MainWeaponCount; i++) {
+		/*武器を初期化する*/
 		Weapon Weapon(20.0, 8.0 - i * 2, 10.0, 10.0,
 			0.0, 0.2, 100,
 			50, 12, PL->ReferAmmoHandle(0), 17, 20,serialNumber);
@@ -350,10 +357,11 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 }
 
 void ShipMain::ShowMePointOfImpact(Camera camera) {
-	DrawMainPoint(camera);
+	DrawMainPoint(camera);//落下地点を描く
 }
 
 //メイン武器の角度を変更
+//入力値：右へ旋回しているか
 //returnはtrueの時は制限範囲に至る、なければfalseを返す
 bool ShipMain::TurnMainWeapon(bool right) {
 	for (int i = 0; i < MainWeaponCount; i++) {
@@ -362,6 +370,9 @@ bool ShipMain::TurnMainWeapon(bool right) {
 	return false;
 }
 
+//メイン武器の角度を変更
+//入力値：上がっているか
+//returnはtrueの時は制限範囲に至る、なければfalseを返す
 bool ShipMain::PullMainWeapon(bool up) {
 	bool end;
 	for (int i = 0; i < MainWeaponCount; i++) {
@@ -370,7 +381,7 @@ bool ShipMain::PullMainWeapon(bool up) {
 	return end;
 }
 
-/*落下地点を表示する*/
+/*落下地点を計算する*/
 void ShipMain::CalThePoint() {
 	CalMainPoint();
 }

@@ -1,4 +1,6 @@
 #include "ShipData.h"
+/*船のデータを読み込むクラスですが、
+実現はまだです*/
 
 ShipData::ShipData()
 {
@@ -12,6 +14,7 @@ ShipDataCollection::ShipDataCollection() {
 
 }
 
+/*メモリを確保する*/
 void ShipDataCollection::AllInif() {
 	MemorySecure();
 
@@ -27,6 +30,7 @@ void ShipDataCollection::FreeMemory() {
 	delete[] BattleCrusierCollection;
 }
 
+/*番号を初期化する...?*/
 void ShipDataCollection::InifBattleCrusier() {
 	const int &BC = BATTLE_CRUISER;
 	//リュッツォウd

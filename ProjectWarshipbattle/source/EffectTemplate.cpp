@@ -7,8 +7,8 @@ EffectTemplate::~EffectTemplate(){
 }
 
 void EffectTemplate::InifEffectTemplate(PictureLoader *PL) {
-	InifCreateBubble(PL);
-	InifCreateSmoke(PL);
+	InifCreateBubble(PL);//画像ローダーを利用して初期化する
+	InifCreateSmoke(PL);//画像ローダーを利用して初期化する
 }
 
 void EffectTemplate::InifCreateBubble(PictureLoader *PL) {

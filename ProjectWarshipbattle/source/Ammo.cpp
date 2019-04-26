@@ -12,11 +12,13 @@ void Ammo::CheckAlive() {
 }
 
 void Ammo::SetData() {
+	/*画像のサイズを取る*/
 	GetGraphSize(*ammoHandle, &graphX, &graphZ);
 }
 
 void Ammo::Draw(int x,int z){
 	double realX, realZ;
+	/*自分野座標とカメラ座標を合わせて計算する*/
 	realX = ReferCoordX() - x;
 	realZ = ReferCoordZ() - z;
 

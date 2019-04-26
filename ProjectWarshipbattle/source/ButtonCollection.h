@@ -13,7 +13,7 @@ public:
 	void InifForUserInterface(PictureLoader *PL);//ƒQ[ƒ€’†‚Ì‰Šú‰»
 	void FREE();
 
-	Button * buttonContainer;
+	Button * buttonContainer;//ƒ{ƒ^ƒ“éŒ¾
 
 private:
 	int buttonAmount;

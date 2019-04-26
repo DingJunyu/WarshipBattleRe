@@ -106,9 +106,9 @@ private:
 	bool PointsToCollisionbox(ShipMain *ship1,ShipMain *ship2);
 	void HitDecision();//ゲームコントローラーに当たる数を返す
 	void SimpleHitDecision();
-	void CheckThisTeamDecision(std::vector<ShipMain> *shipList, Ammo *shell);
-	void RemoveDestroyedShip();
-	void CheckTeamA(std::vector<ShipMain> *teashipListm);
+	void CheckThisTeamDecision(std::vector<ShipMain> *shipList, Ammo *shell);//このチームと弾リストの間にあたり判定を行う
+	void RemoveDestroyedShip();//沈んだ船を消す
+	void CheckTeamA(std::vector<ShipMain> *teashipListm);//沈んだ船を沈む演出リストに追加する
 
 	//弾管理
 	void CheckSelectedWeapon();
@@ -146,5 +146,3 @@ private:
 
 	int hOffScreen;
 };
-
-void SetNewEffect(std::list<Effect> *effectList,std::list<ShipMain> shipList);

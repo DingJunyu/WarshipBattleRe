@@ -19,6 +19,7 @@ void AllMovableObjects::Move() {
 		/*加速の部分*/
 		if (abs(speedOnZ) < abs(maxSpeedOnZ * (input / maxInput))) {
 			speedOnZ += input / mass * (1 - abs(speedOnZ / maxSpeedOnZ)) * 0.5;
+			/*速度は最大速度に近くになると加速度が落とす(重量と速度関係ある)*/
 		}
 	}
 
@@ -26,16 +27,18 @@ void AllMovableObjects::Move() {
 	if (!flyable) {
 		/*前進する場合*/
 		if (speedOnZ > 0) {
-			if (speedOnZ > maxSpeedOnZ * (input / maxInput)) {
-				speedOnZ -= (speedOnZ / maxSpeedOnZ > 0.5) ? 0.0015 : 0.00075;
+			if (speedOnZ > maxSpeedOnZ * (input / maxInput)) {//もし速度は今の最大速度以上であれば
+				speedOnZ -= (speedOnZ / maxSpeedOnZ > 0.5) ? 0.0015 : 0.00075;//速度が早い時に減速も速い
 				//スピードが速いのほうが影響が高いようにしました。
-				if (speedOnZ < 0)
+				if (speedOnZ < 0)//前進の時に後退にならないよう
 					speedOnZ = 0;
 			}
 		}
 		/*後退する場合*/
 		if (speedOnZ < 0) {
+			//もし速度は今の最大速度以上であれば
 			if (speedOnZ < maxSpeedOnZ * (input / maxInput)) {
+				//速度が早い時に減速も速い
 				speedOnZ += (speedOnZ / maxSpeedOnZ > 0.5) ? 0.0015 : 0.00075;
 				//スピードが速いのほうが影響が高いようにしました。
 				if (speedOnZ > 0)
@@ -46,6 +49,7 @@ void AllMovableObjects::Move() {
 
 	/*速度がある場合に転向ができます*/
 	if (speedOnZ != 0 && radianChangePerFrame != 0) {
+		//速度が早ければ早いほど転向が早くなる
 		radianOnZ += (radianChangePerFrame/100) * speedOnZ;
 	}
 	//オーバーフロー対策:Radianの範囲は-2π~2π
@@ -81,7 +85,7 @@ void AllMovableObjects::SetSpeed(double Spe) {
 		speedOnY = sin(radianOnY)*Spe;
 		speedOnZ = cos(radianOnY)*Spe;
 	}
-	speedOnZLargerThan0 = speedOnZ > 0 ? true : false;
+	speedOnZLargerThan0 = speedOnZ > 0 ? true : false;//方向を設置する
 }
 
 void AllMovableObjects::SpeedDownbyAirResistance() {
@@ -148,6 +152,7 @@ void AllMovableObjects::DrawSub(Camera CM) {
 	int shadowDistanceOnX = 2;
 	int shadowDistanceOnZ = 2;
 
+	/*自分の座標とカメラ座標を合わせて計算する*/
 	double coordX = coord.x - CM.ReferRealCameraX();
 	double coordZ = coord.z - CM.ReferRealCameraZ();
 
@@ -168,6 +173,7 @@ void AllMovableObjects::DrawSubShadow(Camera CM) {
 	int shadowDistanceOnX = 2;
 	int shadowDistanceOnZ = 2;
 
+	/*座標とカメラ座標を合わせて計算する*/
 	double coordX = coord.x - CM.ReferRealCameraX() + shadowDistanceOnX;
 	double coordZ = coord.z - CM.ReferRealCameraZ() + shadowDistanceOnZ;
 

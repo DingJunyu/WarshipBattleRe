@@ -34,7 +34,6 @@ bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 	aMinZ = tempZ - ACrash.z / 2;
 	aMaxX = tempX + ACrash.x / 2;
 	aMaxZ = tempZ + ACrash.z / 2;
-
 	aMinY = A.y;
 	aMaxY = A.y + ACrash.y;
 
@@ -45,12 +44,6 @@ bool crash3DtoPoint(Coordinate<double>A, Coordinate<double> B,
 		return true;
 	}
 	//‚»‚êˆÈŠO‚Ífalse‚ð•Ô‚·
-	return false;
-}
-
-bool crash3Dto3D(Coordinate<double>A, Coordinate<double> B,
-	CrashSize3d<double> ACrash, CrashSize3d<double> BCrash,
-	double radianA, double radianB) {
 	return false;
 }
 

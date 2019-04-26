@@ -34,13 +34,13 @@ private:
 	void SetMyPos(Coordinate2D<double> pos) { myPos = pos; }
 	void CalTargetRadianAndSetRadianNeeded();
 	/*変数部分*/
-	Coordinate2D<double> wayPoint;
-	Coordinate2D<double> myPos;
+	Coordinate2D<double> wayPoint;//ウェイポイント
+	Coordinate2D<double> myPos;//今自分の座標
 	double targetRadian;//ウェイポイントに向く角度
-	double nowRadian;
+	double nowRadian;//今自分の角度
 	double radianNeededNow;//回転角度//targetRadianに近づけば近づいほど小さくなる
-	double nowSpeed;
-	double distance;
+	double nowSpeed;//今自分の速度
+	double distance;//ウェイポイントとの距離
 
 	/*艦隊の接触状態による*/
 	double targetSpeed;

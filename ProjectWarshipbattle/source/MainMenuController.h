@@ -22,11 +22,11 @@ public:
 
 	void Inif();
 
-	void DrawTitle();
-	void DrawMainMenu();
-	void DrawLoading();
+	void DrawTitle();//タイトル画面を描画する
+	void DrawMainMenu();//メインメニューを描画する
+	void DrawLoading();//Loading
 
-	int CheckChoice();
+	int CheckChoice();//選択肢を確認
 	void FREE();
 
 private:
@@ -44,6 +44,7 @@ private:
 	/*提示の点滅用カウント*/
 	int countForTitle;
 
+	/*ボタンの部分*/
 	enum ButtonCoord
 	{
 		AMOUNT = 2,
@@ -55,14 +56,18 @@ private:
 	int buttonSizeZ;
 	double buttonMultiple;
 
+	/*背景*/
 	int *backGroundHandle;
+	/*タイトル*/
 	int *title;
 	int titleSizeX;
 	int titleSizeZ;
 
+	/*タイトルの大きさはタイトルの中とメインメニューの中が違う*/
 	int titleMultipleRateInTitle;
 	int titleMultipleRateInMainMenu;
 
+	/*ボタンを押す*/
 	int *pressedToStart;
 	int PTSSizeX;
 	int PTSSizeZ;
@@ -70,6 +75,7 @@ private:
 
 	int titleMultiple;
 
+	/*初めてメインメニューを呼び出す時に初期処理を行う*/
 	bool firstTimeGetIntoMainMenu;
 };
 

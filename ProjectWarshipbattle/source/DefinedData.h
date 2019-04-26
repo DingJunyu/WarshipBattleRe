@@ -11,12 +11,12 @@ enum CommandSerial {
 	COUNT = 50,//コマンドの数
 	NONE_COMMAND = -1,//命令なし
 	TEST_VIEW_ON = 0,//デバッグモードon
-	INCREASE_OUTPUT = 1,
-	DECREASE_OUTPUT,
-	TURN_RIGHT,
-	TURN_LEFT,
-	TURN_RETURN,
-	SHOOT,
+	INCREASE_OUTPUT = 1,//出力増加
+	DECREASE_OUTPUT,//出力減少
+	TURN_RIGHT,//舵を右に回る
+	TURN_LEFT,//舵を左に回る
+	TURN_RETURN,//舵を中心に戻る
+	SHOOT,//射撃
 	TURRET_TURN_RIGHT,
 	TURRET_TURN_LEFT,
 	TURRET_PULLUP,

@@ -12,18 +12,22 @@ void UserInterface::InifUI(PictureLoader *PL) {
 	miniMapPaper = PL->ReferMiniMapPaperHandle();
 
 	for (int i = UI_LIST::RADAR; i <= UI_LIST::MY_DIRECT; i++)
-		handleList[i] = PL->ReferUIList(i);
+		handleList[i] = PL->ReferUIList(i);//ハンドルをコピーする
 
 	Coordinate2D<float> coord;
 	unsigned int color;
 	//電球初期化
+	//座標を計算する
 	coord.x = (float)(Screen::SCREEN_X)*(float)(LAMP_POSITION::RETURN_TO_MIDDLE_X);
 	coord.z = (float)(Screen::SCREEN_Z)*(float)(LAMP_POSITION::RETURN_TO_MIDDLE_Z);
+	//座標を電球に代入
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].Inif(coord,
 		(float)LAMP_POSITION::RETURN_TO_MIDDLE_R);
-	color = GetColor(255, 0, 0);//オフ状態の色を設定
+	//オフ状態の色を設定
+	color = GetColor(255, 0, 0);
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].SetColor(false, color);
-	color = GetColor(0, 255, 0);//オン状態の色を設定
+	//オン状態の色を設定
+	color = GetColor(0, 255, 0);
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].SetColor(true, color);
 }
 
@@ -256,6 +260,7 @@ void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {
 	double realZ = abs((Z + MapSize::zSize) /
 		(MapSize::zSize * 2)) * mapPaperSize * 1.2f;
 	
+	/*ミニマップに点を描く*/
 	DrawBox(
 		Screen::SCREEN_X / 2 - (int)mapPaperSize + (int)realX - 3,
 		Screen::SCREEN_Z - (int)(((1.2 * (int)mapPaperSize) - realZ)),
@@ -302,6 +307,7 @@ void UserInterface::DrawPictureByCenterOnX(int SN, double X,
 	);
 }
 
+/*中心座標を利用して描く*/
 void UserInterface::DrawPictureByCenter(int SN, double X,
 	double Z, double Multiple) {
 	int startX, startZ;

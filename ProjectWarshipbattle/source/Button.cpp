@@ -13,6 +13,9 @@ void Button::Inif(int *bH, int *bPH) {
 	pressed = false;
 }
 
+/*Definedデータに保存された座標はパーセンテージで保存しているため、
+転換する必要があります
+この関数は座標を入れて処理する*/
 void Button::SetXZ(double xP, double zP, double zM) {
 	xPercent = xP;
 	zPercent = zP;
@@ -24,6 +27,9 @@ void Button::SetXZ(double xP, double zP, double zM) {
 	zoomMultiple = zM;//拡大率を設定する
 }
 
+/*Definedデータに保存された座標はパーセンテージで保存しているため、
+転換する必要があります
+この関数はその処理を行います*/
 void Button::CheckXZ() {
 	coordX = (int)(xPercent * Screen::SCREEN_X);
 	coordZ = (int)(zPercent * Screen::SCREEN_Z);

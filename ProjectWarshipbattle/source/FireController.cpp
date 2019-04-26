@@ -18,10 +18,10 @@ void FireController::InifDistance(double MaxRadian, double MinRadian) {
 	/*範囲を保存する*/
 	maxRadian = MaxRadian;
 	minRadian = MinRadian;
-	originPoint = { 0,20,0 };
+	originPoint = { 0,20,0 };//原点
 
 	for (int i = FIRE_DISTANCE::ANGLE_100_P; i <= FIRE_DISTANCE::ANGLE_0_P; i++) {
-		testAmmo.SetSpeed(speed);
+		testAmmo.SetSpeed(speed);//速度を設置する
 		testAmmo.SetRadianOnY(radianRange*(1 - i * 0.2) + MinRadian);//角度を設置する
 		testAmmo.SetCoord(originPoint);//座標を0にする
 		CalTheAnswer();//落下地点を真似て計算する
@@ -64,7 +64,8 @@ double FireController::FindTheDistance(double Distance,
 	testAmmo.SetSpeed(speed);
 	testAmmo.SetRadianOnY(realRadian);
 	testAmmo.SetCoord(originPoint);
-	CalTheAnswer();
+
+	CalTheAnswer();//一回模擬を行う
 	
 	double tempDistance;
 	tempDistance = Distance2D(originPoint, answer);

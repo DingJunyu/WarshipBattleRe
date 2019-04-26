@@ -55,6 +55,6 @@ int Controller::GetCommand() {
 }
 
 void Controller::Inif(SoundLoader *SL) {
-	shipHordHigh = SL->referShipHordLargeHigh();
+	shipHordHigh = SL->referShipHordLargeHigh();//音のデータを設置する
 	shipHordLow = SL->referShipHordLargeLow();
 }

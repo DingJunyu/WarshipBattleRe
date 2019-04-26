@@ -33,21 +33,22 @@ public:
 	void InifDistance(double MaxRadian,double MinRadian);
 	void CalTheAnswer();
 
+	/*距離を入れて、上がる角度を返す*/
 	double CalDistanceAndTellMeRadianOnY(double Distance);
 
 private:
 	double FindTheDistance(double Distance, double MaxRadian, double MinRadian);
 
-	double speed;
+	double speed;//砲弾速度
 	
 	RadianNeededIn3D radian;//角度
 	AllMovableObjects testAmmo;//シミュレーション用オブジェクト
 
-	double distance[FIRE_DISTANCE::ANGLE_TYPE_AMOUNT];
+	double distance[FIRE_DISTANCE::ANGLE_TYPE_AMOUNT];//
 	
 	double maxRadian;//垂直最大角度
 	double minRadian;//垂直最小角度
-	double radianRange;
+	double radianRange;//角度の範囲
 
 	Coordinate<double> originPoint;
 	Coordinate<double> answer;//落下地点の座標

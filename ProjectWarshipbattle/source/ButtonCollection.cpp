@@ -10,8 +10,8 @@ void ButtonCollection::Inif(PictureLoader *PL) {
 	//メインメニューボタンの初期化
 	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++)
 		buttonContainer[i].Inif(
-			PL->ReferButtonHandle(i),
-			PL->ReferButtonPressedHandle(i)
+			PL->ReferButtonHandle(i),//普通のハンドルを取る
+			PL->ReferButtonPressedHandle(i)//押された時のハンドルを取る
 		);
 }
 
@@ -22,14 +22,14 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 	//ボタン初期化
 	for (int i = CommandSerial::INCREASE_OUTPUT; i < CommandSerial::SELECT; i++)
 		buttonContainer[i].Inif(
-			PL->ReferButtonIntheGame(i),
-			PL->ReferButtonPressedIntheGame(i)
+			PL->ReferButtonIntheGame(i),//普通のハンドルを取る
+			PL->ReferButtonPressedIntheGame(i)//押された時のハンドルを取る
 		);
 	/*敵リストと自機リスト*/
 	for (int i = CommandSerial::SELECT;
 		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2; i++) {
 		buttonContainer[i].Inif(
-			PL->ReferButtonIntheGame(CommandSerial::SELECT),
+			PL->ReferButtonIntheGame(CommandSerial::SELECT),//押されたときとふつうの時が変わらないため、両方もふつうにする
 			PL->ReferButtonIntheGame(CommandSerial::SELECT));
 	}
 }

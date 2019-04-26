@@ -2,6 +2,7 @@
 #include"DxLib.h"
 /*このクラスはインターネットに載せたものに基づいて作りました
   変数の命名などは自分で作ったものと違う*/
+/*実際に描画フレームと処理フレームを分けたいです*/
 class FrameControl
 {
 public:
@@ -25,7 +26,7 @@ public:
 	}
 
 private:
-	int FRAMES_PER_SECOND;
+	int FRAMES_PER_SECOND;//毎秒フレーム数
 	int SKIP_TICKS;
 	unsigned long next_game_tick;
 	int sleep_time;

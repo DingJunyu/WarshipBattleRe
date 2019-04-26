@@ -10,8 +10,8 @@ bool FrameControl::Wait() {
 	if (sleep_time >= 0)
 	{
 		Sleep(sleep_time);//待つ
-		return true;
+		return true;//このフレームを描画する
 	}
 	else
-		return false;
+		return false;//このフレームを描画しない
 }
