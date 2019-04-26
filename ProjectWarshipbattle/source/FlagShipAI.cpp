@@ -24,34 +24,43 @@ void FlagShipAI::SetWayPoint(Coordinate2D<double> targetPos, double radian, doub
 	NextPoint(&wayPoint,radian, speed, nextPointFrame);
 }
 
+/*ìGÇ∆ãﬂÇ√Ç≠Ç∆ìGÇÃêiçsï˚å¸Ç∆ìØÇ∂ï˚å¸Ç…êiÇﬁ*/
+void FlagShipAI::DisableWayPoint_MoveWithEnemy(double radian) {
+	targetRadian = radian;
+}
+
 /*ñ⁄ïWÇ∆ÇÃäpìxÇåvéZÇ∑ÇÈ*/
 void FlagShipAI::CalTargetRadianAndSetRadianNeeded() {
 	using namespace MathAndPhysics;
 
 	targetRadian = CalRadianBetweenPoints(wayPoint, myPos, nowRadian);
 
-	if (targetRadian > 60 * OneDegreeRadian) {
-		radianNeededNow = 15 * OneDegreeRadian;
+	/*îÕàÕÇ©ÇÁç°ïKóvÇ»äpìxÇåvéZÇ∑ÇÈ*/
+	if (abs(targetRadian) > RANGE_MAX * OneDegreeRadian) {
+		radianNeededNow = SPEED_MAX * OneDegreeRadian;
 	}
-	if (targetRadian <= 60 * OneDegreeRadian&&
-		targetRadian > 30 * OneDegreeRadian) {
-		radianNeededNow = 9 * OneDegreeRadian;
+	if (abs(targetRadian) <= RANGE_MAX * OneDegreeRadian&&
+		abs(targetRadian) > RANGE_1_2 * OneDegreeRadian) {
+		radianNeededNow = SPEED_1_2 * OneDegreeRadian;
 	}
-	if (targetRadian <= 30 * OneDegreeRadian&&
-		targetRadian > 10 * OneDegreeRadian) {
-		radianNeededNow = 4 * OneDegreeRadian;
+	if (abs(targetRadian) <= RANGE_1_2 * OneDegreeRadian&&
+		abs(targetRadian) > RANGE_1_4 * OneDegreeRadian) {
+		radianNeededNow = SPEED_1_4 * OneDegreeRadian;
 	}
-	if (targetRadian <= 10 * OneDegreeRadian&&
-		targetRadian > 0) {
-		radianNeededNow = OneDegreeRadian;
+	if (abs(targetRadian) <= RANGE_1_4 * OneDegreeRadian&&
+		abs(targetRadian) > RANGE_1_8) {
+		radianNeededNow = SPEED_1_8 * OneDegreeRadian;
 	}
-	if (targetRadian == 0) {
+	if (targetRadian == RANGE_1_8) {
 		radianNeededNow = 0;
 	}
-	if (targetRadian < 0 &&
-		targetRadian >= -10 * OneDegreeRadian) {
-		radianNeededNow = -OneDegreeRadian;
-	}
 
+	/*ï˚å¸ÇèCê≥Ç∑ÇÈ*/
+	if (targetRadian < 0)
+		radianNeededNow = -radianNeededNow;
 }
 
+/*ãóó£ÇåvéZÇ∑ÇÈä÷êî*/
+void FlagShipAI::CalDistance() {
+	distance = Distance2D(wayPoint, myPos);
+}

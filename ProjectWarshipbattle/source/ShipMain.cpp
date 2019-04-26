@@ -150,15 +150,15 @@ void ShipMain::Alignment() {
 
 	if (returnToCenter == true) {
 		//舵が右にある時
-		if (currentRadian > MathAndPhysics::PI / 10000)
-			currentRadian -= MathAndPhysics::PI / 10000;
+		if (currentRadian > MathAndPhysics::PI / 2000)
+			currentRadian -= MathAndPhysics::PI / 2000;
 		//舵が左にある時
-		if (currentRadian < -MathAndPhysics::PI / 10000)
-			currentRadian += MathAndPhysics::PI / 10000;
+		if (currentRadian < -MathAndPhysics::PI / 2000)
+			currentRadian += MathAndPhysics::PI / 2000;
 		/*中心に近くなると中心に置くようにする*/
-		if ((currentRadian < MathAndPhysics::PI / 10000
+		if ((currentRadian < MathAndPhysics::PI / 2000
 			&& currentRadian>0) ||
-			(currentRadian > -MathAndPhysics::PI / 10000 
+			(currentRadian > -MathAndPhysics::PI / 2000 
 				&& currentRadian < 0)) {
 			currentRadian = 0;
 		}
@@ -207,8 +207,8 @@ void ShipMain::TEST() {
 
 	/*移動関連*/
 	SetSpeed(0);//今の速度を０に設定する
-	maxRadian = MathAndPhysics::PI / 10;//最大角度を18度に設定する
-	radianChangePerFrame = MathAndPhysics::PI / 1800;//舵旋回速度を設置
+	maxRadian = MathAndPhysics::PI / 6;//最大角度を18度に設定する
+	radianChangePerFrame = MathAndPhysics::PI / 900;//舵旋回速度を設置
 	currentRadian = 0;//舵を原点に設定する
 
 	serialNumber = 1;//番号
@@ -279,6 +279,7 @@ Effect ShipMain::NewSmoke(int num) {
 
 /*音声関連*/
 void ShipMain::LoadSound(SoundLoader *SL) {
+	/*各部分の音をロードする*/
 	soundEngine = SL->referShipSoundEngine();
 	soundMoving = SL->referShipSoundMoving();
 	soundSlow = SL->referShipSoundSlow();

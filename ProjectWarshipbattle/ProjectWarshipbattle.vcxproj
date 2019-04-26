@@ -52,7 +52,6 @@
     <ClInclude Include="source\OtherFunctions.h" />
     <ClInclude Include="source\PictureLoader.h" />
     <ClInclude Include="source\Plane.h" />
-    <ClInclude Include="source\PlayerStatus.h" />
     <ClInclude Include="source\ShipCrashParts.h" />
     <ClInclude Include="source\ShipData.h" />
     <ClInclude Include="source\ShipMain.h" />
@@ -93,7 +92,6 @@
     <ClCompile Include="source\OtherFunctions.cpp" />
     <ClCompile Include="source\PictureLoader.cpp" />
     <ClCompile Include="source\Plane.cpp" />
-    <ClCompile Include="source\PlayerStatus.cpp" />
     <ClCompile Include="source\ShipCrashParts.cpp" />
     <ClCompile Include="source\ShipData.cpp" />
     <ClCompile Include="source\ShipMain.cpp" />

@@ -24,7 +24,7 @@ public:
 	void DrawUI();
 	void DrawUINeedInput(ShipMain *ship);
 
-	void DrawUIUnderShip(bool lock,Coordinate2D<int> coord,Camera camera, double radian);
+	void DrawUIUnderShip(bool lock,Coordinate2D<double> coord,Camera camera, double radian);
 
 	void DrawShipOnTheMap(double X, double Z, bool enemy);
 
@@ -61,7 +61,7 @@ private:
 	
 	/*○を回すようにするradian*/
 	double radian_returnTheLockCircle;
-	void DrawCircle(Coordinate2D<int> coord, Camera camera);
+	void DrawCircle(Coordinate2D<double> coord, Camera camera);
 	void DrawMyCircle(Camera camera, double radian);
 
 	/*各パーツのハンドル*/

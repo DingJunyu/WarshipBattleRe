@@ -4,6 +4,26 @@
 #include"ShipMain.h"
 #include"IncludeForAll.h"
 #include"OtherFunctions.h"
+#include<cmath>
+
+enum RadianRange {
+	RANGE_MAX = 60,
+	RANGE_1_2 = 30,
+	RANGE_1_4 = 10,
+	RANGE_1_8 = 0,
+	SPEED_MAX = 25,
+	SPEED_1_2 = 18,
+	SPEED_1_4 = 9,
+	SPEED_1_8 = 4
+};
+
+enum DistanceRange {
+	PATROL_RANGE = 3000,
+	COMING_IN_RANGE = 2000,
+	TAKE_T = 1000,
+	BATTLE = 500
+};
+
 class FlagShipAI
 {
 public:
@@ -30,9 +50,11 @@ private:
 	void CalData(ShipMain *ship);
 	void SetWayPoint();//ウェイポイント設定関数
 	void SetWayPoint(Coordinate2D<double>, double radian, double speed);
+	void DisableWayPoint_MoveWithEnemy(double radian);
 	void SetNowRadian(double rad) { nowRadian = rad; }
 	void SetMyPos(Coordinate2D<double> pos) { myPos = pos; }
 	void CalTargetRadianAndSetRadianNeeded();
+	void CalDistance();
 	/*変数部分*/
 	Coordinate2D<double> wayPoint;//ウェイポイント
 	Coordinate2D<double> myPos;//今自分の座標

@@ -7,6 +7,8 @@ public:
 	Lock();
 	~Lock();
 	/*–â‚¢‡‚í‚¹ŠÖ”*/
+	Coordinate<double> ReferNextPosition() { return nextPosition; }
+	RadianNeededIn3D Refercorrection() { return correction; }
 	bool ReferLockOn() { return lockOn; }
 	int ReferTarget() { return targetNumber; }
 
@@ -16,12 +18,22 @@ public:
 
 	void LockOn_Switch() { lockOn = !lockOn; }
 
+	void Set_IntialLead_Seconds(bool up);
+	void ChangeCorrection_Distance(bool up);
+	void Reset_IntialLead_Seconds() { initialLead_Seconds = 0; }
 
+	/*ˆ—ŠÖ”*/
+	void CalNextPosition(Coordinate<double> coord,double speed,double radian);
 
 private:
 	int discoverStatus;
 
 	int targetNumber;//‰½”Ô‚Ì“G‚ğƒƒbƒN‚µ‚Ä‚¢‚é
 	bool lockOn;
+
+	double initialLead_Seconds;//‰Šú–¢—ˆC³—Ê
+	RadianNeededIn3D correction;//ƒvƒŒ[ƒ„[İ’u‚µ‚½C³—Ê
+
+	Coordinate<double> nextPosition;//x•bŒã“G‚ÌˆÊ’u
 };
 

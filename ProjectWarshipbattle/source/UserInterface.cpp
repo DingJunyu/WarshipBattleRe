@@ -239,7 +239,7 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].Draw();
 }
 
-void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<int> coord
+void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<double> coord
 	, Camera camera, double radian) {
 	if (lock)
 		DrawCircle(coord,camera);
@@ -327,6 +327,7 @@ void UserInterface::DrawPictureByCenter(int SN, double X,
 	);
 }
 
+/*旋回グラフを描く-旋回点は左上*/
 void UserInterface::DrawRotatePicture(int SN, double X, double Z, double Multiple,
 	double Radian) {
 	int startX, startZ;
@@ -345,6 +346,7 @@ void UserInterface::DrawRotatePicture(int SN, double X, double Z, double Multipl
 	);
 }
 
+/*旋回グラフを描く-旋回点は中心*/
 void UserInterface::DrawRotatePicture2(int SN, double X, double Z, double Multiple,
 	double Radian) {
 	int graphSizeX, graphSizeZ;
@@ -360,13 +362,15 @@ void UserInterface::DrawRotatePicture2(int SN, double X, double Z, double Multip
 	);
 }
 
-void UserInterface::DrawCircle(Coordinate2D<int> coord, Camera camera) {
+/*ロックの円を描く*/
+void UserInterface::DrawCircle(Coordinate2D<double> coord, Camera camera) {
 	DrawRotatePicture2(UI_LIST::LOCK_CIRCLE, coord.x - camera.ReferRealCameraX(), 
 		coord.z - camera.ReferRealCameraZ(),
 		USER_INTERFACE_POSITION::LOCK_CIRCLE, radian_returnTheLockCircle);
 	radian_returnTheLockCircle += MathAndPhysics::PI / 720;
 }
 
+/*自分のしたにある円を描く*/
 void UserInterface::DrawMyCircle(Camera camera, double radian) {
 	int xOnScreen;
 	int zOnScreen;
