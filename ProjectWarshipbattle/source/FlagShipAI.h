@@ -18,10 +18,10 @@ enum RadianRange {
 };
 
 enum DistanceRange {
-	PATROL_RANGE = 3000,
-	COMING_IN_RANGE = 2000,
-	TAKE_T = 1000,
-	BATTLE = 500
+	PATROL_RANGE = 2000,//0.5出力
+	COMING_IN_RANGE = 2000,//.75
+	TAKE_T = 1000,//100
+	BATTLE = 500//same with target
 };
 
 class FlagShipAI
@@ -30,7 +30,7 @@ public:
 	FlagShipAI() :inBattle(false) {}
 	~FlagShipAI();
 
-	void LetUsGo(ShipMain *ship);//移動関数-ステータスによって決めた行動を行う
+	void LetUsGo(ShipMain *me, ShipMain *target);//移動関数-ステータスによって決めた行動を行う
 	void ShowMeTheTarget();//敵を指定する関数
 
 	double ReferRadianNeededNow() { return radianNeededNow; }
@@ -63,6 +63,8 @@ private:
 	double radianNeededNow;//回転角度//targetRadianに近づけば近づいほど小さくなる
 	double nowSpeed;//今自分の速度
 	double distance;//ウェイポイントとの距離
+	double targetDistance;//敵との距離
+	const double needToChange = 300;
 
 	/*艦隊の接触状態による*/
 	double targetSpeed;

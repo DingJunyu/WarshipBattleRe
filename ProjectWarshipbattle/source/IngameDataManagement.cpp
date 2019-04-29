@@ -29,6 +29,7 @@ void IngameDataManagement::Update() {
 
 	MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
 	Control();//コマンドを受け取って、船の状態を変更する
+	LetFlagShipMove();//敵のフラグシープを動かす
 	GetNewEffect();//エフェクトを生成する
 	MoveAll();//移動、状態更新
 
@@ -46,6 +47,14 @@ bool IngameDataManagement::TeamDestroyed() {
 	if (alliesFleet.empty() || enemyFleet.empty())
 		return false;
 	return false;
+}
+
+/****************************************************/
+/*                      AI管理                      */
+/****************************************************/
+void IngameDataManagement::LetFlagShipMove() {
+	flagShipAI.LetUsGo(&enemyFleet[0], &alliesFleet[0]);
+	enemyFleet[0].SetChangingDirect(flagShipAI.ReferRadianNeededNow());
 }
 
 /****************************************************/
@@ -326,7 +335,7 @@ void IngameDataManagement::TEST() {
 	ship->SetWeaponTest(&PL);//武器をロードする
 
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 1; i++) {
 		enemyFleet.push_back(ShipMain());//テスト用敵船を生成する
 		auto enemyShip = enemyFleet.end();//イテレータで船を選ぶ
 		enemyShip--;

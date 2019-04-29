@@ -58,6 +58,11 @@ private:
 	SoundLoader SL;//音声ローダー
 	ClickableUserInterface CUI;//クリックできるUI
 
+	/*AI管理*/
+	FlagShipAI flagShipAI;
+
+	void LetFlagShipMove();
+
 	/*描画処理関連*/
 	long long counter;//60までカウントする
 	bool shouldIRender;//探索状況更新スイッチ

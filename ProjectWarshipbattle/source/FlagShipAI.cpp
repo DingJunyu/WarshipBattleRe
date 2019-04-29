@@ -4,6 +4,24 @@ FlagShipAI::~FlagShipAI()
 {
 }
 
+void FlagShipAI::LetUsGo(ShipMain *me, ShipMain *target) {
+	SetMyPos(me->ReferCoord2D_d());//自分の位置を設定する
+	SetNowRadian(me->ReferRadianOnZ());//自分の角度を設定する
+	targetDistance = Distance2D(target->ReferCoord2D_d(), myPos);//目標との距離を測量する
+	CalDistance();//前のウェイポイントとの距離を計算する
+	if (targetDistance > (double)DistanceRange::PATROL_RANGE) {
+		if (distance < needToChange)//前のウェイポイントが使えなくなる時に
+			SetWayPoint();//新しいウェイポイントを作る		
+	}
+	if (targetDistance <= (double)DistanceRange::COMING_IN_RANGE) {
+		//これは５秒ごとに更新するほうがいいか。。。
+		SetWayPoint(target->ReferCoord2D_d(), target->ReferRadianOnZ(),
+			target->ReferSpeedOnZ());
+	}
+
+	CalTargetRadianAndSetRadianNeeded();//角度を更新
+}
+
 void FlagShipAI::SetWayPoint() {
 	/*ランダムで次のターゲットを探す*/
 	RandomPoint(&wayPoint,nextPosOnMapX, nextPosOnMapZ, randRange);
@@ -21,6 +39,8 @@ void FlagShipAI::SetWayPoint() {
 /*敵の進行方向の前の点をターゲット点に設定する*/
 void FlagShipAI::SetWayPoint(Coordinate2D<double> targetPos, double radian, double speed) {
 	wayPoint = targetPos;
+	if (speed == 0)
+		speed = 0.1;
 	NextPoint(&wayPoint,radian, speed, nextPointFrame);
 }
 
@@ -36,27 +56,27 @@ void FlagShipAI::CalTargetRadianAndSetRadianNeeded() {
 	targetRadian = CalRadianBetweenPoints(wayPoint, myPos, nowRadian);
 
 	/*範囲から今必要な角度を計算する*/
-	if (abs(targetRadian) > RANGE_MAX * OneDegreeRadian) {
-		radianNeededNow = SPEED_MAX * OneDegreeRadian;
+	if (abs(targetRadian) > RadianRange::RANGE_MAX * OneDegreeRadian) {
+		radianNeededNow = RadianRange::SPEED_MAX * OneDegreeRadian;
 	}
-	if (abs(targetRadian) <= RANGE_MAX * OneDegreeRadian&&
-		abs(targetRadian) > RANGE_1_2 * OneDegreeRadian) {
-		radianNeededNow = SPEED_1_2 * OneDegreeRadian;
+	if (abs(targetRadian) <= RadianRange::RANGE_MAX * OneDegreeRadian&&
+		abs(targetRadian) > RadianRange::RANGE_1_2 * OneDegreeRadian) {
+		radianNeededNow = RadianRange::SPEED_1_2 * OneDegreeRadian;
 	}
-	if (abs(targetRadian) <= RANGE_1_2 * OneDegreeRadian&&
-		abs(targetRadian) > RANGE_1_4 * OneDegreeRadian) {
-		radianNeededNow = SPEED_1_4 * OneDegreeRadian;
+	if (abs(targetRadian) <= RadianRange::RANGE_1_2 * OneDegreeRadian&&
+		abs(targetRadian) > RadianRange::RANGE_1_4 * OneDegreeRadian) {
+		radianNeededNow = RadianRange::SPEED_1_4 * OneDegreeRadian;
 	}
-	if (abs(targetRadian) <= RANGE_1_4 * OneDegreeRadian&&
-		abs(targetRadian) > RANGE_1_8) {
-		radianNeededNow = SPEED_1_8 * OneDegreeRadian;
+	if (abs(targetRadian) <= RadianRange::RANGE_1_4 * OneDegreeRadian&&
+		abs(targetRadian) > RadianRange::RANGE_1_8) {
+		radianNeededNow = RadianRange::SPEED_1_8 * OneDegreeRadian;
 	}
-	if (targetRadian == RANGE_1_8) {
+	if (targetRadian == RadianRange::RANGE_1_8) {
 		radianNeededNow = 0;
 	}
 
 	/*方向を修正する*/
-	if (targetRadian < 0)
+	if (targetRadian > 0)
 		radianNeededNow = -radianNeededNow;
 }
 
@@ -64,3 +84,4 @@ void FlagShipAI::CalTargetRadianAndSetRadianNeeded() {
 void FlagShipAI::CalDistance() {
 	distance = Distance2D(wayPoint, myPos);
 }
+

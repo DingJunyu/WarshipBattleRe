@@ -55,6 +55,15 @@ public:
 	void ReturnDirectChange() { returnToCenter = ! returnToCenter; }
 	void Alignment();
 
+	void SetChangingDirect(double rad) {
+		currentRadian = rad;
+		if (rad > maxRadian)
+			currentRadian = maxRadian;
+		if (rad < -maxRadian)
+			currentRadian = -maxRadian;
+		SetRadianChangePerFrame(currentRadian);
+	}
+
 	void TEST();
 	void TestDraw(double x,double z);
 
