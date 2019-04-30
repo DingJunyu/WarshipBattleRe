@@ -353,7 +353,7 @@ void IngameDataManagement::TEST() {
 		enemyShip->TEST();
 		enemyShip->SetSerialNumber(2);
 		enemyShip->SetWeaponTest(&PL);
-		enemyShip->ChangeAccPercentage(true);
+		enemyShip->SetEngineOutPutRate(true);
 	}
 }
 

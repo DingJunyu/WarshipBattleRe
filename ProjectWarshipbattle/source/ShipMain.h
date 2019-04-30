@@ -18,7 +18,7 @@ class ShipMain :
 {
 public:
 	ShipMain() : AllMovableObjects(false, false, false, true) {
-		currentAccPercentage = 0;
+		currentEngineOutPutRate = 0;
 		returnToCenter = false;
 
 		forecastSeconds = 0;
@@ -49,7 +49,11 @@ public:
 	void Update();
 
 	//移動関連
-	void ChangeAccPercentage(bool up);
+	void SetEngineOutPutRate(bool up);
+	void SetEngineOutPutRate(double oP) {
+		currentEngineOutPutRate = oP;
+		mainEngine.SetOutPutPercentage(currentEngineOutPutRate);//今の出力を与える
+	}
 	void CalSpeed();
 	void ChangeDirect(bool right);
 	void ReturnDirectChange() { returnToCenter = ! returnToCenter; }
@@ -81,7 +85,7 @@ public:
 	/*移動関連*/
 	bool ReferReturnOn() { return returnToCenter; }
 	double ReferChangingRadian() { return currentRadian; }
-	double ReferOutPutRate() { return currentAccPercentage; }
+	double ReferOutPutRate() { return currentEngineOutPutRate; }
 	/*武器関連*/
 	int ReferWeaponCount(bool Main) { 
 		if (Main)
@@ -115,8 +119,8 @@ public:
 	}
 	void ResetStatus() {
 		currentRadian = 0;
-		currentAccPercentage = 0;
-		mainEngine.SetOutPutPercentage(currentAccPercentage);
+		currentEngineOutPutRate = 0;
+		mainEngine.SetOutPutPercentage(currentEngineOutPutRate);
 	}
 	/*番号*/
 	int ReferSerialNumber() { return serialNumber; }
@@ -174,7 +178,7 @@ private:
 
 	/*エンジン*/
 	Engine mainEngine;
-	double currentAccPercentage;//出力のパーセンテージ
+	double currentEngineOutPutRate;//出力のパーセンテージ
 
 	/*砲のステータス変更*/
 	bool TurnMainWeapon(bool right);

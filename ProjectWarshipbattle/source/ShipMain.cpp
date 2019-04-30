@@ -115,14 +115,14 @@ void ShipMain::FindThosePoint() {
 }
 
 /*出力パーセンテージ変更*/
-void ShipMain::ChangeAccPercentage(bool up) {
-	if (up&&currentAccPercentage < 1.0f) {//範囲内であれば
-		currentAccPercentage += 0.25f;	//増加する
+void ShipMain::SetEngineOutPutRate(bool up) {
+	if (up&&currentEngineOutPutRate < 1.0f) {//範囲内であれば
+		currentEngineOutPutRate += 0.25f;	//増加する
 	}
-	if (!up&&currentAccPercentage > -0.25f) {//範囲内であれば
-		currentAccPercentage -= 0.25f; //減少する
+	if (!up&&currentEngineOutPutRate > -0.25f) {//範囲内であれば
+		currentEngineOutPutRate -= 0.25f; //減少する
 	}
-	mainEngine.SetOutPutPercentage(currentAccPercentage);//今の出力を与える
+	mainEngine.SetOutPutPercentage(currentEngineOutPutRate);//今の出力を与える
 }
 
 void ShipMain::CalSpeed() {
@@ -173,8 +173,8 @@ void ShipMain::Alignment() {
 void ShipMain::ControlThisShip(int Command) {;
 	switch (Command) {
 	case CommandSerial::NONE_COMMAND:break;
-	case CommandSerial::INCREASE_OUTPUT:ChangeAccPercentage(true); break;
-	case CommandSerial::DECREASE_OUTPUT:ChangeAccPercentage(false); break;
+	case CommandSerial::INCREASE_OUTPUT:SetEngineOutPutRate(true); break;
+	case CommandSerial::DECREASE_OUTPUT:SetEngineOutPutRate(false); break;
 	case CommandSerial::TURN_RIGHT:ChangeDirect(true); break;
 	case CommandSerial::TURN_LEFT:ChangeDirect(false); break;
 	case CommandSerial::TURN_RETURN:ReturnDirectChange(); break;
@@ -291,10 +291,10 @@ void ShipMain::LoadSound(SoundLoader *SL) {
 
 void ShipMain::CheckAndPlaySound() {
 	/*エンジン音*/
-	if (currentAccPercentage != 0 && CheckSoundMem(*soundEngine) == 0) {
+	if (currentEngineOutPutRate != 0 && CheckSoundMem(*soundEngine) == 0) {
 		PlaySoundMem(*soundEngine, DX_PLAYTYPE_LOOP, TRUE);
 	}
-	if (currentAccPercentage == 0 && CheckSoundMem(*soundEngine) != 0) {
+	if (currentEngineOutPutRate == 0 && CheckSoundMem(*soundEngine) != 0) {
 		StopSoundMem(*soundEngine);
 	}
 	/*水音*/

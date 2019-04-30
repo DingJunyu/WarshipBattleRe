@@ -18,10 +18,10 @@ enum RadianRange {
 };
 
 enum DistanceRange {
-	PATROL_RANGE = 2000,//0.5出力
-	COMING_IN_RANGE = 2000,//.75
-	TAKE_T = 1000,//100
-	BATTLE = 500//same with target
+	PATROL_RANGE = 4000,//0.5出力
+	COMING_IN_RANGE = 4000,//.75
+	TAKE_T = 2000,//100
+	BATTLE = 1000//same with target
 };
 
 class FlagShipAI
@@ -46,6 +46,10 @@ private:
 	const double nextPosOnMapZ = 1500;
 	const int randRange = 1000;
 	const int nextPointFrame = 1800;//18秒後の位置をターゲットに設定する
+	const double outPut_50 = 0.5;
+	const double outPut_75 = 0.75;
+	const double outPut_100 = 1.0;
+	const int nextCounter = 600;
 	/*関数部分*/
 	void CalData(ShipMain *ship);
 	void SetWayPoint();//ウェイポイント設定関数
@@ -53,8 +57,10 @@ private:
 	void DisableWayPoint_MoveWithEnemy(double radian);
 	void SetNowRadian(double rad) { nowRadian = rad; }
 	void SetMyPos(Coordinate2D<double> pos) { myPos = pos; }
-	void CalTargetRadianAndSetRadianNeeded();
-	void CalDistance();
+	void CalTargetRadian();//敵との角度を計算して
+	void SetRadianNeeded();// 今が必要な角度を設定する
+	void CalDistance();//
+	double SpeedINeed(double outPutRate);//出力を設定する
 	/*変数部分*/
 	Coordinate2D<double> wayPoint;//ウェイポイント
 	Coordinate2D<double> myPos;//今自分の座標
@@ -65,6 +71,7 @@ private:
 	double distance;//ウェイポイントとの距離
 	double targetDistance;//敵との距離
 	const double needToChange = 300;
+	int counter;
 
 	/*艦隊の接触状態による*/
 	double targetSpeed;
