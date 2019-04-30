@@ -55,6 +55,30 @@ bool IngameDataManagement::TeamDestroyed() {
 void IngameDataManagement::LetFlagShipMove() {
 	flagShipAI.LetUsGo(&enemyFleet[0], &alliesFleet[0]);
 	enemyFleet[0].SetChangingDirect(flagShipAI.ReferRadianNeededNow());
+	enemyFleet[0].SetEngineOutPutRate(flagShipAI.ReferSpeedInNeed());
+}
+
+void IngameDataManagement::LetEveryOneMove() {
+	ControlThisList(&alliesFleet, &AI);
+	ControlThisList(&enemyFleet, &AI);
+}
+
+void IngameDataManagement::ControlThisList(std::vector<ShipMain> *shipList,
+	ArtificialIntelligence *AI) {	
+	int num = 0;
+	if (!shipList->empty() && shipList->begin()!=shipList->end()) {
+		for (auto ship = shipList->begin();
+			ship != shipList->end();
+			ship++) {
+			if (num == 0) {
+				num++;
+				continue;
+			}
+			auto prevShip = ship--;
+			AI->Move(*ship, *prevShip);
+			ship->SetChangingDirect(AI->ReferRadianNeededNow());
+		}
+	}
 }
 
 /****************************************************/

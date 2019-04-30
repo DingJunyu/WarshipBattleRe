@@ -33,3 +33,4 @@ void NextPoint(Coordinate2D<double> *coord, double radian, double speed, int fra
 /*ランダムにポイントを生成する*/
 void RandomPoint(Coordinate2D<double> *coord, double nextX, double nextZ,
 	int Range);
+void NextPoint(Coordinate2D<double> *coord, double radian, double dis);

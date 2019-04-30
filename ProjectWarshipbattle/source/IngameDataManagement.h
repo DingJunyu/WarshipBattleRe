@@ -62,6 +62,9 @@ private:
 	FlagShipAI flagShipAI;
 
 	void LetFlagShipMove();
+	void LetEveryOneMove();
+	void ControlThisList(std::vector<ShipMain> *shipList,
+		ArtificialIntelligence *AI);
 
 	/*•`‰æˆ—ŠÖ˜A*/
 	long long counter;//60‚Ü‚ÅƒJƒEƒ“ƒg‚·‚é
@@ -139,6 +142,7 @@ private:
 
 	std::vector<ShipMain> alliesFleet;//©ŒRŠÍ‘à
 	std::vector<ShipMain> enemyFleet;//“GŒRŠÍ‘à
+	ArtificialIntelligence AI;
 	std::list<ShipMain> sinkingShip;//’¾‚ñ‚Å‚¢‚é‘D
 
 	std::list<Ammo> shellList;//–C’eƒŠƒXƒg

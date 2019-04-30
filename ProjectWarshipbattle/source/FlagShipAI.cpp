@@ -29,7 +29,7 @@ void FlagShipAI::LetUsGo(ShipMain *me, ShipMain *target) {
 		DisableWayPoint_MoveWithEnemy(target->ReferRadianOnZ());
 	}
 	SetRadianNeeded();//Šp“x‚ðXV
-	me->SetEngineOutPutRate(SpeedINeed(target->ReferOutPutRate()));
+	targetSpeedRate = SpeedINeed(target->ReferOutPutRate());
 }
 
 void FlagShipAI::SetWayPoint() {

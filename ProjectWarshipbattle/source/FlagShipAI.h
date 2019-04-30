@@ -6,24 +6,6 @@
 #include"OtherFunctions.h"
 #include<cmath>
 
-enum RadianRange {
-	RANGE_MAX = 60,
-	RANGE_1_2 = 30,
-	RANGE_1_4 = 10,
-	RANGE_1_8 = 0,
-	SPEED_MAX = 25,
-	SPEED_1_2 = 18,
-	SPEED_1_4 = 9,
-	SPEED_1_8 = 4
-};
-
-enum DistanceRange {
-	PATROL_RANGE = 4000,//0.5出力
-	COMING_IN_RANGE = 4000,//.75
-	TAKE_T = 2000,//100
-	BATTLE = 1000//same with target
-};
-
 class FlagShipAI
 {
 public:
@@ -34,6 +16,7 @@ public:
 	void ShowMeTheTarget();//敵を指定する関数
 
 	double ReferRadianNeededNow() { return radianNeededNow; }
+	double ReferSpeedInNeed() { return targetSpeedRate; }
 
 private:
 	/*状態部分*/
@@ -68,6 +51,7 @@ private:
 	double nowRadian;//今自分の角度
 	double radianNeededNow;//回転角度//targetRadianに近づけば近づいほど小さくなる
 	double nowSpeed;//今自分の速度
+	double targetSpeedRate;
 	double distance;//ウェイポイントとの距離
 	double targetDistance;//敵との距離
 	const double needToChange = 300;

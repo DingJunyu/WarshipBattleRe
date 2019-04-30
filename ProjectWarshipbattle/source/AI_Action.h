@@ -1,5 +1,23 @@
 #pragma once
 /*このヘッダーファイルに保存しているのはAIの行動指令表*/
+enum RadianRange {
+	RANGE_MAX = 60,
+	RANGE_1_2 = 30,
+	RANGE_1_4 = 10,
+	RANGE_1_8 = 0,
+	SPEED_MAX = 25,
+	SPEED_1_2 = 18,
+	SPEED_1_4 = 9,
+	SPEED_1_8 = 4
+};
+
+enum DistanceRange {
+	PATROL_RANGE = 4000,//0.5出力
+	COMING_IN_RANGE = 4000,//.75
+	TAKE_T = 2000,//100
+	BATTLE = 1000//same with target
+};
+
 enum AI_WAYPOINT {
 	ON_X = 500,
 	ON_Z = 500
