@@ -34,15 +34,13 @@ void FlagShipAI::LetUsGo(ShipMain *me, ShipMain *target) {
 
 void FlagShipAI::SetWayPoint() {
 	/*ランダムで次のターゲットを探す*/
-	RandomPoint(&wayPoint,nextPosOnMapX, nextPosOnMapZ, randRange);
+	RandomPoint(&wayPoint, nextPosOnMapX, nextPosOnMapZ, randRange);
 
-	if (myPos.x > 0 && myPos.z > 0) {
-		int target = rand() % 3;
-		switch (target) {
-		case 0:wayPoint.ChangeX(); break;//第四象限に移す
-		case 1:wayPoint.ChangeZ(); break;//第二象限に移す
-		case 2:wayPoint.ChangeXandZ(); break;//第三象限に移す
-		}
+	int target = rand() % 3;
+	switch (target) {
+	case 0:wayPoint.ChangeX(); break;//第四象限に移す
+	case 1:wayPoint.ChangeZ(); break;//第二象限に移す
+	case 2:wayPoint.ChangeXandZ(); break;//第三象限に移す
 	}
 }
 
@@ -88,7 +86,7 @@ void FlagShipAI::SetRadianNeeded() {
 	}
 
 	/*方向を修正する*/
-	if (targetRadian < 0)
+	if (targetRadian > 0)
 		radianNeededNow = -radianNeededNow;
 }
 

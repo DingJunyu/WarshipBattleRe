@@ -26,10 +26,14 @@ void IngameDataManagement::Update() {
 		}
 	}
 	/**************/
-
-	MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
+	if (!alliesFleet[0].fireDataFigureUp.ReferLockOn())
+		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
+	else
+		MainCamera.GetXZ(ReferTargetX(alliesFleet[0].fireDataFigureUp.ReferTarget()),
+			ReferTargetZ(alliesFleet[0].fireDataFigureUp.ReferTarget()));
 	Control();//コマンドを受け取って、船の状態を変更する
 	LetFlagShipMove();//敵のフラグシープを動かす
+	LetEveryOneMove();
 	GetNewEffect();//エフェクトを生成する
 	MoveAll();//移動、状態更新
 
@@ -74,9 +78,12 @@ void IngameDataManagement::ControlThisList(std::vector<ShipMain> *shipList,
 				num++;
 				continue;
 			}
-			auto prevShip = ship--;
+			ship--;
+			auto prevShip = ship;
+			ship++;
 			AI->Move(*ship, *prevShip);
 			ship->SetChangingDirect(AI->ReferRadianNeededNow());
+			ship->SetEngineOutPutRate(AI->ReferOutPutRateNeededNow());
 		}
 	}
 }
@@ -129,9 +136,9 @@ void IngameDataManagement::DrawShips() {
 		for (auto mark = alliesFleet.begin();
 			mark != alliesFleet.end(); mark++) {
 		if (mark->ReferAlive()) {//ターゲットの状態を確認
-			if (mark == alliesFleet.begin())
-				mark->Draw(MainCamera);//自分だけが画面中心に映す
-			else
+//			if (mark == alliesFleet.begin())
+//				mark->Draw(MainCamera);//自分だけが画面中心に映す
+//			else
 				mark->DrawSub(MainCamera);//それ以外のは相対座標を利用して描く
 		}
 	}
@@ -151,9 +158,9 @@ void IngameDataManagement::DrawShipsShadow() {
 		for (auto mark = alliesFleet.begin();
 			mark != alliesFleet.end(); mark++) {
 		if (mark->ReferAlive()) {//ターゲットの状態を確認
-			if (mark == alliesFleet.begin())
-				mark->DrawShadow(MainCamera);//自分だけが画面中心に映す
-			else
+//			if (mark == alliesFleet.begin())
+//				mark->DrawShadow(MainCamera);//自分だけが画面中心に映す
+//			else
 				mark->DrawSubShadow(MainCamera);//それ以外のは相対座標を利用して描く
 		}
 	}
@@ -359,7 +366,7 @@ void IngameDataManagement::TEST() {
 	ship->SetWeaponTest(&PL);//武器をロードする
 
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 2; i++) {
 		enemyFleet.push_back(ShipMain());//テスト用敵船を生成する
 		auto enemyShip = enemyFleet.end();//イテレータで船を選ぶ
 		enemyShip--;
@@ -368,8 +375,8 @@ void IngameDataManagement::TEST() {
 		enemyShip->SetMultiple(0.125);
 		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
 			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
-		enemyShip->NewCoordX(1200 + (rand() % 400) * i);
-		enemyShip->NewCoordZ(400 +  (rand() % 400) * i);
+		enemyShip->NewCoordX(2500 + (rand() % 400) * i);
+		enemyShip->NewCoordZ(2000 +  (rand() % 400) * i);
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
 		enemyShip->SetLength(PL.ReferShipSizeX());

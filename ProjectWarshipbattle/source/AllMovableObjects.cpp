@@ -107,6 +107,10 @@ void AllMovableObjects::SpeedDownbyAirResistance() {
 			speedOnZ = 0;
 	}
 }
+
+/*描画について：
+分ける必要はないです*/
+
 //自機描く時はこの関数を使う
 //自機は画面の中心にいるため、ここはカメラの中心座標を使う
 //次回更新について：DrawとDrawShadowに分ける、影の描画と本体の描画が別々に行います。

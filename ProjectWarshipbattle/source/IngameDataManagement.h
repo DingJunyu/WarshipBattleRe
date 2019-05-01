@@ -26,7 +26,9 @@ public:
 	//ƒJƒƒ‰—pÀ•W–â‚¢‡‚í‚¹
 	double ReferPlayerX() { return alliesFleet[0].ReferCoordX(); }
 	double ReferPlayerZ() { return alliesFleet[0].ReferCoordZ(); }
-
+	double ReferTargetX(int x) { return enemyFleet[x].ReferCoordX(); }
+	double ReferTargetZ(int x) { return enemyFleet[x].ReferCoordZ(); }
+	
 	//GameController–â‚¢‡‚í‚¹
 	int ReferRemainedAlliesNum();
 	int ReferRemainedEnemiesNum();

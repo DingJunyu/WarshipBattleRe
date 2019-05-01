@@ -18,9 +18,10 @@ public:
 	bool ReferFlagShip() { return flagShip; }
 
 	double ReferRadianNeededNow() { return radianNeededNow; }
+	double ReferOutPutRateNeededNow() { return outPutRate; }
 
 private:
-	const double disToFront = 400;
+	const double disToFront = 50;
 
 	double range;
 	double targetDis;
@@ -40,5 +41,6 @@ private:
 	void SetRadianNeeded();
 	void CalDistance(Coordinate2D<double> coord);
 	void CalWaypointDis();
+	void SetSpeed(double outputRate);
 };
 

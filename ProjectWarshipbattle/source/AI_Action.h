@@ -15,7 +15,10 @@ enum DistanceRange {
 	PATROL_RANGE = 4000,//0.5èoóÕ
 	COMING_IN_RANGE = 4000,//.75
 	TAKE_T = 2000,//100
-	BATTLE = 1000//same with target
+	BATTLE = 1000,//same with target
+	CLOSING = 1000,
+	SLOW_DOWN = 300,
+	STOP = 100
 };
 
 enum AI_WAYPOINT {

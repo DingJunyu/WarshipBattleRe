@@ -243,7 +243,8 @@ void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<double> coord
 	, Camera camera, double radian) {
 	if (lock)
 		DrawCircle(coord,camera);
-	DrawMyCircle(camera, radian);
+	if (!lock)
+		DrawMyCircle(camera, radian);
 }
 
 void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {

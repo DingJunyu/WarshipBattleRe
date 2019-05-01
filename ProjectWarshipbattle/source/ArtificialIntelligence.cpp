@@ -11,9 +11,12 @@ ArtificialIntelligence::~ArtificialIntelligence()
 
 void ArtificialIntelligence::Move(ShipMain me, ShipMain target) {
 	SetMyPos(me.ReferCoord2D_d());
+	SetNowRadian(me.ReferRadianOnZ());
 	SetTargetPos(target.ReferCoord2D_d(), target.ReferRadianOnZ());
+	CalWaypointDis();
 	CalTargetRadian();
 	SetRadianNeeded();
+	SetSpeed(target.ReferOutPutRate());
 }
 
 void ArtificialIntelligence::SetTargetPos(Coordinate2D<double> target,double radian) {
@@ -48,7 +51,7 @@ void ArtificialIntelligence::SetRadianNeeded() {
 	}
 
 	/*ï˚å¸ÇèCê≥Ç∑ÇÈ*/
-	if (targetRadian < 0)
+	if (targetRadian > 0)
 		radianNeededNow = -radianNeededNow;
 }
 
@@ -58,4 +61,16 @@ void ArtificialIntelligence::CalDistance(Coordinate2D<double> coord) {
 
 void ArtificialIntelligence::CalWaypointDis() {
 	wayPointDis = Distance2D(myPos, wayPoint);
+}
+
+void ArtificialIntelligence::SetSpeed(double TGoutputRate) {
+	if (wayPointDis >= DistanceRange::CLOSING)
+		outPutRate = 1.0;
+	else if (wayPointDis <= DistanceRange::SLOW_DOWN
+		&& wayPointDis > DistanceRange::STOP)
+		outPutRate = 0.25;
+	else if (wayPointDis <= DistanceRange::STOP)
+		outPutRate = 0;
+	else
+		outPutRate = TGoutputRate;
 }
