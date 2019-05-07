@@ -109,7 +109,7 @@ void SingleGame_DeathMatch_Progress() {
 	}
 	IDM.DrawLoading();
 	/*Œ‹‰Ê”­•\*/
-//	TDMC.DrawBoard(IDM);
+	IDM.DrawStatisticBoard();
 	/*ƒƒ‚ƒŠ‰ğ•ú*/
 	IDM.Free();
 }

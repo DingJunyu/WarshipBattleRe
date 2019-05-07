@@ -268,6 +268,15 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/Ships_Mark/Ship_Unknown.png");
 }
 
+void PictureLoader::LoadStatisticBoard() {
+	statisticBoardHandle[StatisticBoard::SB_BACKGROUND] = LoadGraph(
+		"GraphicData/Back_Ground/statistic_board.jpg");
+	statisticBoardHandle[StatisticBoard::WIN] = LoadGraph(
+		"GraphicData/Back_Ground/win.png");
+	statisticBoardHandle[StatisticBoard::LOSE] = LoadGraph(
+		"GraphicData/Back_Ground/lose.png");
+}
+
 void PictureLoader::FreePicture() {
 	DeleteShips();
 	DeleteSea();
@@ -338,4 +347,11 @@ void PictureLoader::DeleteButtonInGame() {
 		DeleteGraph(buttonIntheGame[i]);
 		DeleteGraph(buttonPressedIntheGame[i]);
 	}
+}
+
+void PictureLoader::DeleteStatisticBoard() {
+	for (int i = StatisticBoard::SB_BACKGROUND;
+		i <= StatisticBoard::LOSE;
+		i++)
+		DeleteGraph(statisticBoardHandle[i]);
 }

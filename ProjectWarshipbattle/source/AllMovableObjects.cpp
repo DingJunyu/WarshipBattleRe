@@ -63,6 +63,8 @@ void AllMovableObjects::Move() {
 	//ˆÚ“®‚µ‚½À•W‚ğŒvZ‚·‚é
 	coord.x += speedOnZ * cos(radianOnZ);
 	coord.z += speedOnZ * sin(radianOnZ);
+
+	distanceMoved += speedOnZ;
 }
 
 void AllMovableObjects::Unmove() {

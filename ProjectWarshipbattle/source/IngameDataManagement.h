@@ -50,6 +50,8 @@ public:
 	//ロード画面
 	void DrawLoading();
 
+	void DrawStatisticBoard();
+
 private:
 	//他のコントローラー
 	PictureLoader PL;//画像ローダー
@@ -123,17 +125,14 @@ private:
 	void CheckTeamA(std::vector<ShipMain> *teashipListm);//沈んだ船を沈む演出リストに追加する
 
 	//弾管理
-	void TestShoot(ShipMain *ship);
-
-	int shootCount;
-	int hitCount;
+	void TestShoot(ShipMain *ship,bool me);
 
 	void LockAndRefresh();
 	void CheckThisTeamLock(std::vector<ShipMain> *shipList,
 		std::vector<ShipMain> enemyList);
 
 	void CheckSelectedWeapon();
-	void InputNewAmmo(ShipMain *SM, FiringData FD);//新しい弾をlistに追加
+	void InputNewAmmo(ShipMain *SM, FiringData FD,bool me);//新しい弾をlistに追加
 	void DeleteUselessAmmo();//期限切りものを削除
 
 	/*音声関数*/
@@ -170,5 +169,20 @@ private:
 	std::list<Effect> explosionList;//爆発リスト
 	std::list<Effect> rippleList;//水泡リスト(砲弾落下地)
 
-	int hOffScreen;
+	/*統計*/
+	void InifStatisticBoardData() {
+		shootCount = 0;
+		hitCount = 0;
+		movedDis = 0;
+		damage = 0; damageRecieved = 0;
+		killed = 0;
+	}
+	int *statisticBoard[StatisticBoard::SB_NUM];
+	int shootCount;
+	int hitCount;
+	double hitRate;
+	double movedDis;
+	int damage;
+	int damageRecieved;
+	int killed;
 };

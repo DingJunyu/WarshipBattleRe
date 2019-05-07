@@ -25,6 +25,7 @@ public:
 		LoadEffect();
 		LoadAmmo();
 		LoadButtonInGame();
+		LoadStatisticBoard();
 	}
 
 	/*メモリ回収*/
@@ -42,6 +43,7 @@ public:
 		DeleteEffect();
 		DeleteAmmo();
 		DeleteButtonInGame();
+		DeleteStatisticBoard();
 		FreeMemory();
 	}
 
@@ -67,6 +69,8 @@ public:
 	int ReferMapZ() { return mapZ; }
 
 	int *ReferMapHandle() { return &mapHandle; }
+
+	int *RefetrStatisticBoardHandle(int x) { return &statisticBoardHandle[x]; }
 
 	//UI
 	int *ReferMatHandle() { return &matHandle; }
@@ -124,6 +128,7 @@ private:
 	void LoadMainMenu();
 	void LoadButtonInMainMenu();
 	void LoadButtonInGame();
+	void LoadStatisticBoard();
 
 	/*機能別メモリ解放関数*/
 	void DeleteShips();
@@ -134,6 +139,7 @@ private:
 	void DeleteMainMenu();
 	void DeleteButtonInMainMenu();
 	void DeleteButtonInGame();
+	void DeleteStatisticBoard();
 
 	/*船画像データ*/
 	/*参考：DefinedData.h-SerialNumberOfShipHandle*/
@@ -199,4 +205,6 @@ private:
 	int pressedToStart;
 	int pressedToStartDown;
 	int backGround;
+
+	int statisticBoardHandle[StatisticBoard::SB_NUM];
 };

@@ -28,8 +28,8 @@ enum CommandSerial {
 	REVISE_RADIAN_ON_Z_MINUS,
 	MENU,
 	CONTINUE,
-	SETTING,
 	EXIT,
+	SETTING,
 	CHOOSE_MAIN,
 	CHOOSE_SUB,
 
@@ -141,14 +141,21 @@ enum TypeOfHord {
 	SMALL
 };
 
+enum StatisticBoard {
+	SB_NUM = 3,
+	SB_BACKGROUND = 0,
+	WIN,
+	LOSE
+};
+
 enum ButtonEvent {
 	BUTTON_AMOUNT = 20,
 	//メインメニューボタン集
 	NEW_GAME = 0,
+	GAME_OVER,
 	CONTINUE_GAME,
 	LOAD_GAME,
-	OPTION,
-	GAME_OVER
+	OPTION
 };
 
 enum UI_LIST {
