@@ -16,7 +16,7 @@ public:
 		firstTimeGetIntoMainMenu = true;
 		titleMultipleRateInTitle = 2;
 		titleMultipleRateInMainMenu = 4;
-		buttonMultiple = 0.5;
+		buttonMultiple = 0.7;
 	}
 	~MainMenuController();
 

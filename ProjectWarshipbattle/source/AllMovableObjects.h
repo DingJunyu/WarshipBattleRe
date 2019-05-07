@@ -20,6 +20,7 @@ public:
 		airResistance = 0.00001;
 		speedOnZ = 0;
 		input = 0;
+		distanceMoved = 0;
 	}
 	virtual ~AllMovableObjects();
 
@@ -41,6 +42,8 @@ public:
 	double ReferLength() { return length; }//長さ(画像)
 	double ReferWidth() { return width; }//幅(画像)
 	double ReferMultiple() { return multiple; }//拡大率
+
+	double ReferDistanceMoved() { return distanceMoved; }
 
 	//状態問い合わせ関数
 	bool ReferAlive() { return alive; }//生きる状況確認
@@ -91,6 +94,7 @@ private:
 	/*XZは水平座標、Yは高さ*/
 	Coordinate<double> coord;
 	Coordinate<double> oldCoord;
+	double distanceMoved;
 	/*スピードは水平と垂直に分ける*/
 	double speedOnZ;
 	double speedOnY;

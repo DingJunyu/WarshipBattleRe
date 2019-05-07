@@ -23,12 +23,19 @@ void UserInterface::InifUI(PictureLoader *PL) {
 	//座標を電球に代入
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].Inif(coord,
 		(float)LAMP_POSITION::RETURN_TO_MIDDLE_R);
+	//ロック状態の指示
+	coord.x = (float)(Screen::SCREEN_X)*(float)(LAMP_POSITION::LOCKED_X);
+	coord.z = (float)(Screen::SCREEN_Z)*(float)(LAMP_POSITION::LOCKED_Z);
+	lamps[LAMP_LIST::LOCKED].Inif(coord,
+		(float)LAMP_POSITION::LOCKED_R);
 	//オフ状態の色を設定
 	color = GetColor(255, 0, 0);
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].SetColor(false, color);
+	lamps[LAMP_LIST::LOCKED].SetColor(false, color);
 	//オン状態の色を設定
 	color = GetColor(0, 255, 0);
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].SetColor(true, color);
+	lamps[LAMP_LIST::LOCKED].SetColor(true, color);
 }
 
 void UserInterface::DrawUI() {
@@ -153,6 +160,8 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 			USER_INTERFACE_POSITION::ARROW_RED_A_Z,
 			USER_INTERFACE_POSITION::ARROW_RED_A_MULTI,
 			radian);
+		lamps[LAMP_LIST::LOCKED].SetOnOrOff(ship->ReferCanIShoot());
+		lamps[LAMP_LIST::LOCKED].Draw();
 	}
 
 	/*砲塔角度指示*/
@@ -243,7 +252,8 @@ void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<double> coord
 	, Camera camera, double radian) {
 	if (lock)
 		DrawCircle(coord,camera);
-	DrawMyCircle(camera, radian);
+	if (!lock)
+		DrawMyCircle(camera, radian);
 }
 
 void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {

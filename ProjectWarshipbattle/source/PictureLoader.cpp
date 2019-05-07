@@ -242,6 +242,11 @@ void PictureLoader::LoadButtonInGame() {
 	buttonPressedIntheGame[CommandSerial::REVISE_RADIAN_ON_Z_MINUS] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/revise_on_y_minus_pressed.png");
 
+	buttonIntheGame[CommandSerial::CHANGE_CAMERA] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/change_camera.png");
+	buttonPressedIntheGame[CommandSerial::CHANGE_CAMERA] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/change_camera_pressed.png");
+
 	buttonIntheGame[CommandSerial::MENU] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/menu_normal.png");
 	buttonPressedIntheGame[CommandSerial::MENU] = LoadGraph(
@@ -261,6 +266,15 @@ void PictureLoader::LoadButtonInGame() {
 
 	buttonIntheGame[CommandSerial::SELECT] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/Ships_Mark/Ship_Unknown.png");
+}
+
+void PictureLoader::LoadStatisticBoard() {
+	statisticBoardHandle[StatisticBoard::SB_BACKGROUND] = LoadGraph(
+		"GraphicData/Back_Ground/statistic_board.jpg");
+	statisticBoardHandle[StatisticBoard::WIN] = LoadGraph(
+		"GraphicData/Back_Ground/win.png");
+	statisticBoardHandle[StatisticBoard::LOSE] = LoadGraph(
+		"GraphicData/Back_Ground/lose.png");
 }
 
 void PictureLoader::FreePicture() {
@@ -333,4 +347,11 @@ void PictureLoader::DeleteButtonInGame() {
 		DeleteGraph(buttonIntheGame[i]);
 		DeleteGraph(buttonPressedIntheGame[i]);
 	}
+}
+
+void PictureLoader::DeleteStatisticBoard() {
+	for (int i = StatisticBoard::SB_BACKGROUND;
+		i <= StatisticBoard::LOSE;
+		i++)
+		DeleteGraph(statisticBoardHandle[i]);
 }

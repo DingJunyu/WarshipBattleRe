@@ -23,14 +23,16 @@ enum CommandSerial {
 	TURRET_PULLDOWN,
 	FORECAST_PLUS,
 	FORECAST_MINUS,
+	CHANGE_CAMERA,
 	REVISE_RADIAN_ON_Z_PLUS,
 	REVISE_RADIAN_ON_Z_MINUS,
 	MENU,
 	CONTINUE,
-	SETTING,
 	EXIT,
+	SETTING,
 	CHOOSE_MAIN,
 	CHOOSE_SUB,
+
 
 	SELECT,/*いつも最後に設置する*/
 
@@ -139,14 +141,21 @@ enum TypeOfHord {
 	SMALL
 };
 
+enum StatisticBoard {
+	SB_NUM = 3,
+	SB_BACKGROUND = 0,
+	WIN,
+	LOSE
+};
+
 enum ButtonEvent {
 	BUTTON_AMOUNT = 20,
 	//メインメニューボタン集
 	NEW_GAME = 0,
+	GAME_OVER,
 	CONTINUE_GAME,
 	LOAD_GAME,
-	OPTION,
-	GAME_OVER
+	OPTION
 };
 
 enum UI_LIST {
@@ -171,9 +180,10 @@ enum UI_LIST {
 };
 
 enum LAMP_LIST {
-	LAMP_AMOUNT = 1,
+	LAMP_AMOUNT = 2,
 
 	RETURN_TO_MIDDLE = 0,
+	LOCKED
 };
 
 namespace BUTTON_POSITION {
@@ -241,6 +251,10 @@ namespace BUTTON_POSITION_INGAME {
 	const double DECREASE_OUTPUT_MULTI = .06;
 	const double DECREASE_OUTPUT_X = 0.025;
 	const double DECREASE_OUTPUT_Z = 0.86;
+
+	const double CHANGE_CAMERA_MULTI = .06;
+	const double CHANGE_CAMERA_X = 0.72;
+	const double CHANGE_CAMERA_Z = 0.82;
 
 	const double SHIP_MARK_MULTI = .13;
 	const double SHIP_MARK_LEFT_X = .002;
@@ -311,6 +325,10 @@ namespace LAMP_POSITION {
 	const double RETURN_TO_MIDDLE_X = 0.5;
 	const double RETURN_TO_MIDDLE_Z = 0.735;
 	const double RETURN_TO_MIDDLE_R = 4;
+
+	const double LOCKED_X = .655;
+	const double LOCKED_Z = .8;
+	const double LOCKED_R = 5;
 }
 
 enum AmmoType {
@@ -395,6 +413,7 @@ namespace MathAndPhysics {
 	const double OneDegreeRadian = PI * OneDegree;
 	const double MAX_SPEED_FOR_SHIP = 1.30;
 	const double RANGE_ERROR = 10;//角度探す関数が正常に動作しない時に適度に上がってみよう
+	const double Infinite = 99999999.0;
 }
 
 namespace GameDefine {

@@ -18,22 +18,23 @@ class ShipMain :
 {
 public:
 	ShipMain() : AllMovableObjects(false, false, false, true) {
-		currentAccPercentage = 0;
+		currentEngineOutPutRate = 0;
 		returnToCenter = false;
 
 		forecastSeconds = 0;
 		reviseRadianOnZ = 0;
 
 		/*テスト部分*/
-		hitPoint = 5000;
+		hitPoint = 240;
 		shipMainCrash = { 180, 40, 18 };
+		controled = false;
 	}
 	~ShipMain();
 
 	//初期化
 	void RegistrateShipCrashParts();
-	void InifThisShip(int *ShipHandle,int *SShadowH,int ShipNum, 
-		EffectTemplate ET,SoundLoader *SL);
+	void InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
+		EffectTemplate ET, SoundLoader *SL);
 	void SetEffectPoint(ShipData SD);
 	void DestroyMemory();
 	void SetWeaponTest(PictureLoader *PL);
@@ -48,15 +49,30 @@ public:
 	//更新
 	void Update();
 
+	void SetControled() { controled = !controled; }
+
 	//移動関連
-	void ChangeAccPercentage(bool up);
+	void SetEngineOutPutRate(bool up);
+	void SetEngineOutPutRate(double oP) {
+		currentEngineOutPutRate = oP;
+		mainEngine.SetOutPutPercentage(currentEngineOutPutRate);//今の出力を与える
+	}
 	void CalSpeed();
 	void ChangeDirect(bool right);
-	void ReturnDirectChange() { returnToCenter = ! returnToCenter; }
+	void ReturnDirectChange() { returnToCenter = !returnToCenter; }
 	void Alignment();
 
+	void SetChangingDirect(double rad) {
+		currentRadian = rad;
+		if (rad > maxRadian)
+			currentRadian = maxRadian;
+		if (rad < -maxRadian)
+			currentRadian = -maxRadian;
+		SetRadianChangePerFrame(currentRadian);
+	}
+
 	void TEST();
-	void TestDraw(double x,double z);
+	void TestDraw(double x, double z);
 
 	/*簡単化した戦闘*/
 	void SufferDamage(int damage);
@@ -72,9 +88,9 @@ public:
 	/*移動関連*/
 	bool ReferReturnOn() { return returnToCenter; }
 	double ReferChangingRadian() { return currentRadian; }
-	double ReferOutPutRate() { return currentAccPercentage; }
+	double ReferOutPutRate() { return currentEngineOutPutRate; }
 	/*武器関連*/
-	int ReferWeaponCount(bool Main) { 
+	int ReferWeaponCount(bool Main) {
 		if (Main)
 			return MainWeaponCount;
 		else
@@ -96,6 +112,7 @@ public:
 	double ReferMainMaxWeaponRadianOnY() {
 		return MainWeapon[0].ReferMaxRadianOnY();
 	}
+	double ReferMainMaxRange() { return fireControllerMain.ReferMaxRange(); }
 
 	/*collision関連*/
 	double ReferShipCrashR() { return shipCrashR; }
@@ -106,9 +123,11 @@ public:
 	}
 	void ResetStatus() {
 		currentRadian = 0;
-		currentAccPercentage = 0;
-		mainEngine.SetOutPutPercentage(currentAccPercentage);
+		currentEngineOutPutRate = 0;
+		mainEngine.SetOutPutPercentage(currentEngineOutPutRate);
 	}
+
+	bool ReferControled() { return controled; }
 	/*番号*/
 	int ReferSerialNumber() { return serialNumber; }
 	//エンジン関連
@@ -116,6 +135,7 @@ public:
 	double ReferEngineMaxOutput() { return mainEngine.ReferMaxOutput(); }
 	/*ロック関係*/
 	int ReferForecastSecond() { return forecastSeconds; }
+	bool ReferCanIShoot() { return canIShoot; }
 
 	//エフェクト生成
 	Effect NewBubble(int num);
@@ -144,6 +164,7 @@ private:
 	/*自分の弾が自分に当たらないように使用する番号です*/
 	int serialNumber;
 	int shipType;
+	bool controled;
 
 	Weapon * MainWeapon;//メイン武器
 	int MainWeaponCount;//メイン武器の数
@@ -165,7 +186,7 @@ private:
 
 	/*エンジン*/
 	Engine mainEngine;
-	double currentAccPercentage;//出力のパーセンテージ
+	double currentEngineOutPutRate;//出力のパーセンテージ
 
 	/*砲のステータス変更*/
 	bool TurnMainWeapon(bool right);
@@ -177,6 +198,8 @@ private:
 
 	void DrawMainPoint(Camera camera);
 	void DrawSubPoint(Camera camera);
+	
+	bool canIShoot;
 
 	double draft;//喫水:魚雷を使う時に使うデータです。
 	int thisShipType;

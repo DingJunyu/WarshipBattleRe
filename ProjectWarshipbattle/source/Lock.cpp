@@ -4,7 +4,7 @@ Lock::Lock()
 {
 	correction = { 0,0 };
 	lockOn = false;
-	targetNumber = 1;
+	targetNumber = 0;
 }
 
 Lock::~Lock()

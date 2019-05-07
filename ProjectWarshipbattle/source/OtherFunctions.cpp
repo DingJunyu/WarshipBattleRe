@@ -88,3 +88,8 @@ void RandomPoint(Coordinate2D<double> *coord, double nextX, double nextZ,
 	coord->x = nextX + (double)(rand() % randRange);
 	coord->z = nextZ + (double)(rand() % randRange);
 }
+
+void NextPoint(Coordinate2D<double> *coord, double radian, double dis) {
+	coord->x += cos(radian) * dis;
+	coord->z += sin(radian) * dis;
+}
