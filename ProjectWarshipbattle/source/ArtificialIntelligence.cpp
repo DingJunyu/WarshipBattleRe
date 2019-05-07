@@ -23,9 +23,9 @@ void ArtificialIntelligence::Move(ShipMain me, ShipMain target) {
 void ArtificialIntelligence::InBattle(ShipMain *me,
 	vector<ShipMain> shipList,int targetNum) {
 	double maxRange = me->ReferMainMaxRange();
-	targetDis = MathAndPhysics::Infinite;
+	targetDis = MathAndPhysics::Infinite;//無限大に設置する
 	double temp;
-	int count = 0;
+	int count = 0;//数をリセットする
 	if (targetNum != -1) {
 		me->fireDataFigureUp.SetNumber(targetNum);//ターゲットを設置する
 	}
@@ -36,7 +36,7 @@ void ArtificialIntelligence::InBattle(ShipMain *me,
 			if (ship->ReferAlive()) {
 				temp = Distance2D(me->ReferCoord2D_d(), ship->ReferCoord2D_d());//距離を測る
 				if (temp < targetDis) {//今の距離より小さければ
-					targetDis = temp;
+					targetDis = temp;//一番近い敵を選ぶ
 					me->fireDataFigureUp.SetNumber(count);
 				}
 			}

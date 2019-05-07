@@ -808,7 +808,7 @@ void IngameDataManagement::NewExplosion(Coordinate2D<double> Coord) {
 	double radian = (double)(rand() % 180) * 1.0 / 180.0 * MathAndPhysics::PI;
 	Effect effect(false, 500, radian, 0, 0, 0, Coord.x, Coord.z,
 		PL.ReferEffectList(TypeOfEffect::EXPLOSION), true,
-		0.02 * (double)(rand()%4), 1.05);
+		0.04 * (double)(rand()%4), 1.05);
 
 	explosionList.push_back(effect);//生成されたものをリストの後ろに追加する
 }
@@ -933,6 +933,40 @@ void IngameDataManagement::CrashDecision() {
 				}
 			}
 		}
+		//敵同士のチェック
+		for (auto ship1 = enemyFleet.begin();
+			ship1 != enemyFleet.end();
+			ship1++) {
+			if (ship1->ReferAlive())//生きる状態確認
+				for (auto ship2 = enemyFleet.begin();
+					ship2 != enemyFleet.end();
+					ship2++) {
+				if (ship1 == ship2)//自分とのあたり判定をしません
+					continue;
+				if (ship2->ReferAlive())//生きる状態確認
+					if (PointsToCollisionbox(&*ship1, &*ship2)) {
+						ship1->Unmove(); ship1->ResetStatus();//船を停止する
+						ship2->Unmove(); ship2->ResetStatus();
+					}
+			}
+		}
+		//友軍同士のチェック
+		for (auto ship1 = alliesFleet.begin();
+			ship1 != alliesFleet.end();
+			ship1++) {
+			if (ship1->ReferAlive())//生きる状態確認
+				for (auto ship2 = alliesFleet.begin();
+					ship2 != alliesFleet.end();
+					ship2++) {
+				if (ship1 == ship2)//自分とのあたり判定をしません
+					continue;
+				if (ship2->ReferAlive())//生きる状態確認
+					if (PointsToCollisionbox(&*ship1, &*ship2)) {
+						ship1->Unmove(); ship1->ResetStatus();//船を停止する
+						ship2->Unmove(); ship2->ResetStatus();
+					}
+			}
+		}
 	}
 }
 
@@ -993,11 +1027,18 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 				shell->ReferCoordZ() };
 				NewExplosion(C2D);//当たったところに爆発エフェクトを生成
 				shell->Unusable();//弾が使えなくなる
+				
 				if (shell->ReferSerialNumber() == 1) {
 					hitCount++;//ヒット数増加
 					damage += (int)shell->ReferDamage();//ダメージ数増加
-					if (!ship->ReferAlive())
+					if (!ship->ReferAlive()) {
+						if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
+							alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ロック状態を変更
+							ship->ResetReviseData();//修正データをリセット
+							CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//ＵＩを変更
+						}
 						killed++;
+					}
 				}
 				return;
 			}
