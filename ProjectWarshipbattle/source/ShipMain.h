@@ -25,15 +25,16 @@ public:
 		reviseRadianOnZ = 0;
 
 		/*テスト部分*/
-		hitPoint = 5000;
+		hitPoint = 240;
 		shipMainCrash = { 180, 40, 18 };
+		controled = false;
 	}
 	~ShipMain();
 
 	//初期化
 	void RegistrateShipCrashParts();
-	void InifThisShip(int *ShipHandle,int *SShadowH,int ShipNum, 
-		EffectTemplate ET,SoundLoader *SL);
+	void InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
+		EffectTemplate ET, SoundLoader *SL);
 	void SetEffectPoint(ShipData SD);
 	void DestroyMemory();
 	void SetWeaponTest(PictureLoader *PL);
@@ -48,6 +49,8 @@ public:
 	//更新
 	void Update();
 
+	void SetControled() { controled = !controled; }
+
 	//移動関連
 	void SetEngineOutPutRate(bool up);
 	void SetEngineOutPutRate(double oP) {
@@ -56,7 +59,7 @@ public:
 	}
 	void CalSpeed();
 	void ChangeDirect(bool right);
-	void ReturnDirectChange() { returnToCenter = ! returnToCenter; }
+	void ReturnDirectChange() { returnToCenter = !returnToCenter; }
 	void Alignment();
 
 	void SetChangingDirect(double rad) {
@@ -69,7 +72,7 @@ public:
 	}
 
 	void TEST();
-	void TestDraw(double x,double z);
+	void TestDraw(double x, double z);
 
 	/*簡単化した戦闘*/
 	void SufferDamage(int damage);
@@ -87,7 +90,7 @@ public:
 	double ReferChangingRadian() { return currentRadian; }
 	double ReferOutPutRate() { return currentEngineOutPutRate; }
 	/*武器関連*/
-	int ReferWeaponCount(bool Main) { 
+	int ReferWeaponCount(bool Main) {
 		if (Main)
 			return MainWeaponCount;
 		else
@@ -109,6 +112,7 @@ public:
 	double ReferMainMaxWeaponRadianOnY() {
 		return MainWeapon[0].ReferMaxRadianOnY();
 	}
+	double ReferMainMaxRange() { return fireControllerMain.ReferMaxRange(); }
 
 	/*collision関連*/
 	double ReferShipCrashR() { return shipCrashR; }
@@ -122,6 +126,8 @@ public:
 		currentEngineOutPutRate = 0;
 		mainEngine.SetOutPutPercentage(currentEngineOutPutRate);
 	}
+
+	bool ReferControled() { return controled; }
 	/*番号*/
 	int ReferSerialNumber() { return serialNumber; }
 	//エンジン関連
@@ -129,6 +135,7 @@ public:
 	double ReferEngineMaxOutput() { return mainEngine.ReferMaxOutput(); }
 	/*ロック関係*/
 	int ReferForecastSecond() { return forecastSeconds; }
+	bool ReferCanIShoot() { return canIShoot; }
 
 	//エフェクト生成
 	Effect NewBubble(int num);
@@ -157,6 +164,7 @@ private:
 	/*自分の弾が自分に当たらないように使用する番号です*/
 	int serialNumber;
 	int shipType;
+	bool controled;
 
 	Weapon * MainWeapon;//メイン武器
 	int MainWeaponCount;//メイン武器の数
@@ -190,6 +198,8 @@ private:
 
 	void DrawMainPoint(Camera camera);
 	void DrawSubPoint(Camera camera);
+	
+	bool canIShoot;
 
 	double draft;//喫水:魚雷を使う時に使うデータです。
 	int thisShipType;

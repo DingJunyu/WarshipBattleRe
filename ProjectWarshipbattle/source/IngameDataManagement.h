@@ -9,6 +9,7 @@ public:
 		GameOver = false;
 		counter = 0;
 		shouldIRender = false;
+		showLock = false;
 	}
 	~IngameDataManagement();
 
@@ -63,14 +64,21 @@ private:
 	/*AI管理*/
 	FlagShipAI flagShipAI;
 
+	void AIUpdate();
 	void LetFlagShipMove();
 	void LetEveryOneMove();
-	void ControlThisList(std::vector<ShipMain> *shipList,
+	void ControlThisListMove(std::vector<ShipMain> *shipList,
 		ArtificialIntelligence *AI);
+	void LetEveryOneLockOn();
+	void ControlThisListLock(std::vector<ShipMain> *shipList,
+		std::vector<ShipMain> enemyList);
+	void LetEveryOneShoot();
+	void ControlThisListShoot(std::vector<ShipMain> *shipList);
 
 	/*描画処理関連*/
 	long long counter;//60までカウントする
 	bool shouldIRender;//探索状況更新スイッチ
+	bool showLock;
 
 	//描く関数
 	void DrawAll();
@@ -97,12 +105,6 @@ private:
 	void CheckShipListStatus(std::vector<ShipMain> *shipList);
 	void CheckShipsStatus();//船の状態を更新する
 
-	//射撃テスト
-	void TestShoot();
-
-	int shootCount;
-	int hitCount;
-
 	//コントロール関数
 	void Control();
 
@@ -121,6 +123,15 @@ private:
 	void CheckTeamA(std::vector<ShipMain> *teashipListm);//沈んだ船を沈む演出リストに追加する
 
 	//弾管理
+	void TestShoot(ShipMain *ship);
+
+	int shootCount;
+	int hitCount;
+
+	void LockAndRefresh();
+	void CheckThisTeamLock(std::vector<ShipMain> *shipList,
+		std::vector<ShipMain> enemyList);
+
 	void CheckSelectedWeapon();
 	void InputNewAmmo(ShipMain *SM, FiringData FD);//新しい弾をlistに追加
 	void DeleteUselessAmmo();//期限切りものを削除
@@ -137,9 +148,13 @@ private:
 	void NewRipple(double coordX,double coordZ);//砲弾が海に落ちる時新しいエフェクトを生成
 
 	/*ゲームコントロール*/
+	bool win;
 	void DeleteUseless();
 	void DestroyShips();
 	void DestroyThisTeam(std::vector<ShipMain> *shipList);
+	void CheckTeamStatus();
+	void CheckAlliesStatus();
+	void CheckEnemyStatus();
 	void TEST_WIN();
 
 	std::vector<ShipMain> alliesFleet;//自軍艦隊

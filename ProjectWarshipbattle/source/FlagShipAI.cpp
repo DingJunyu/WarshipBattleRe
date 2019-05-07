@@ -114,4 +114,5 @@ double FlagShipAI::SpeedINeed(double outPutRate) {
 	if (targetDistance < (double)DistanceRange::BATTLE) {
 		return outPutRate;
 	}
+	return outPutRate;
 }

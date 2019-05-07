@@ -423,18 +423,21 @@ void ShipMain::ChangeForecastSecond(bool up) {
 
 /*ロック管理*/
 void ShipMain::TestLock(ShipMain *ship, bool render) {
-	if (render) {
-		if (forecastSeconds == 0)
-			CalDistance(ship);//距離を計算する
-		else
-			CalNextPos(ship);
-	}
+
+	if (forecastSeconds == 0)
+		CalDistance(ship);//距離を計算する
+	else
+		CalNextPos(ship);
+
 
 	//目標ラジアン
-	double difference;
+	double differenceOnY;
+	double differenceOnZ;
+
+	canIShoot = false;
 
 	//目標ラジアンを計算する
-	difference = CalRadianBetweenPoints(
+	differenceOnZ = CalRadianBetweenPoints(
 		(forecastSeconds == 0) ? ship->ReferCoord2D_d() : nextPos,
 		//予測を使う時は予測地点を使う、使わない時は敵の座標を使う
 		ReferCoord2D_d(),
@@ -444,25 +447,29 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 	targetRadianForMain = fireControllerMain.CalDistanceAndTellMeRadianOnY(distance)
 		+ fireDataFigureUp.Refercorrection().y;
 
+	differenceOnY = MainWeapon[0].ReferRadianOnY() + reviseRadianOnZ
+		- targetRadianForMain;
+
 	/*メイン武器の調整*/
 	/*垂直*/
-	if (MainWeapon[0].ReferRadianOnY() + reviseRadianOnZ 
-		- targetRadianForMain > 0.03) {
+	if (differenceOnY > 0.03) {
 		PullMainWeapon(false);
 	}
-	else if (MainWeapon->ReferRadianOnY() + reviseRadianOnZ 
-		- targetRadianForMain < 0.03) {
+	else if (differenceOnY < 0.03) {
 		PullMainWeapon(true);
 	}
 
 	/*左へ回す時*/
-	if (difference > 0.03) {
+	if (differenceOnZ > 0.03) {
 		TurnMainWeapon(false);
 	}
 	/*右へ回す時*/
-	else if (difference < 0.03) {
+	else if (differenceOnZ < 0.03) {
 		TurnMainWeapon(true);
 	}
+
+	if (abs(differenceOnY) < 0.06 && abs(differenceOnZ) < 0.1)
+		canIShoot = true;
 }
 
 void ShipMain::CalDistance(ShipMain *ship) {

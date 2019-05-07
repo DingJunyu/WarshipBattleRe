@@ -242,6 +242,11 @@ void PictureLoader::LoadButtonInGame() {
 	buttonPressedIntheGame[CommandSerial::REVISE_RADIAN_ON_Z_MINUS] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/revise_on_y_minus_pressed.png");
 
+	buttonIntheGame[CommandSerial::CHANGE_CAMERA] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/change_camera.png");
+	buttonPressedIntheGame[CommandSerial::CHANGE_CAMERA] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/change_camera_pressed.png");
+
 	buttonIntheGame[CommandSerial::MENU] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/menu_normal.png");
 	buttonPressedIntheGame[CommandSerial::MENU] = LoadGraph(

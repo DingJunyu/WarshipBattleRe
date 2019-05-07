@@ -10,32 +10,20 @@ void IngameDataManagement::Update() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
 	ClearDrawScreen();
 
-	counter++;
-	if (counter >= 60)//60フレームごとにリセットする
-		counter = counter % 60;
-
-	shouldIRender = counter % 20 == 0 ? true : false;//毎秒三回レンダーする
-
-	/*ロックテスト*/
-	if (!alliesFleet.empty() && !enemyFleet.empty()) {
-		auto ship1 = alliesFleet.begin();//リストの一番を取る
-		if (ship1->fireDataFigureUp.ReferLockOn()) {//もしロックは使っていれば
-			ship1->TestLock(&enemyFleet[ship1->fireDataFigureUp.ReferTarget()],
-				shouldIRender);//選んだ敵をロックする
-			//船２を目標にしてロックする
-		}
-	}
-	/**************/
-	if (!alliesFleet[0].fireDataFigureUp.ReferLockOn())
-		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
-	else
+	AIUpdate();
+	LockAndRefresh();
+	if (alliesFleet[0].fireDataFigureUp.ReferLockOn() && showLock == true)
 		MainCamera.GetXZ(ReferTargetX(alliesFleet[0].fireDataFigureUp.ReferTarget()),
 			ReferTargetZ(alliesFleet[0].fireDataFigureUp.ReferTarget()));
+	else
+		MainCamera.GetXZ(ReferPlayerX(), ReferPlayerZ());//カメラ座標を更新
+		
 	Control();//コマンドを受け取って、船の状態を変更する
-	LetFlagShipMove();//敵のフラグシープを動かす
-	LetEveryOneMove();
 	GetNewEffect();//エフェクトを生成する
 	MoveAll();//移動、状態更新
+
+
+	CheckTeamStatus();//各艦隊の状態を確認し、一方が殲滅されたらゲーム終了
 
 	DeleteUseless();//入らないものを消す
 
@@ -56,6 +44,13 @@ bool IngameDataManagement::TeamDestroyed() {
 /****************************************************/
 /*                      AI管理                      */
 /****************************************************/
+void IngameDataManagement::AIUpdate() {
+	LetFlagShipMove();//敵のフラグシープを動かす
+	LetEveryOneMove();
+	LetEveryOneLockOn();
+	LetEveryOneShoot();
+}
+
 void IngameDataManagement::LetFlagShipMove() {
 	flagShipAI.LetUsGo(&enemyFleet[0], &alliesFleet[0]);
 	enemyFleet[0].SetChangingDirect(flagShipAI.ReferRadianNeededNow());
@@ -63,11 +58,11 @@ void IngameDataManagement::LetFlagShipMove() {
 }
 
 void IngameDataManagement::LetEveryOneMove() {
-	ControlThisList(&alliesFleet, &AI);
-	ControlThisList(&enemyFleet, &AI);
+	ControlThisListMove(&alliesFleet, &AI);
+	ControlThisListMove(&enemyFleet, &AI);
 }
 
-void IngameDataManagement::ControlThisList(std::vector<ShipMain> *shipList,
+void IngameDataManagement::ControlThisListMove(std::vector<ShipMain> *shipList,
 	ArtificialIntelligence *AI) {	
 	int num = 0;
 	if (!shipList->empty() && shipList->begin()!=shipList->end()) {
@@ -82,8 +77,42 @@ void IngameDataManagement::ControlThisList(std::vector<ShipMain> *shipList,
 			auto prevShip = ship;
 			ship++;
 			AI->Move(*ship, *prevShip);
-			ship->SetChangingDirect(AI->ReferRadianNeededNow());
-			ship->SetEngineOutPutRate(AI->ReferOutPutRateNeededNow());
+			ship->SetChangingDirect(AI->ReferRadianNeededNow());//変更角度を設置する
+			ship->SetEngineOutPutRate(AI->ReferOutPutRateNeededNow());//速度を設置する
+		}
+	}
+}
+
+void IngameDataManagement::LetEveryOneLockOn() {
+	ControlThisListLock(&alliesFleet, enemyFleet);
+	ControlThisListLock(&enemyFleet, alliesFleet);
+}
+
+void IngameDataManagement::ControlThisListLock(std::vector<ShipMain> *shipList,
+	std::vector<ShipMain> enemyList) {
+	for (auto ship = shipList->begin();
+		ship != shipList->end();
+		ship++) {
+		if (ship->ReferAlive() && !ship->ReferControled()) {
+			AI.InBattle(&*ship, enemyList, -1);//ロックターゲットを設置する
+			ship->fireDataFigureUp.LockOn_Switch();
+		}
+	}
+}
+
+void IngameDataManagement::LetEveryOneShoot() {
+	ControlThisListShoot(&alliesFleet);
+	ControlThisListShoot(&enemyFleet);
+}
+
+void IngameDataManagement::ControlThisListShoot(std::vector<ShipMain> *shipList) {
+	for (auto ship = shipList->begin();
+		ship != shipList->end();
+		ship++) {
+		if (ship->ReferAlive() && //生きている
+			!ship->ReferControled() &&//プレーヤーの船じゃない
+			ship->ReferCanIShoot()) {//射撃範囲内にいる
+			TestShoot(&*ship);//射撃
 		}
 	}
 }
@@ -449,6 +478,7 @@ void IngameDataManagement::Control() {
 		answer == CommandSerial::DECREASE_OUTPUT ||
 		answer == CommandSerial::MENU ||
 		answer == CommandSerial::TURN_RETURN||
+		answer == CommandSerial::CHANGE_CAMERA ||
 		answer >= CommandSerial::SELECT)
 		if (!CUI.ReferClickable())
 			return;
@@ -470,15 +500,15 @@ void IngameDataManagement::Control() {
 	/*select以前のコマンドの処理*/
 	if (answer < CommandSerial::SELECT) {
 		switch (answer) {
-		case CommandSerial::SHOOT:TestShoot(); break;/*射撃*/
+		case CommandSerial::SHOOT:TestShoot(&alliesFleet[0]); break;/*射撃*/
 		case CommandSerial::MENU:CUI.LetMeSeeMenu();break;/*メニュー状態変更*/
 		case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*テストビュー*/
 		case CommandSerial::EXIT:GameOver = true; break;	/*ゲーム終了*/
+		case CommandSerial::CHANGE_CAMERA:showLock = !showLock; break;
 		}
 	}
 
 	else {
-	
 		ship->fireDataFigureUp.SetNumber(answer -
 			CommandSerial::SELECT - CommandSerial::SELECT_RANGE);//ターゲットを設置する
 		ship->fireDataFigureUp.LockOn_Switch();//ロック状態を変更
@@ -563,7 +593,9 @@ void IngameDataManagement::Inif() {
 	SL.Inif();//音声ローダー初期化
 	CT.Inif(&SL);//キーボードコントローラー初期化
 	CUI.IngameInif(&PL,&SL);//マウスコントローラー初期化
+
 	TEST();
+	alliesFleet[0].SetControled();//友軍艦隊の一番の操作権を取る
 	CUI.InifShipList(&enemyFleet,false);
 	CUI.InifShipList(&alliesFleet, true);
 	CUI.SetNormalStatus();/*ここはテストバージョン*/
@@ -597,6 +629,35 @@ void IngameDataManagement::DestroyThisTeam(std::vector<ShipMain> *shipList) {
 			ship->DestroyMemory();//メモリ解放
 		}
 	}
+}
+
+void IngameDataManagement::CheckTeamStatus() {
+	/*友軍の状態を確認する*/
+	CheckAlliesStatus();
+	/*敵の状態を確認する*/
+	CheckEnemyStatus();
+}
+
+void IngameDataManagement::CheckAlliesStatus() {
+	for (auto ship = alliesFleet.begin();
+		ship != alliesFleet.end();
+		ship++) {
+		if (ship->ReferAlive())
+			return;
+	}
+	win = false;//友軍艦隊は全滅されたら負けです
+	TEST_WIN();/*終わる状態を設置*/
+}
+
+void IngameDataManagement::CheckEnemyStatus() {
+	for (auto ship = enemyFleet.begin();
+		ship != enemyFleet.end();
+		ship++) {
+		if (ship->ReferAlive())
+			return;
+	}
+	win = true;//敵軍艦隊は全滅されたら負けです
+	TEST_WIN();/*終わる状態を設置*/
 }
 
 void IngameDataManagement::CheckAndPlaySound() {
@@ -689,16 +750,42 @@ void IngameDataManagement::CheckAndCleanThisEffectList(std::list<Effect> *effect
 /*                     射撃関連                     */
 /****************************************************/
 
-void IngameDataManagement::TestShoot() {
+void IngameDataManagement::TestShoot(ShipMain *ship) {
 	FiringData FD;
 	//ゲーム中では、敵が射撃する時に全部trueにする
 	FD.isThisMainWeapon = true;
 	for (int i = 0; i < 8; i++) {
 		FD.selected[i] = true;//武器を選ぶ
 	}
-	
-	auto ship = alliesFleet.begin();
-	InputNewAmmo(&*ship, FD);//リストに新しい弾を追加する
+	InputNewAmmo(ship, FD);//リストに新しい弾を追加する
+}
+
+void IngameDataManagement::LockAndRefresh() {
+	counter++;
+	if (counter >= 60)//60フレームごとにリセットする
+		counter = counter % 60;
+
+	shouldIRender = counter % 20 == 0 ? true : false;//毎秒三回レンダーする
+
+	CheckThisTeamLock(&alliesFleet, enemyFleet);
+	CheckThisTeamLock(&enemyFleet, alliesFleet);
+
+}
+
+void IngameDataManagement::CheckThisTeamLock(std::vector<ShipMain> *shipList,
+	std::vector<ShipMain> enemyList) {
+	if (!shipList->empty() && !enemyList.empty()) {
+		for (auto ship = shipList->begin();
+			ship != shipList->end();
+			ship++) {
+			if(ship->ReferAlive())
+			if (ship->fireDataFigureUp.ReferLockOn()) {//もしロックは使っていれば
+				ship->TestLock(&enemyList[ship->fireDataFigureUp.ReferTarget()],
+					shouldIRender);//選んだ敵をロックする
+				//船２を目標にしてロックする
+			}
+		}
+	}
 }
 
 void IngameDataManagement::InputNewAmmo(ShipMain *SM, FiringData FD) {
@@ -726,6 +813,7 @@ void IngameDataManagement::DeleteUselessAmmo() {
 			break;
 	}
 }
+
 
 /****************************************************/
 /*                     あたり判定                   */
