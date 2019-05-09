@@ -6,12 +6,12 @@ PictureLoader::~PictureLoader()
 
 void PictureLoader::MemorySecure() {
 	
-	battleCruiserHandle
-		= new int *[COUNT_OF_EVERYTYPE::BATTLE_CRUSIER_TYPE_COUNT];
+	shipHandle
+		= new int *[COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT];
 	for (int i = 0;
-		i < COUNT_OF_EVERYTYPE::BATTLE_CRUSIER_TYPE_COUNT;
+		i < COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT;
 		i++) {
-		battleCruiserHandle[i] 
+		shipHandle[i] 
 			= new int [SerialNumberOfShipHandle::ARRAY_SIZE];
 	}
 
@@ -27,11 +27,11 @@ void PictureLoader::MemorySecure() {
 
 void PictureLoader::FreeMemory() {
 	for (int i = 0;
-		i < COUNT_OF_EVERYTYPE::BATTLE_CRUSIER_TYPE_COUNT;
+		i < COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT;
 		i++) {
-		delete[] battleCruiserHandle[i];
+		delete[] shipHandle[i];
 	}
-	delete[] battleCruiserHandle;
+	delete[] shipHandle;
 
 	//ボタン
 	delete[] buttonHandle;
@@ -59,15 +59,15 @@ void PictureLoader::LoadPicture() {
 
 void PictureLoader::LoadShips() {
 	/*ロード戦闘巡洋艦*/
-	battleCruiserHandle[0][SerialNumberOfShipHandle::SHIP_HANDLE] =
+	shipHandle[4000][SerialNumberOfShipHandle::SHIP_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_TopView/BattleCrusier/BattleCrusier_TopView_00_Lvtzow.png");
-	GetGraphSize(battleCruiserHandle[0][SerialNumberOfShipHandle::SHIP_HANDLE],
+	GetGraphSize(shipHandle[4000][SerialNumberOfShipHandle::SHIP_HANDLE],
 		&shipSizeX, &shipSizeZ);
-	battleCruiserHandle[0][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
+	shipHandle[4000][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_Shadow/BattleCrusier/BattleCrusier_Shadow_01_Lvtzow.png");
-	battleCruiserHandle[0][SerialNumberOfShipHandle::SHIP_CARD] =
+	shipHandle[4000][SerialNumberOfShipHandle::SHIP_CARD] =
 		LoadGraph(
 			"GraphicData/Interactive_User_Interface/Ships_Mark/Battle_Crusier/BattleCrusier_Mark_001_Gneisenau.png");
 }
@@ -294,9 +294,9 @@ void PictureLoader::DeleteShips() {
 		i < COUNT_OF_EVERYTYPE::BATTLE_CRUSIER_TYPE_COUNT;
 		i++) {
 		DeleteGraph(
-			battleCruiserHandle[i][SerialNumberOfShipHandle::SHIP_HANDLE]);
+			shipHandle[i][SerialNumberOfShipHandle::SHIP_HANDLE]);
 		DeleteGraph(
-			battleCruiserHandle[i][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE]);
+			shipHandle[i][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE]);
 	}
 }
 

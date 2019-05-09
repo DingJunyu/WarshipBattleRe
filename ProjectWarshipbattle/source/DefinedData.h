@@ -388,6 +388,7 @@ enum FIRE_DISTANCE {
 
 /*äeéÌóﬁÇÃëDÇÃêî*/
 namespace COUNT_OF_EVERYTYPE {
+	const int ALL_SHIP_COUNT = 5000;
 	const int DESTROYER_TYPE_COUNT = 0;
 	const int LIGHT_CRUSIER_TYPE_COUNT = 0;
 	const int HEAVEY_CRUSIER_TYPE_COUNT = 0;

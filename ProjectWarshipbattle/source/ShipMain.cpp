@@ -35,6 +35,57 @@ void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
 		0.06, 1.005);
 }
 
+/*ファイル読み込みが失敗したらfalseを戻る*/
+bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
+	SoundLoader *SL, int num,int SN) {
+
+	int count = 0;
+
+	char readData[50][20];
+	char trash[30];
+	double doubleData[50];
+
+	/*ファイル操作*/
+	FILE *filePointer;//ファイルポインター
+	char fileName[100];
+	sprintf_s(fileName, 100, ".//Data//ShipNumList//%d.csv", num);
+
+	if ((fopen_s(&filePointer, fileName, "r")) != 0) {
+		return false;
+	}
+
+	/*読み込む*/
+	while (1) {
+		fscanf_s(filePointer,"%[^,]", &readData[count], 20);//数字を読む
+		doubleData[count] = atof(readData[count]);
+		fscanf_s(filePointer,"%*[,]%s", &trash, 20);
+
+		count++;
+		if (feof(filePointer))/*読み込み中止*/
+			break;
+	}
+
+	fclose(filePointer);
+
+	SetPictureHandle(PL->ReferShipHandle(num));
+	SetShadowHandle(PL->ReferShipShadowHandle(num));
+	//GetDataFromShipdata(ShipNum);
+	thisShipType = num;
+	MemorySecure();//メモリ確保
+	LoadSound(SL);//音を読み込む
+	FindThosePoint();//あたり判定用ポイントを取得する
+
+	/*あたり判定用ポイントを利用して泡生成ポイントを作る*/
+	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
+	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
+		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
+		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
+			aroundPointPos[i].z, true, 3400, 20, true,
+			0.15, 1.001);
+	}//泡生成ポイントを設置
+
+}
+
 /*ファイル操作を入れたのため、初期化の速度が大幅早くなりました*/
 void ShipMain::FindThosePoint() {
 	using namespace AUTO_SHIP_DATA;
@@ -350,6 +401,7 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 			50, 12, PL->ReferAmmoHandle(0), 17, 20,serialNumber);
 		MainWeapon[i] = Weapon;
 		MainWeapon[i].SetCoolDownTime(3200);//射撃間隔を設定する
+		MainWeapon[i].SetDamage(3);
 	}
 	/*武器のステータスを射撃コントロールにあげる*/
 	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());

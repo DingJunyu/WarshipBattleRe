@@ -13,6 +13,7 @@
 #include"FireController.h"//射撃管理
 #include"Lock.h"//ロックする時に関わる操作やデータ
 #include<stdio.h>
+#include<stdlib.h>
 class ShipMain :
 	public AllMovableObjects
 {
@@ -35,6 +36,11 @@ public:
 	void RegistrateShipCrashParts();
 	void InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
 		EffectTemplate ET, SoundLoader *SL);
+
+	bool InifThisShip(PictureLoader *PL, EffectTemplate ET,
+		SoundLoader *SL, int num, int SN);
+	void SetThisShipPos(Coordinate<double> Coord, double radian);
+
 	void SetEffectPoint(ShipData SD);
 	void DestroyMemory();
 	void SetWeaponTest(PictureLoader *PL);

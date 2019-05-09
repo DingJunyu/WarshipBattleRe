@@ -43,6 +43,7 @@ public:
 		return temp;
 	}
 
+	void SetDamage(int Damage) { damage = Damage; }
 	void SetCoolDownTime(int time) { reloadTime = time; }
 	void Turn(bool right) {
 		if (right)
@@ -78,6 +79,8 @@ private:
 	double maxRadianOnY;
 
 	double high;
+
+	int damage;
 
 	int heartPoint;
 	int maxHeartPoint;

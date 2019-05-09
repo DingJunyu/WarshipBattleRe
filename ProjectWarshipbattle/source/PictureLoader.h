@@ -52,15 +52,13 @@ public:
 	int ReferShipSizeX() { return shipSizeX; }
 	int ReferShipSizeZ() { return shipSizeZ; }
 
-	int *ReferBattleCrusierHandle(int x) {
-		return &battleCruiserHandle
-			[x - ShipType::BATTLE_CRUISER*RESERVED_NUMBER_FOR_SHIPS]
+	int *ReferShipHandle(int x) {
+		return &shipHandle[x]
 		[SerialNumberOfShipHandle::SHIP_HANDLE];
 	}
 
-	int *ReferBattleCrusierShadowHandle(int x) {
-		return &battleCruiserHandle
-			[x - ShipType::BATTLE_CRUISER*RESERVED_NUMBER_FOR_SHIPS]
+	int *ReferShipShadowHandle(int x) {
+		return &shipHandle[x]
 		[SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE];
 	}
 
@@ -146,7 +144,7 @@ private:
 	int **destroyerHandle;
 	int **lightCruiserHandle;
 	int **heaveyCruiserHandle;
-	int **battleCruiserHandle;
+	int **shipHandle;
 	int **battleShipHandle;
 	int **aircraftCarrierHandle;
 	int **lightAircraftCarrierHandle;

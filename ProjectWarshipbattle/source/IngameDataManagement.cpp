@@ -423,7 +423,7 @@ void IngameDataManagement::DrawStatisticBoard() {
 	for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
 		fprintf_s(filePointer, "%lf\n", boardData[i]);
 
-	fclose(filePointer);
+	fclose(filePointer);//ファイルを閉じる
 
 	/*描画色*/
 	unsigned int Cr;
@@ -466,9 +466,11 @@ void IngameDataManagement::TEST() {
 	auto ship = alliesFleet.begin();//イテレータを使って自分の船を選ぶ
 	//ここの部分は初期化関数とファイル読み込みはまだ出来ていない
 	//初期化関数は下のようにしたい
+	ship->InifThisShip(&PL, ET, &SL, 4000, 1);
+
 	ship->SetMultiple(0.125);
-	ship->InifThisShip(PL.ReferBattleCrusierHandle(4000), 
-		PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);//初期化
+	ship->InifThisShip(PL.ReferShipHandle(4000), 
+		PL.ReferShipShadowHandle(4000), 4000, ET, &SL);//初期化
 	ship->NewCoordX(640);//新しい座標をあげる
 	ship->NewCoordZ(380);
 	ship->NewCoordY(-10);
@@ -487,8 +489,8 @@ void IngameDataManagement::TEST() {
 		double radian = (double)(rand() % 180) / 180.0*MathAndPhysics::PI;
 
 		enemyShip->SetMultiple(0.125);
-		enemyShip->InifThisShip(PL.ReferBattleCrusierHandle(4000),
-			PL.ReferBattleCrusierShadowHandle(4000), 4000, ET, &SL);
+		enemyShip->InifThisShip(PL.ReferShipHandle(4000),
+			PL.ReferShipShadowHandle(4000), 4000, ET, &SL);
 		enemyShip->NewCoordX(2500 + (rand() % 400) * i);
 		enemyShip->NewCoordZ(2000 +  (rand() % 400) * i);
 		enemyShip->NewCoordY(-10);
@@ -704,6 +706,24 @@ void IngameDataManagement::Free() {
 	SL.FreeAll();//動的メモリを解放、メモリ中のデータを削除
 	CUI.Free();//ＵＩ部分の動的メモリを解放する
 	DestroyShips();//船が利用した動的メモリを解放する
+
+	using namespace std;
+
+	/*標準ライブラリメモリ解放*/
+	/*vector解放*/
+	alliesFleet.clear();
+	vector<ShipMain>().swap(alliesFleet);
+	enemyFleet.clear();
+	vector<ShipMain>().swap(enemyFleet);
+
+	/*リスト解放*/
+	shellList.clear();
+	bombList.clear();
+	torpedoList.clear();
+	bubbleList.clear();
+	smokeList.clear();
+	explosionList.clear();
+	rippleList.clear();
 }
 
 /*制限時間超えたものを消す*/

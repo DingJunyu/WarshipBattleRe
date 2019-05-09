@@ -14,7 +14,7 @@ public:
 	/*初期化時に必要なもの:
 	速度、角度、ＸＺＹ座標、Ｙ軸の角度、弾のハンドル、船の番号*/
 	Ammo(double Speed, double Radian, double CoordX, double CoordZ, double CoordY,
-		double RadianOnY, int *AmmoHandle,int SerialNumber) :
+		double RadianOnY, int *AmmoHandle,int SerialNumber,int Damage) :
 		AllMovableObjects(true, false, true, true) {
 		SetRadianOnZ(Radian);
 		NewCoordX(CoordX);
@@ -27,7 +27,7 @@ public:
 		SetData();//画像サイズを取る
 
 		isUsable = true;
-		damage = 10;
+		damage = Damage;
 	}
 	~Ammo();
 

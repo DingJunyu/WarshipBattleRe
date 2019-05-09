@@ -1,6 +1,7 @@
 #pragma once
 #include"DefinedData.h"
 //すべての船のデータはここで保存して置きます
+/*ファイルから船のステータスを読み込むなど*/
 class ShipData
 {
 public:
@@ -25,16 +26,3 @@ private:
 	int crashPartZ;
 };
 
-class ShipDataCollection {
-public:
-	ShipDataCollection();
-
-	void AllInif();
-	void FreeMemory();
-private:
-	void MemorySecure();
-
-	void InifBattleCrusier();
-
-	ShipData *BattleCrusierCollection;
-};

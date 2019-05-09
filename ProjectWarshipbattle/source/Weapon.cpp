@@ -38,7 +38,7 @@ Ammo Weapon::Shoot(double x, double z,double r) {
 	}
 
 	return Ammo(initialSpeed, realRadianOnZ, realX, realZ, high, radianOnY,
-		ammoHandle, serialNumber);
+		ammoHandle, serialNumber,damage);
 }
 
 bool Weapon::ReferShootable() {
