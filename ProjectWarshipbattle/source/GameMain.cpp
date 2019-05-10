@@ -98,6 +98,9 @@ void SingleGame_DeathMatch_Progress() {
 
 	/*初期化*/
 	IDM.Inif();
+	IDM.FormationBoard();
+//	WaitKey();
+	IDM.FreeFormationBoard();
 
 	/*ゲームメインプログレス*/
 	while (!TDMC.GameOver(IDM.TeamDestroyed())) {

@@ -147,6 +147,7 @@ public:
 	Effect NewBubble(int num);
 	Effect NewSmoke(int num);
 	int ReferBubblePointCount() { return bubblePointCount; }
+	int ReferSmokePointCount() { return smokePointCount; }
 
 	void CheckAndPlaySound();
 

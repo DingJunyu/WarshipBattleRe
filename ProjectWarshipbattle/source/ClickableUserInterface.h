@@ -26,6 +26,7 @@ public:
 	~ClickableUserInterface();
 
 	void IngameInif(PictureLoader *PL, SoundLoader *SL);
+	void ChooseInif(PictureLoader *PL, SoundLoader *SL);
 	void InifShipList(std::vector<ShipMain> *shipList, bool left);
 	void CheckShipList(std::vector<ShipMain> *shipList, bool left);
 	
@@ -34,6 +35,8 @@ public:
 	void Draw();
 	void DrawNeedInput(bool lock, int num);
 	/*最初に現るものを見えるように設定する*/
+	void SetFormationMenuStatus();
+	void CloseFormationMenu();
 	void SetNormalStatus();
 	/*メニューが使えるかのスイッチ*/
 	void LetMeSeeMenu();

@@ -6,8 +6,7 @@ PictureLoader::~PictureLoader()
 
 void PictureLoader::MemorySecure() {
 	
-	shipHandle
-		= new int *[COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT];
+	shipHandle = new int *[COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT];
 	for (int i = 0;
 		i < COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT;
 		i++) {
@@ -70,6 +69,14 @@ void PictureLoader::LoadShips() {
 	shipHandle[4000][SerialNumberOfShipHandle::SHIP_CARD] =
 		LoadGraph(
 			"GraphicData/Interactive_User_Interface/Ships_Mark/Battle_Crusier/BattleCrusier_Mark_001_Gneisenau.png");
+
+	/*ロード戦艦*/
+	shipHandle[5000][SerialNumberOfShipHandle::SHIP_HANDLE] =
+		LoadGraph(
+			"GraphicData/Ship_TopView/BattleShip/BattleShip_TopView_00_Yamashiro.png");
+	shipHandle[5000][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
+		LoadGraph(
+			"GraphicData/Ship_Shadow/BattleShip/BattleShip_Shadow_00_Yamashiro.png");
 }
 
 void PictureLoader::LoadSea() {
@@ -266,6 +273,37 @@ void PictureLoader::LoadButtonInGame() {
 
 	buttonIntheGame[CommandSerial::SELECT] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/Ships_Mark/Ship_Unknown.png");
+
+	/*編成メニューに使うやつ*/
+	buttonIntheGame[CommandSerial::GAME_START] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/start_button.png");
+	buttonPressedIntheGame[CommandSerial::GAME_START] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/start_button_pressed.png");
+	buttonIntheGame[CommandSerial::PLUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/plus.png");
+	buttonPressedIntheGame[CommandSerial::PLUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/plus_pressed.png");
+	buttonIntheGame[CommandSerial::MINUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/minus.png");
+	buttonPressedIntheGame[CommandSerial::MINUS] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/minus_pressed.png");
+	buttonIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/up.png");
+	buttonPressedIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/up.png");
+	buttonIntheGame[CommandSerial::FORMATION_DOWN] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/down.png");
+	buttonPressedIntheGame[CommandSerial::FORMATION_DOWN] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/down.png");
+	buttonIntheGame[CommandSerial::FORMATION_RIGHT] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/right.png");
+	buttonPressedIntheGame[CommandSerial::FORMATION_RIGHT] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/right.png");
+	buttonIntheGame[CommandSerial::FORMATION_LEFT] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/left.png");
+	buttonPressedIntheGame[CommandSerial::FORMATION_LEFT] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/left.png");
+
 }
 
 void PictureLoader::LoadStatisticBoard() {
@@ -275,6 +313,13 @@ void PictureLoader::LoadStatisticBoard() {
 		"GraphicData/Back_Ground/win.png");
 	statisticBoardHandle[StatisticBoard::LOSE] = LoadGraph(
 		"GraphicData/Back_Ground/lose.png");
+}
+
+void PictureLoader::LoadFormationBoard() {
+	formationBoardHandle[FormationBoard::FB_BACKGROUND] = LoadGraph(
+		"GraphicData/Back_Ground/team_menu.jpg");
+	formationBoardHandle[FormationBoard::FB_SHIP_CARD] = LoadGraph(
+		"GraphicData/Back_Ground/Ship_Card.png");
 }
 
 void PictureLoader::FreePicture() {

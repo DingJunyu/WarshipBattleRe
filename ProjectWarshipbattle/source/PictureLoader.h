@@ -26,6 +26,7 @@ public:
 		LoadAmmo();
 		LoadButtonInGame();
 		LoadStatisticBoard();
+		LoadFormationBoard();
 	}
 
 	/*ƒƒ‚ƒŠ‰ñû*/
@@ -68,7 +69,8 @@ public:
 
 	int *ReferMapHandle() { return &mapHandle; }
 
-	int *RefetrStatisticBoardHandle(int x) { return &statisticBoardHandle[x]; }
+	int *ReferStatisticBoardHandle(int x) { return &statisticBoardHandle[x]; }
+	int *ReferFormationBoardHandle(int x) { return &formationBoardHandle[x]; }
 
 	//UI
 	int *ReferMatHandle() { return &matHandle; }
@@ -127,6 +129,7 @@ private:
 	void LoadButtonInMainMenu();
 	void LoadButtonInGame();
 	void LoadStatisticBoard();
+	void LoadFormationBoard();
 
 	/*‹@”\•Êƒƒ‚ƒŠ‰ğ•úŠÖ”*/
 	void DeleteShips();
@@ -205,4 +208,7 @@ private:
 	int backGround;
 
 	int statisticBoardHandle[StatisticBoard::SB_NUM];
+	int formationBoardHandle[FormationBoard::FB_NUM];
+
+	int fantasyNumbers[11];
 };

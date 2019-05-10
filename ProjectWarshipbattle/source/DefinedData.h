@@ -29,6 +29,13 @@ enum CommandSerial {
 	MENU,
 	CONTINUE,
 	EXIT,
+	GAME_START,
+	PLUS,
+	MINUS,
+	FORMATION_UP,
+	FORMATION_DOWN,
+	FORMATION_RIGHT,
+	FORMATION_LEFT,
 	SETTING,
 	CHOOSE_MAIN,
 	CHOOSE_SUB,
@@ -139,6 +146,12 @@ enum TypeOfHord {
 	LARGE,
 	MEDIUM,
 	SMALL
+};
+
+enum FormationBoard {
+	FB_NUM = 2,
+	FB_BACKGROUND = 0,
+	FB_SHIP_CARD
 };
 
 enum StatisticBoard {
@@ -339,6 +352,11 @@ enum AmmoType {
 	HUGE_CALIBER
 };
 
+struct Choice {
+	int num;
+	bool plus;
+};
+
 /*3D座標保存*/
 template <typename T>
 struct Coordinate {
@@ -388,7 +406,7 @@ enum FIRE_DISTANCE {
 
 /*各種類の船の数*/
 namespace COUNT_OF_EVERYTYPE {
-	const int ALL_SHIP_COUNT = 5000;
+	const int ALL_SHIP_COUNT = 9000;
 	const int DESTROYER_TYPE_COUNT = 0;
 	const int LIGHT_CRUSIER_TYPE_COUNT = 0;
 	const int HEAVEY_CRUSIER_TYPE_COUNT = 0;
@@ -415,6 +433,8 @@ namespace MathAndPhysics {
 	const double MAX_SPEED_FOR_SHIP = 1.30;
 	const double RANGE_ERROR = 10;//角度探す関数が正常に動作しない時に適度に上がってみよう
 	const double Infinite = 99999999.0;
+
+	const double ShipCardRate = 0.2;
 }
 
 namespace GameDefine {

@@ -27,6 +27,9 @@
 #include"FlagShipAI.h"//敵フラグシープのAI
 #include"ArtificialIntelligence.h"//船別のAI
 
+/*編成部分*/
+#include"ShipCard.h"
+
 struct EnemyWithAI {
 	ShipMain shipHere;
 	ArtificialIntelligence AI;

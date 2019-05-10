@@ -49,8 +49,11 @@ public:
 	//ロード画面
 	void DrawLoading();
 
-	void DrawStatisticBoard();
 
+	void FormationBoard();
+	void FreeFormationBoard();
+
+	void DrawStatisticBoard();
 private:
 	//他のコントローラー
 	PictureLoader PL;//画像ローダー
@@ -155,6 +158,9 @@ private:
 	void CheckEnemyStatus();
 	void TEST_WIN();
 
+	void DrawFormationBoard();
+	void InifFormationBoard();
+
 	std::vector<ShipMain> alliesFleet;//自軍艦隊
 	std::vector<ShipMain> enemyFleet;//敵軍艦隊
 	ArtificialIntelligence AI;
@@ -184,4 +190,14 @@ private:
 	int damage;
 	int damageRecieved;
 	int killed;
+	
+	/*編成*/
+	int *formationBoard[FormationBoard::FB_NUM];
+	std::vector<ShipCard> teamA;
+	std::vector<ShipCard> teamB;
+
+	const int maxCountInATeam = 10;
+	int teamAChoose[4][2];
+	int teamBChoose[4][2];
+
 };

@@ -62,6 +62,7 @@ public:
 	void DrawShadow(Camera CM);//影を描画する
 	void DrawSub(Camera CM);//他のところにある時に使う描画関数
 	void DrawSubShadow(Camera CM);//影を描画する
+	void DrawCard(Coordinate2D<double> coord);
 
 	//状態設置関数
 	//ステータス設定関数

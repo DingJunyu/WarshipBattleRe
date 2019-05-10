@@ -77,9 +77,18 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 	SetThisOne(CommandSerial::TURN_RETURN, BUTTON_POSITION_INGAME::TURN_RETURN_X,
 		BUTTON_POSITION_INGAME::TURN_RETURN_Z, BUTTON_POSITION_INGAME::TURN_RETURN_MULTI);
 
+	/*編成メニュー*/
+	SetThisOne(CommandSerial::GAME_START, 0.365, .9, 0.75);
+	SetThisOne(CommandSerial::FORMATION_UP, 0.8, .9, .1);
+	SetThisOne(CommandSerial::FORMATION_DOWN, 0.8, .9, .1);
+	SetThisOne(CommandSerial::FORMATION_RIGHT, 0.8, .9, .1);
+	SetThisOne(CommandSerial::FORMATION_LEFT, 0.8, .9, .1);
+	SetThisOne(CommandSerial::PLUS, 0.8, .9, .1);
+	SetThisOne(CommandSerial::MINUS, 0.8, .9, .1);
+
 
 	for (int i = CommandSerial::INCREASE_OUTPUT;
-		i <= CommandSerial::EXIT; i++)
+		i <= CommandSerial::CHOOSE_SUB; i++)
 		BC.buttonContainer[i].SetXZ(
 			buttonPosition[i][SaveForCUI::COORD_X],
 			buttonPosition[i][SaveForCUI::COORD_Z],
@@ -182,6 +191,22 @@ void ClickableUserInterface::Draw() {
 		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
 			BC.buttonContainer[i].DrawThisButton();
 	}
+}
+
+void ClickableUserInterface::SetFormationMenuStatus() {
+	for (int i = CommandSerial::GAME_START; i <= CommandSerial::FORMATION_LEFT;
+		i++) {
+		buttonPosition[i][SaveForCUI::SHOW] = 0;
+	}
+}
+
+void ClickableUserInterface::CloseFormationMenu() {
+	for (int i = CommandSerial::GAME_START; i <= CommandSerial::FORMATION_LEFT;
+		i++) {
+		buttonPosition[i][SaveForCUI::SHOW] = 1;
+	}
+
+	SetNormalStatus();
 }
 
 /*初めてボタンを初期化時表すべきボタンをオンにする*/

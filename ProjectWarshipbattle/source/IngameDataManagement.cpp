@@ -373,6 +373,53 @@ void IngameDataManagement::DrawLoading() {
 	DxLib::ScreenFlip();
 }
 
+void IngameDataManagement::FormationBoard() {
+	while (CUI.CheckChoice() != GAME_START) {
+		if (ProcessMessage() == -1)
+			break;
+
+		DrawFormationBoard();
+	}
+}
+
+void IngameDataManagement::DrawFormationBoard() {
+	SetDrawScreen(DX_SCREEN_BACK);
+
+	ClearDrawScreen();
+
+	DrawExtendGraph(0, 0,
+		Screen::SCREEN_X, Screen::SCREEN_Z,
+		*formationBoard[FormationBoard::FB_BACKGROUND], FALSE);
+
+	teamA[0].DrawCard(Coordinate2D<double>{70, 100});
+	teamA[1].DrawCard(Coordinate2D<double>{70, 220});
+	CUI.Draw();
+	DxLib::ScreenFlip();
+}
+
+void IngameDataManagement::InifFormationBoard() {
+	teamA.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD)));
+	teamA[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1);
+	teamA.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD)));
+	teamA[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
+}
+
+void IngameDataManagement::FreeFormationBoard() {//フリーした後にメニューを通常状態に設置する
+	teamA[0].ship.DestroyMemory();
+	teamA[1].ship.DestroyMemory();
+
+	teamA.clear();
+	std::vector<ShipCard>().swap(teamA);
+
+	TEST();
+
+	alliesFleet[0].SetControled();//友軍艦隊の一番の操作権を取る
+	CUI.InifShipList(&enemyFleet, false);
+	CUI.InifShipList(&alliesFleet, true);
+
+	CUI.CloseFormationMenu();
+}
+
 void IngameDataManagement::DrawStatisticBoard() {
 	SetDrawScreen(DX_SCREEN_BACK);
 	ClearDrawScreen();
@@ -442,10 +489,10 @@ void IngameDataManagement::DrawStatisticBoard() {
 			*statisticBoard[StatisticBoard::LOSE], TRUE);
 
 	/*今回のデータを描く*/
-	DxLib::DrawFormatString(410, 115, Cr, "%2.3lf", hitRate);//命中率を表示
-	DxLib::DrawFormatString(410, 225, Cr, "%d", damage);
-	DxLib::DrawFormatString(410, 335, Cr, "%.1lf", alliesFleet[0].ReferDistanceMoved());
-	DxLib::DrawFormatString(410, 445, Cr, "%d", killed);
+	DxLib::DrawFormatString(400, 110, Cr, "%2.3lf", hitRate);//命中率を表示
+	DxLib::DrawFormatString(400, 220, Cr, "%d", damage);
+	DxLib::DrawFormatString(400, 330, Cr, "%.1lf", alliesFleet[0].ReferDistanceMoved());
+	DxLib::DrawFormatString(400, 440, Cr, "%d", killed);
 
 	/*記録を描く*/
 	DxLib::SetFontSize(26);
@@ -491,7 +538,7 @@ void IngameDataManagement::TEST() {
 		enemyShip->NewCoordZ(2000 + (rand() % 400) * i);
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
-		if (!enemyShip->InifThisShip(&PL, ET, &SL, 4000, i + 10)) {
+		if (!enemyShip->InifThisShip(&PL, ET, &SL, 5000, i + 10)) {
 			DrawString(10, 10, "ファイル読み込む失敗", GetColor(255, 255, 255));
 			DxLib::ScreenFlip();
 			WaitKey();
@@ -679,21 +726,23 @@ void IngameDataManagement::Inif() {
 	SL.Inif();//音声ローダー初期化
 	CT.Inif(&SL);//キーボードコントローラー初期化
 	CUI.IngameInif(&PL,&SL);//マウスコントローラー初期化
+	InifFormationBoard();
 
 	/*統計ボードーの初期化*/
 	for (int i = StatisticBoard::SB_BACKGROUND;
 		i <= StatisticBoard::LOSE;
 		i++)
 		statisticBoard[i] =
-		PL.RefetrStatisticBoardHandle(i);
+		PL.ReferStatisticBoardHandle(i);
 
 	InifStatisticBoardData();
 
-	TEST();
-	alliesFleet[0].SetControled();//友軍艦隊の一番の操作権を取る
-	CUI.InifShipList(&enemyFleet,false);
-	CUI.InifShipList(&alliesFleet, true);
-	CUI.SetNormalStatus();/*ここはテストバージョン*/
+	for (int i = 0; i < FormationBoard::FB_NUM; i++) {
+		formationBoard[i] = PL.ReferFormationBoardHandle(i);
+	}
+
+
+	CUI.SetFormationMenuStatus();/*ここはテストバージョン*/
 }
 
 /*使ったメモリを解放する*/
@@ -810,7 +859,7 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 				if ((rand() % 8 < abs(ship->ReferSpeedOnZ()) * 10)
 					&& rand() % 4 == 0) {//確率で生成する
 					//for(int i = 0; i < ship->ReferSmokeCount(); i++)
-					for (int i = 0; i < 2; i++)
+					for (int i = 0; i < ship->ReferSmokePointCount(); i++)
 						smokeList.push_back(ship->NewSmoke(i));//リストの最後に追加する
 				}
 			}
@@ -1056,6 +1105,8 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 						killed++;
 					}
 				}
+				if (ship->ReferSerialNumber() == 1)
+					damageRecieved += (int)shell->ReferDamage();
 				return;
 			}
 		}

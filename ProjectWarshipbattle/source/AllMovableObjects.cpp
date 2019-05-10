@@ -197,3 +197,12 @@ void AllMovableObjects::DrawSubShadow(Camera CM) {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	}//ï`âÊÉÇÅ[ÉhÇÇ‡Ç∆Ç…ñﬂÇÈ
 }
+
+void AllMovableObjects::DrawCard(Coordinate2D<double> coord) {
+	const double & multiple = MathAndPhysics::ShipCardRate;
+
+	DrawExtendGraph((int)coord.x, (int)coord.z,
+		(int)(coord.x + multiple * length),
+		(int)(coord.z + multiple * width),
+		*pictureHandle, TRUE);
+}
