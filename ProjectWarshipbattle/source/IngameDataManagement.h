@@ -20,8 +20,7 @@ public:
 	//ゲームを初期化操作
 	//ここの関数にファイル操作も含む
 	void Inif();
-	void registerTeamA(PictureLoader PL);
-	void registerTeamB(PictureLoader PL);
+	void registerTeam();
 	void Free();
 
 	//カメラ用座標問い合わせ

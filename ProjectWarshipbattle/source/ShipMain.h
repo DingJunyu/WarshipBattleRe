@@ -234,6 +234,7 @@ private:
 
 	/*ŠÈ’P‰»‚µ‚½í“¬•”•ª*/
 	int hitPoint;
+	int maxHitPoint;
 
 	/*ËŒ‚*/
 	FireController fireControllerMain;

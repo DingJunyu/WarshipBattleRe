@@ -450,7 +450,7 @@ void IngameDataManagement::DrawStatisticBoard() {
 	/*記録を描く*/
 	DxLib::SetFontSize(26);
 	for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
-		DxLib::DrawFormatString(950, 115 + i * 75, Cr, "%5.1lf",boardData[i]);
+		DxLib::DrawFormatString(940, 115 + i * 75, Cr, "%5.1lf",boardData[i]);
 
 	DxLib::ScreenFlip();
 
@@ -466,41 +466,37 @@ void IngameDataManagement::TEST() {
 	auto ship = alliesFleet.begin();//イテレータを使って自分の船を選ぶ
 	//ここの部分は初期化関数とファイル読み込みはまだ出来ていない
 	//初期化関数は下のようにしたい
-	ship->InifThisShip(&PL, ET, &SL, 4000, 1);
+	
 
-	ship->SetMultiple(0.125);
-	ship->InifThisShip(PL.ReferShipHandle(4000), 
-		PL.ReferShipShadowHandle(4000), 4000, ET, &SL);//初期化
 	ship->NewCoordX(640);//新しい座標をあげる
 	ship->NewCoordZ(380);
 	ship->NewCoordY(-10);
 	ship->SetRadianOnZ(0);
-	ship->SetLength(PL.ReferShipSizeX());//サイズを設定
-	ship->SetWidth(PL.ReferShipSizeZ());
-	ship->TEST();//テスト関数をロードする
-	ship->SetSerialNumber(1);
-	ship->SetWeaponTest(&PL);//武器をロードする
+	if (!ship->InifThisShip(&PL, ET, &SL, 4000, 1)) {
+		DrawString(10, 10, "ファイル読み込む失敗", GetColor(255, 255, 255));
+		DxLib::ScreenFlip();
+		WaitKey();
+		exit(1);
+	}
 
 
 	for (int i = 0; i < 2; i++) {
 		enemyFleet.push_back(ShipMain());//テスト用敵船を生成する
 		auto enemyShip = enemyFleet.end();//イテレータで船を選ぶ
-		enemyShip--;
+		enemyShip--;//いつも最後の船を設置する
 		double radian = (double)(rand() % 180) / 180.0*MathAndPhysics::PI;
 
-		enemyShip->SetMultiple(0.125);
-		enemyShip->InifThisShip(PL.ReferShipHandle(4000),
-			PL.ReferShipShadowHandle(4000), 4000, ET, &SL);
+
 		enemyShip->NewCoordX(2500 + (rand() % 400) * i);
-		enemyShip->NewCoordZ(2000 +  (rand() % 400) * i);
+		enemyShip->NewCoordZ(2000 + (rand() % 400) * i);
 		enemyShip->NewCoordY(-10);
 		enemyShip->SetRadianOnZ(radian);
-		enemyShip->SetLength(PL.ReferShipSizeX());
-		enemyShip->SetWidth(PL.ReferShipSizeZ());
-		enemyShip->TEST();
-		enemyShip->SetSerialNumber(2);
-		enemyShip->SetWeaponTest(&PL);
-		enemyShip->SetEngineOutPutRate(true);
+		if (!enemyShip->InifThisShip(&PL, ET, &SL, 4000, i + 10)) {
+			DrawString(10, 10, "ファイル読み込む失敗", GetColor(255, 255, 255));
+			DxLib::ScreenFlip();
+			WaitKey();
+			exit(1);
+		}
 	}
 }
 

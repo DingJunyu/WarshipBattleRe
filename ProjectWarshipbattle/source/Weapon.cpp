@@ -22,10 +22,10 @@ Ammo Weapon::Shoot(double x, double z,double r) {
 	lastShootedTime = GetTickCount();
 
 	//絶対座標を計算する
-	double realX = cos(radianOnZ + r) * relativeCoordX -
-		sin(radianOnZ + r) * relativeCoordZ + x;
-	double realZ = cos(radianOnZ + r) * relativeCoordZ +
-		sin(radianOnZ + r) * relativeCoordX + z;
+	double realX = cos(r) * relativeCoordX -
+		sin(r) * relativeCoordZ + x;
+	double realZ = cos(r) * relativeCoordZ +
+		sin(r) * relativeCoordX + z;
 
 	//最初の角度がランダムに変更して最後の落下点に影響を上げるようにする
 	double realRadianOnZ = radianOnZ + r;

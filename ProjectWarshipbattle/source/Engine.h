@@ -23,7 +23,7 @@ public:
 	double ReferOutputPercentage() { return outPutPercentage; }
 
 	//データ入力
-	/*最大正数出力、最大負数出力、出力増加率*/
+	/*最大出力、出力増加率*/
 	void Inif(double MaxOutput, double BaseIncreaseRate) {
 		maxOutput = MaxOutput;
 		baseIncreaseRate = BaseIncreaseRate;

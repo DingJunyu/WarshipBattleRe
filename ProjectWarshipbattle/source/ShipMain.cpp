@@ -41,9 +41,11 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 
 	int count = 0;
 
-	char readData[50][20];
-	char trash[30];
+	char readData[50][50];
+	char trash[50];
 	double doubleData[50];
+
+	serialNumber = SN;
 
 	/*ファイル操作*/
 	FILE *filePointer;//ファイルポインター
@@ -65,11 +67,12 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 			break;
 	}
 
-	fclose(filePointer);
+	fclose(filePointer);//ファイルを閉じる
 
 	SetPictureHandle(PL->ReferShipHandle(num));
 	SetShadowHandle(PL->ReferShipShadowHandle(num));
-	//GetDataFromShipdata(ShipNum);
+	SetLength(PL->ReferShipSizeX());
+	SetWidth(PL->ReferShipSizeZ());
 	thisShipType = num;
 	MemorySecure();//メモリ確保
 	LoadSound(SL);//音を読み込む
@@ -84,6 +87,84 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 			0.15, 1.001);
 	}//泡生成ポイントを設置
 
+	int pointer = 0;//データを読み込む用ポインター
+					
+	SetMultiple(doubleData[pointer]);
+	pointer++;
+	//ＨＰを設置する
+	maxHitPoint = hitPoint = (int)doubleData[pointer];
+	pointer++;
+
+	//スモーク生成点を設置する
+	smokePointCount  = (int)doubleData[pointer];
+	pointer++;
+
+	int smokeTime;//スモークの継続時間を設置
+	smokeTime = (int)doubleData[pointer];
+	pointer++;
+
+	for (int i = 0; i < smokePointCount; i++) {
+		smokeStartPoint[i] = ET.CopyFromCreateSmoke();//テンプレートからコピーする
+		/*初期化する*/
+		smokeStartPoint[i].InifCoordinate(doubleData[pointer],
+			doubleData[pointer + 1], true, smokeTime, 20, true,
+			0.06, 1.005);
+		pointer += 2;
+	}
+
+	/*注意:設置した後にポインターはもう次の行に指しているから＋＋をしないで*/
+	/*あたり判定用ボックスを設置する*/
+	shipMainCrash = { doubleData[pointer],doubleData[pointer + 1], 
+		doubleData[pointer + 2]};
+	pointer += 3;
+
+	/*重力を設置する*/
+	SetMass(doubleData[pointer]);
+	pointer++;
+	/*エンジンの出力を設置する*/
+	mainEngine.Inif(doubleData[pointer], doubleData[pointer + 1]);
+	pointer += 2;
+	SetMaxOutput(mainEngine.ReferMaxOutput());//最大出力をAllMovableObjectに設定する
+	/*最大速度を設置する*/
+	SetMaxSpeedOnZ(doubleData[pointer]);
+	pointer++;
+
+	SetSpeed(0);//今の速度を０に設定する
+	maxRadian = MathAndPhysics::PI / 6;//最大角度を18度に設定する
+	radianChangePerFrame = MathAndPhysics::PI / 900;//舵旋回速度を設置
+	currentRadian = 0;//舵を原点に設定する
+
+	/*武器通用ステータスを記録*/
+	int weaponCD = (int)doubleData[pointer];
+	pointer++;
+	int weaponDamage = (int)doubleData[pointer];
+	pointer++;
+	double weaponHigh = doubleData[pointer];
+	pointer++;
+	double weaponInitialSpeed = doubleData[pointer];
+	pointer++;
+
+	MainWeaponCount = (int)doubleData[pointer];
+	pointer++;
+
+	for (int i = 0; i < MainWeaponCount; i++) {
+		Weapon Weapon(doubleData[pointer], doubleData[pointer + 1],
+			10.0, 10.0,//長さと横の長さ-まだ使っていません
+			0.0, 0.2, 100,//初期角度、ＨＰ（まだ使っていません）
+			50, 12, //装甲値（まだ使っていません）
+			PL->ReferAmmoHandle(0), weaponInitialSpeed, weaponHigh,
+			serialNumber);
+		MainWeapon[i] = Weapon;
+		MainWeapon[i].SetCoolDownTime(weaponCD);//射撃間隔を設定する
+		MainWeapon[i].SetDamage(weaponDamage);
+		pointer += 2;
+	}
+	/*武器のステータスを射撃コントロールにあげる*/
+	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());
+	//速度を読み込み、初期化する
+	fireControllerMain.InifDistance(MainWeapon[0].ReferMaxRadianOnY(), 0);
+	
+	return true;
 }
 
 /*ファイル操作を入れたのため、初期化の速度が大幅早くなりました*/
