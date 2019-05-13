@@ -77,16 +77,6 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 	thisShipType = num;
 	MemorySecure();//メモリ確保
 	LoadSound(SL);//音を読み込む
-	FindThosePoint();//あたり判定用ポイントを取得する
-
-	/*あたり判定用ポイントを利用して泡生成ポイントを作る*/
-	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
-	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
-		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
-		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
-			aroundPointPos[i].z, true, 3400, 20, true,
-			0.15, 1.001);
-	}//泡生成ポイントを設置
 
 	int pointer = 0;//データを読み込む用ポインター
 					
@@ -164,6 +154,17 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 	fireControllerMain.SetSpeed(MainWeapon[0].ReferInitialSpeed());
 	//速度を読み込み、初期化する
 	fireControllerMain.InifDistance(MainWeapon[0].ReferMaxRadianOnY(), 0);
+
+	FindThosePoint();//あたり判定用ポイントを取得する
+
+	/*あたり判定用ポイントを利用して泡生成ポイントを作る*/
+	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
+	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
+		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
+		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
+			aroundPointPos[i].z, true, 3400, 20, true,
+			0.15, 1.001);
+	}//泡生成ポイントを設置
 	
 	return true;
 }
