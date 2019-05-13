@@ -8,10 +8,12 @@ IngameDataManagement::~IngameDataManagement()
 /*メインルート*/
 void IngameDataManagement::Update() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
-	ClearDrawScreen();
+	ClearDrawScreen();//画面をクリアする
 
-	AIUpdate();
-	LockAndRefresh();
+	AIUpdate();//AIでデータを更新すｒう
+	LockAndRefresh();//ロック状態を更新すｒう
+
+	/*カメラ状態を設置する*/
 	if (alliesFleet[0].fireDataFigureUp.ReferLockOn() && showLock == true)
 		MainCamera.GetXZ(ReferTargetX(alliesFleet[0].fireDataFigureUp.ReferTarget()),
 			ReferTargetZ(alliesFleet[0].fireDataFigureUp.ReferTarget()));
@@ -46,37 +48,53 @@ bool IngameDataManagement::TeamDestroyed() {
 /****************************************************/
 void IngameDataManagement::AIUpdate() {
 	LetFlagShipMove();//敵のフラグシープを動かす
-	LetEveryOneMove();
-	LetEveryOneLockOn();
-	LetEveryOneShoot();
+	LetEveryOneMove();//すべての船の状態を更新する
+	LetEveryOneLockOn();//ターゲットを選択する
+	LetEveryOneShoot();//射撃する
 }
 
 void IngameDataManagement::LetFlagShipMove() {
-	flagShipAI.LetUsGo(&enemyFleet[0], &alliesFleet[0]);
-	enemyFleet[0].SetChangingDirect(flagShipAI.ReferRadianNeededNow());
-	enemyFleet[0].SetEngineOutPutRate(flagShipAI.ReferSpeedInNeed());
+	if (!enemyFlagShip->ReferAlive())//もしフラグシープはまだ生きてあれば
+		return;
+	flagShipAI.LetUsGo(enemyFlagShip, &alliesFleet[0]);//プレーヤーが操作している船をターゲットに設定し移動する
+	enemyFlagShip->SetChangingDirect(flagShipAI.ReferRadianNeededNow());//角度を更新する
+	enemyFlagShip->SetEngineOutPutRate(flagShipAI.ReferSpeedInNeed());//出力を更新する
 }
 
 void IngameDataManagement::LetEveryOneMove() {
-	ControlThisListMove(&alliesFleet, &AI);
-	ControlThisListMove(&enemyFleet, &AI);
+	ControlThisListMove(&alliesFleet, &AI);//友軍艦隊を移動する
+	ControlThisListMove(&enemyFleet, &AI);//敵軍艦隊を移動する
 }
 
 void IngameDataManagement::ControlThisListMove(std::vector<ShipMain> *shipList,
 	ArtificialIntelligence *AI) {	
-	int num = 0;
+	bool first = true;
 	if (!shipList->empty() && shipList->begin()!=shipList->end()) {
 		for (auto ship = shipList->begin();
 			ship != shipList->end();
 			ship++) {
-			if (num == 0) {
-				num++;
+			if (first) {//一番目をスキップする
+				first = false;
 				continue;
 			}
+			if (!ship->ReferAlive())//沈んだらスキップする
+				continue;
+			if (&*ship == enemyFlagShip)//フラグシープだったらスキップする
+				continue;
 			ship--;
-			auto prevShip = ship;
+			auto prevShip = ship;//前の船を設定する
 			ship++;
-			AI->Move(*ship, *prevShip);
+			while (1) {
+				if (prevShip->ReferAlive())//前の船はまだ生きていればそのまま使う
+					break;
+				if (prevShip == shipList->begin()) {//もし一番前の船も沈んだら
+					enemyFlagShip = &*ship;//今の船をフラッグシープに設定する
+					return;//更新をやめる
+				}
+				if (prevShip != shipList->begin())//まだ前に移動できれば
+					prevShip--;
+			}
+			AI->Move(*ship, *prevShip);//移動する
 			ship->SetChangingDirect(AI->ReferRadianNeededNow());//変更角度を設置する
 			ship->SetEngineOutPutRate(AI->ReferOutPutRateNeededNow());//速度を設置する
 		}
@@ -95,7 +113,7 @@ void IngameDataManagement::ControlThisListLock(std::vector<ShipMain> *shipList,
 		ship++) {
 		if (ship->ReferAlive() && !ship->ReferControled()) {
 			AI.InBattle(&*ship, enemyList, -1);//ロックターゲットを設置する
-			ship->fireDataFigureUp.LockOn_Switch();
+			ship->fireDataFigureUp.LockOn_Switch();//ロック状態を更新する
 		}
 	}
 }
@@ -334,7 +352,7 @@ void IngameDataManagement::DrawEffectUnderShips() {
 
 /*船の上にあるエフェクトを描く*/
 void IngameDataManagement::DrawEffectBeyondShips() {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 190);//透明度を下がる
 	DrawThisList(&smokeList);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);//透明度を下がる
 	DrawThisList(&explosionList);
@@ -374,11 +392,98 @@ void IngameDataManagement::DrawLoading() {
 }
 
 void IngameDataManagement::FormationBoard() {
-	while (CUI.CheckChoice() != GAME_START) {
-		if (ProcessMessage() == -1)
+	while (1) {
+		if (ProcessMessage() == -1)//ウィンドを閉じる時正しく終了できるようにする
 			break;
 
+		
+
+		int ans = CommandSerial::NONE_COMMAND;//オーダーを取る
+
+		if (CUI.ReferClickable())
+			ans=CUI.CheckChoice();
+		
+
+		if (ans == GAME_START &&//もしゲームスタートを押したら
+			teamACount!=0 &&//同時に両チームは空でなければ
+			teamBCount!=0)
+			break;
+
+		if (ans != CommandSerial::NONE_COMMAND) {
+			CUI.SetClickTime();
+			ans -= 60;
+			if (ans % 2 == 0) {
+				if (ans >= 8 && teamBCount < maxCountInATeam) {
+					teamBCount++;
+					teamB[(ans - 8) / 2].Plus();
+				}
+				if (ans < 8 && teamACount < maxCountInATeam) {
+					teamACount++;
+					teamA[ans / 2].Plus();
+				}
+			}
+			if (ans % 2 == 1) {
+				if (ans >= 8 && teamBCount > 0) {
+					teamBCount--;
+					teamB[(ans - 8) / 2].Minus();
+				}
+				if (ans < 8 && teamACount > 0) {
+					teamACount--;
+					teamA[ans / 2].Minus();
+				}
+			}
+		}
+
 		DrawFormationBoard();
+	}
+}
+
+void IngameDataManagement::RegisterTeam() {
+	int count = 0;
+	Coordinate<double> coord{ -500, -10, 200 };
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < teamA[i].ReferNumber(); j++) {
+			count++;
+			alliesFleet.push_back(ShipMain());
+			auto ship = alliesFleet.end();
+			ship--;
+
+			coord.x -= 300;//戦艦の間の間隔を取る
+
+			ship->SetCoord(coord);
+			ship->SetRadianOnZ(0);
+			if (!ship->InifThisShip(&PL, ET, &SL, teamA[i].ship.ReferShipType(), i)) {
+				DrawString(10, 10, "ファイル読み込む失敗", GetColor(255, 255, 255));
+				DxLib::ScreenFlip();
+				WaitKey();
+				exit(1);
+			}
+		}
+	}
+
+	coord = { 3000,-10,1800 };
+	count = 0;
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < teamB[i].ReferNumber(); j++) {
+			count++;
+			enemyFleet.push_back(ShipMain());
+			auto ship = enemyFleet.end();
+			ship--;
+
+			coord.x += 300;//戦艦の間の間隔を取る
+
+			ship->SetCoord(coord);
+			ship->SetRadianOnZ(MathAndPhysics::PI);
+			if (!ship->InifThisShip(&PL, ET, &SL, teamB[i].ship.ReferShipType(), 
+				i + CommandSerial::SELECT_RANGE + 1)) {
+				DrawString(10, 10, "ファイル読み込む失敗", GetColor(255, 255, 255));
+				DxLib::ScreenFlip();
+				WaitKey();
+				exit(1);
+			}
+		}
 	}
 }
 
@@ -393,29 +498,54 @@ void IngameDataManagement::DrawFormationBoard() {
 
 	teamA[0].DrawCard(Coordinate2D<double>{70, 100});
 	teamA[1].DrawCard(Coordinate2D<double>{70, 220});
+	teamA[2].DrawCard(Coordinate2D<double>{70, 340});
+	teamA[3].DrawCard(Coordinate2D<double>{70, 460});
+
+	teamB[0].DrawCard(Coordinate2D<double>{710, 100});
+	teamB[1].DrawCard(Coordinate2D<double>{710, 220});
+	teamB[2].DrawCard(Coordinate2D<double>{710, 340});
+	teamB[3].DrawCard(Coordinate2D<double>{710, 460});
+
 	CUI.Draw();
 	DxLib::ScreenFlip();
 }
 
 void IngameDataManagement::InifFormationBoard() {
-	teamA.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD)));
+	for (int i = 0; i < 4; i++) {
+		teamA.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD),
+			PL.ReferFantasyNumber()));
+		teamB.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD),
+			PL.ReferFantasyNumber()));
+	}
+	
 	teamA[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1);
-	teamA.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD)));
 	teamA[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
+	teamA[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
+	teamA[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
+
+	teamB[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1);
+	teamB[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
+	teamB[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
+	teamB[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
 }
 
 void IngameDataManagement::FreeFormationBoard() {//フリーした後にメニューを通常状態に設置する
-	teamA[0].ship.DestroyMemory();
-	teamA[1].ship.DestroyMemory();
+	RegisterTeam();
+	
+	for (int i = 0; i < 4; i++) {
+		teamA[i].ship.DestroyMemory();
+		teamB[i].ship.DestroyMemory();
+	}
 
 	teamA.clear();
+	teamB.clear();
 	std::vector<ShipCard>().swap(teamA);
-
-	TEST();
+	std::vector<ShipCard>().swap(teamB);
 
 	alliesFleet[0].SetControled();//友軍艦隊の一番の操作権を取る
+	enemyFlagShip = &*enemyFleet.begin();
 	CUI.InifShipList(&enemyFleet, false);
-	CUI.InifShipList(&alliesFleet, true);
+//	CUI.InifShipList(&alliesFleet, true);
 
 	CUI.CloseFormationMenu();
 }
@@ -497,7 +627,7 @@ void IngameDataManagement::DrawStatisticBoard() {
 	/*記録を描く*/
 	DxLib::SetFontSize(26);
 	for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
-		DxLib::DrawFormatString(940, 115 + i * 75, Cr, "%5.1lf",boardData[i]);
+		DxLib::DrawFormatString(940, 115 + i * 75, Cr, "%-14.1lf",boardData[i]);
 
 	DxLib::ScreenFlip();
 
@@ -1124,8 +1254,9 @@ void IngameDataManagement::CheckTeamA(std::vector<ShipMain> *shipList) {
 		for (auto ship = shipList->begin();
 			ship != shipList->end();
 			ship++) {
-			if (!ship->ReferAlive()) {
+			if (!ship->ReferAlive()&&!ship->ReferInList()) {
 				sinkingShip.push_back(*ship);//沈んでいるリストに追加する
+				ship->PutInList();
 			}
 		}
 	}

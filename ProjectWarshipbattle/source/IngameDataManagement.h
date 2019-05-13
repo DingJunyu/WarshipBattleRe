@@ -20,7 +20,6 @@ public:
 	//ゲームを初期化操作
 	//ここの関数にファイル操作も含む
 	void Inif();
-	void registerTeam();
 	void Free();
 
 	//カメラ用座標問い合わせ
@@ -51,6 +50,7 @@ public:
 
 
 	void FormationBoard();
+	void RegisterTeam();
 	void FreeFormationBoard();
 
 	void DrawStatisticBoard();
@@ -166,6 +166,8 @@ private:
 	ArtificialIntelligence AI;
 	std::list<ShipMain> sinkingShip;//沈んでいる船
 
+	ShipMain *enemyFlagShip;
+
 	std::list<Ammo> shellList;//砲弾リスト
 	std::list<Bomb> bombList;//爆弾リスト
 	std::list<Torpedo> torpedoList;//魚雷リスト
@@ -197,7 +199,6 @@ private:
 	std::vector<ShipCard> teamB;
 
 	const int maxCountInATeam = 10;
-	int teamAChoose[4][2];
-	int teamBChoose[4][2];
-
+	int teamACount = 0;
+	int teamBCount = 0;
 };

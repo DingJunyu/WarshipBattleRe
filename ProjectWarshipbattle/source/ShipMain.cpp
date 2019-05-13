@@ -46,6 +46,7 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 	double doubleData[50];
 
 	serialNumber = SN;
+	shipType = num;
 
 	/*ファイル操作*/
 	FILE *filePointer;//ファイルポインター
@@ -601,7 +602,7 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 		TurnMainWeapon(true);
 	}
 
-	if (abs(differenceOnY) < 0.06 && abs(differenceOnZ) < 0.1)
+	if (distance < fireControllerMain.ReferMaxRange() && abs(differenceOnZ) < 0.1)
 		canIShoot = true;
 }
 

@@ -29,6 +29,7 @@ public:
 		hitPoint = 240;
 		shipMainCrash = { 180, 40, 18 };
 		controled = false;
+		canIShoot = false;
 	}
 	~ShipMain();
 
@@ -91,6 +92,7 @@ public:
 	}
 
 	//–â‚¢‡‚í‚¹
+	int ReferShipType() { return shipType; }
 	/*ˆÚ“®ŠÖ˜A*/
 	bool ReferReturnOn() { return returnToCenter; }
 	double ReferChangingRadian() { return currentRadian; }

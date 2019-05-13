@@ -8,7 +8,7 @@ namespace Screen {
 
 //コントローラー用指令集
 enum CommandSerial {
-	COUNT = 50,//コマンドの数
+	COUNT = 100,//コマンドの数
 	NONE_COMMAND = -1,//命令なし
 	TEST_VIEW_ON = 0,//デバッグモードon
 	INCREASE_OUTPUT = 1,//出力増加
@@ -32,10 +32,10 @@ enum CommandSerial {
 	GAME_START,
 	PLUS,
 	MINUS,
-	FORMATION_UP,
-	FORMATION_DOWN,
-	FORMATION_RIGHT,
-	FORMATION_LEFT,
+//	FORMATION_UP,
+//	FORMATION_DOWN,
+//	FORMATION_RIGHT,
+//	FORMATION_LEFT,
 	SETTING,
 	CHOOSE_MAIN,
 	CHOOSE_SUB,
@@ -46,7 +46,9 @@ enum CommandSerial {
 	TEST_INCREASE_FRAME,
 	TEST_DECREASE_FRAME,
 
-	SELECT_RANGE = 10
+	SELECT_RANGE = 10,
+
+	SELECT_IN_FORMATION = 60//編成用
 };
 
 //CUIの中に保存されたものとその番号
@@ -435,6 +437,7 @@ namespace MathAndPhysics {
 	const double Infinite = 99999999.0;
 
 	const double ShipCardRate = 0.2;
+	const double FantasyNumRate = 0.2;
 }
 
 namespace GameDefine {

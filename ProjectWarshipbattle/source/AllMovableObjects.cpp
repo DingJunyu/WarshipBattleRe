@@ -164,8 +164,8 @@ void AllMovableObjects::DrawSub(Camera CM) {
 
 	//–{‘Ì‚ð•`‚­
 	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
-	if (coordX > 0 - 100 && coordX < Screen::SCREEN_X + 100 && coordZ>0 - 100 &&
-		coordZ < Screen::SCREEN_Z + 100) {
+	if (coordX > 0 - 200 && coordX < Screen::SCREEN_X + 200 && coordZ>0 - 200 &&
+		coordZ < Screen::SCREEN_Z + 200) {
 		DrawRotaGraph3((int)(coordX),
 			(int)(coordZ),
 			(int)(length / 2), (int)(width / 2),

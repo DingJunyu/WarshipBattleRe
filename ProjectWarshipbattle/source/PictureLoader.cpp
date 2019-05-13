@@ -70,6 +70,13 @@ void PictureLoader::LoadShips() {
 		LoadGraph(
 			"GraphicData/Interactive_User_Interface/Ships_Mark/Battle_Crusier/BattleCrusier_Mark_001_Gneisenau.png");
 
+	shipHandle[4001][SerialNumberOfShipHandle::SHIP_HANDLE] =
+		LoadGraph(
+			"GraphicData/Ship_TopView/BattleCrusier/BattleCrusier_TopView_01_Gneisenau.png");
+	shipHandle[4001][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
+		LoadGraph(
+			"GraphicData/Ship_Shadow/BattleCrusier/BattleCrusier_Shadow_01_Gneisenau.png");
+
 	/*ÉçÅ[ÉhêÌäÕ*/
 	shipHandle[5000][SerialNumberOfShipHandle::SHIP_HANDLE] =
 		LoadGraph(
@@ -77,6 +84,13 @@ void PictureLoader::LoadShips() {
 	shipHandle[5000][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_Shadow/BattleShip/BattleShip_Shadow_00_Yamashiro.png");
+
+	shipHandle[5001][SerialNumberOfShipHandle::SHIP_HANDLE] =
+		LoadGraph(
+			"GraphicData/Ship_TopView/BattleShip/BattleShip_TopView_01_Dunkerque.png");
+	shipHandle[5001][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
+		LoadGraph(
+			"GraphicData/Ship_Shadow/BattleShip/BattleShip_Shadow_01_Dunkerque.png");
 }
 
 void PictureLoader::LoadSea() {
@@ -287,7 +301,7 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/GameMenu/minus.png");
 	buttonPressedIntheGame[CommandSerial::MINUS] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/GameMenu/minus_pressed.png");
-	buttonIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
+/*	buttonIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/GameMenu/up.png");
 	buttonPressedIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/GameMenu/up.png");
@@ -302,7 +316,7 @@ void PictureLoader::LoadButtonInGame() {
 	buttonIntheGame[CommandSerial::FORMATION_LEFT] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/GameMenu/left.png");
 	buttonPressedIntheGame[CommandSerial::FORMATION_LEFT] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/left.png");
+		"GraphicData/Interactive_User_Interface/GameMenu/left.png");*/
 
 }
 
@@ -322,6 +336,14 @@ void PictureLoader::LoadFormationBoard() {
 		"GraphicData/Back_Ground/Ship_Card.png");
 }
 
+void PictureLoader::LoadFantasyNumbers() {
+	char fileName[100];
+	for (int i = 0; i <= 10; i++) {
+		sprintf_s(fileName, 100, "GraphicData//User_Interface//Numbers//%d.png", i);
+		fantasyNumbers[i] = LoadGraph(fileName);
+	}
+}
+
 void PictureLoader::FreePicture() {
 	DeleteShips();
 	DeleteSea();
@@ -331,6 +353,8 @@ void PictureLoader::FreePicture() {
 	DeleteMainMenu();
 	DeleteButtonInMainMenu();
 	DeleteButtonInGame();
+	DeleteStatisticBoard();
+	DeleteFormationBoard();
 }
 
 void PictureLoader::DeleteShips() {
@@ -399,4 +423,11 @@ void PictureLoader::DeleteStatisticBoard() {
 		i <= StatisticBoard::LOSE;
 		i++)
 		DeleteGraph(statisticBoardHandle[i]);
+}
+
+void PictureLoader::DeleteFormationBoard() {
+	for (int i = FormationBoard::FB_BACKGROUND;
+		i <= FormationBoard::FB_SHIP_CARD;
+		i++)
+		DeleteGraph(formationBoardHandle[i]);
 }

@@ -32,6 +32,17 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 			PL->ReferButtonIntheGame(CommandSerial::SELECT),//‰Ÿ‚³‚ê‚½‚Æ‚«‚Æ‚Ó‚Â‚¤‚Ì‚ª•Ï‚í‚ç‚È‚¢‚½‚ßA—¼•û‚à‚Ó‚Â‚¤‚É‚·‚é
 			PL->ReferButtonIntheGame(CommandSerial::SELECT));
 	}
+	for (int i = CommandSerial::SELECT_IN_FORMATION;
+		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
+		if (i % 2 == 0)
+			buttonContainer[i].Inif(
+				PL->ReferButtonIntheGame(CommandSerial::PLUS),
+				PL->ReferButtonPressedIntheGame(CommandSerial::PLUS));
+		else
+			buttonContainer[i].Inif(
+				PL->ReferButtonIntheGame(CommandSerial::MINUS),
+				PL->ReferButtonPressedIntheGame(CommandSerial::MINUS));
+	}
 }
 
 //ƒƒ‚ƒŠ‰ğ•ú

@@ -26,7 +26,7 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 	BC.InifForUserInterface(PL);
 
 	for (int i = CommandSerial::INCREASE_OUTPUT; 
-		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE; i++) {
+		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		for (int j = 0; j < 6; j++)
 			buttonPosition[i][j] = 1;
 	}
@@ -78,13 +78,7 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 		BUTTON_POSITION_INGAME::TURN_RETURN_Z, BUTTON_POSITION_INGAME::TURN_RETURN_MULTI);
 
 	/*編成メニュー*/
-	SetThisOne(CommandSerial::GAME_START, 0.365, .9, 0.75);
-	SetThisOne(CommandSerial::FORMATION_UP, 0.8, .9, .1);
-	SetThisOne(CommandSerial::FORMATION_DOWN, 0.8, .9, .1);
-	SetThisOne(CommandSerial::FORMATION_RIGHT, 0.8, .9, .1);
-	SetThisOne(CommandSerial::FORMATION_LEFT, 0.8, .9, .1);
-	SetThisOne(CommandSerial::PLUS, 0.8, .9, .1);
-	SetThisOne(CommandSerial::MINUS, 0.8, .9, .1);
+
 
 
 	for (int i = CommandSerial::INCREASE_OUTPUT;
@@ -150,7 +144,7 @@ int ClickableUserInterface::CheckChoice() {
 	}
 
 	for (int i = CommandSerial::INCREASE_OUTPUT;
-		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2;
+		i <= CommandSerial::SELECT_IN_FORMATION + 16;
 		i++) {
 		if(buttonPosition[i][SaveForCUI::SHOW] == 0)
 			/*マウスの座標とボタンの範囲を照合する*/
@@ -165,7 +159,7 @@ int ClickableUserInterface::CheckChoice() {
 
 			BC.buttonContainer[i].ChangePressed();//画像を押された状態に変更
 
-			/*押されたら選択しを返す*/
+			/*押されたら選択しを返す*/	
 			if (pressed) {
 				answer = i;
 			}
@@ -187,22 +181,72 @@ void ClickableUserInterface::SetThisOne(int num, double x, double z, double mt) 
 
 void ClickableUserInterface::Draw() {
 	for (int i = CommandSerial::INCREASE_OUTPUT;
-		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2; i++) {
+		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
 			BC.buttonContainer[i].DrawThisButton();
 	}
 }
 
 void ClickableUserInterface::SetFormationMenuStatus() {
-	for (int i = CommandSerial::GAME_START; i <= CommandSerial::FORMATION_LEFT;
-		i++) {
+
+	SetThisOne(CommandSerial::GAME_START, 0.365, .9, 0.75);
+	BC.buttonContainer[CommandSerial::GAME_START].SetXZ(
+		buttonPosition[CommandSerial::GAME_START][SaveForCUI::COORD_X],
+		buttonPosition[CommandSerial::GAME_START][SaveForCUI::COORD_Z],
+		buttonPosition[CommandSerial::GAME_START][SaveForCUI::MULTIPLE]);
+
+	int realNumPlus;
+	int realNumMinus;
+	int realNumPlusRight;
+	int realNumMinusRight;
+
+	for (int i = 0; i < 8; i += 2) {
+		realNumPlus = CommandSerial::SELECT_IN_FORMATION + i;
+		realNumMinus = CommandSerial::SELECT_IN_FORMATION + i + 1;
+		realNumPlusRight = realNumPlus + 8;
+		realNumMinusRight = realNumMinus + 8;
+		SetThisOne(realNumPlus, 0.45, 0.07 + .079*(i + 1), .1);
+		SetThisOne(realNumMinus, 0.45, 0.13 + .079*(i + 1), .1);
+		SetThisOne(realNumPlusRight, 0.94, 0.07 + .079*(i + 1), .1);
+		SetThisOne(realNumMinusRight, 0.94, 0.13 + .079*(i + 1), .1);
+
+		BC.buttonContainer[realNumPlus].SetXZ(
+			buttonPosition[realNumPlus][SaveForCUI::COORD_X],
+			buttonPosition[realNumPlus][SaveForCUI::COORD_Z],
+			buttonPosition[realNumPlus][SaveForCUI::MULTIPLE]
+		);
+		BC.buttonContainer[realNumMinus].SetXZ(
+			buttonPosition[realNumMinus][SaveForCUI::COORD_X],
+			buttonPosition[realNumMinus][SaveForCUI::COORD_Z],
+			buttonPosition[realNumMinus][SaveForCUI::MULTIPLE]
+		);
+		BC.buttonContainer[realNumPlusRight].SetXZ(
+			buttonPosition[realNumPlusRight][SaveForCUI::COORD_X],
+			buttonPosition[realNumPlusRight][SaveForCUI::COORD_Z],
+			buttonPosition[realNumPlusRight][SaveForCUI::MULTIPLE]
+		);
+		BC.buttonContainer[realNumMinusRight].SetXZ(
+			buttonPosition[realNumMinusRight][SaveForCUI::COORD_X],
+			buttonPosition[realNumMinusRight][SaveForCUI::COORD_Z],
+			buttonPosition[realNumMinusRight][SaveForCUI::MULTIPLE]
+		);
+	}
+
+
+
+	buttonPosition[CommandSerial::GAME_START][SaveForCUI::SHOW] = 0;
+
+	for (int i = CommandSerial::SELECT_IN_FORMATION;
+		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		buttonPosition[i][SaveForCUI::SHOW] = 0;
 	}
 }
 
 void ClickableUserInterface::CloseFormationMenu() {
-	for (int i = CommandSerial::GAME_START; i <= CommandSerial::FORMATION_LEFT;
-		i++) {
+	buttonPosition[CommandSerial::GAME_START][SaveForCUI::SHOW] = 1;
+
+	for (int i = CommandSerial::SELECT_IN_FORMATION;
+		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		buttonPosition[i][SaveForCUI::SHOW] = 1;
 	}
 

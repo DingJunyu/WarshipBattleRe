@@ -27,6 +27,7 @@ public:
 		LoadButtonInGame();
 		LoadStatisticBoard();
 		LoadFormationBoard();
+		LoadFantasyNumbers();
 	}
 
 	/*メモリ回収*/
@@ -109,6 +110,8 @@ public:
 	//弾
 	int *ReferAmmoHandle(int x) { return &ammoHandle[x]; }
 
+	int *ReferFantasyNumber() { return &fantasyNumbers[0]; }
+
 private:
 	/*初期化関数*/
 	void MemorySecure();
@@ -130,6 +133,7 @@ private:
 	void LoadButtonInGame();
 	void LoadStatisticBoard();
 	void LoadFormationBoard();
+	void LoadFantasyNumbers();
 
 	/*機能別メモリ解放関数*/
 	void DeleteShips();
@@ -141,6 +145,7 @@ private:
 	void DeleteButtonInMainMenu();
 	void DeleteButtonInGame();
 	void DeleteStatisticBoard();
+	void DeleteFormationBoard();
 
 	/*船画像データ*/
 	/*参考：DefinedData.h-SerialNumberOfShipHandle*/

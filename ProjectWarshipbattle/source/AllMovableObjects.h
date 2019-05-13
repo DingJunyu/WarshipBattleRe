@@ -15,6 +15,7 @@ public:
 		flyable(Flyable),
 		plane(Plane), alive(true), point(Point), crashable(Crashable) {
 		alive = true;
+		inList = false;
 		radianChangePerFrame = 0;
 		airResistanceActive = false;
 		airResistance = 0.00001;
@@ -47,6 +48,7 @@ public:
 
 	//状態問い合わせ関数
 	bool ReferAlive() { return alive; }//生きる状況確認
+	bool ReferInList() { return inList; }
 	int *ReferGraphHandle() { return pictureHandle; }//画像ハンドル
 
 	//移動関数
@@ -85,7 +87,8 @@ public:
 	void SetWidth(double W) { width = W; }
 	void SetMultiple(double M) { multiple = M; }
 
-	void Killed() { alive = false; }//状態を死亡に設置する
+	void Killed() { alive = false; SetSpeed(0); }//状態を死亡に設置する
+	void PutInList() { inList = true; }
 	void SetSpeed(double Spe);//速度を設置
 	void SetMaxSpeedOnZ(double Speed) { maxSpeedOnZ = Speed; }//最大速度を設置
 	void UnsetPlane() { plane = false; }//飛行機が死んだら普通の飛ぶものに変える
@@ -107,6 +110,7 @@ private:
 	double radianChangePerFrame;
 	double radianOnY;//行く方向(垂直)
 	bool alive;//生きる状態
+	bool inList;
 
 	/*出力値と重量*/
 	double input;
