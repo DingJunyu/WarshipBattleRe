@@ -37,4 +37,4 @@ Release/
 *.app
 
 #log
-Log.txt
+/ProjectWarshipbattle/Log.txt
