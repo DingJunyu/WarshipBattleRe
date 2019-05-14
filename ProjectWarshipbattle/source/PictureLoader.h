@@ -166,6 +166,7 @@ private:
 	/*マップデータ*/
 	/*ハンドル*/
 	int mapHandle;
+	int noiseHandle;
 	/*サイズ*/
 	int mapX;
 	int mapZ;

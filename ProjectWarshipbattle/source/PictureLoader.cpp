@@ -97,6 +97,8 @@ void PictureLoader::LoadSea() {
 	/*海*/
 	mapHandle =
 		LoadGraph("GraphicData/Sea/Sea.jpg");
+	noiseHandle =
+		LoadGraph("GraphicData/Sea/noise.png");
 }
 
 void PictureLoader::LoadUserInterfaceInGame() {
@@ -388,6 +390,7 @@ void PictureLoader::DeleteShips() {
 void PictureLoader::DeleteSea() {
 	/*マップ*/
 	DeleteGraph(mapHandle);
+	DeleteGraph(noiseHandle);
 }
 
 void PictureLoader::DeleteUserInterfaceInGame() {
@@ -403,9 +406,10 @@ void PictureLoader::DeleteUserInterfaceInGame() {
 
 void PictureLoader::DeleteEffect(){
 	/*エフェクト*/
-	for (int i = 0; i < 16; i++) {
-		DeleteGraph(effectHandleList[TypeOfEffect::EXPLOSION][i]);
-		DeleteGraph(effectHandleList[TypeOfEffect::RIPPLE][i]);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 16; j++) {
+			DeleteGraph(effectHandleList[i][j]);
+		}
 	}
 }
 
