@@ -4,36 +4,36 @@ ShipMain::~ShipMain()
 {
 }
 
-void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
-	EffectTemplate ET, SoundLoader *SL) {
-	SetPictureHandle(ShipHandle);
-	SetShadowHandle(SShadowH);
-	//GetDataFromShipdata(ShipNum);
-	thisShipType = ShipNum;
-	MemorySecure();//メモリ確保
-	LoadSound(SL);//音を読み込む
-	FindThosePoint();//あたり判定用ポイントを取得する
-
-	/*あたり判定用ポイントを利用して泡生成ポイントを作る*/
-	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
-	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
-		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
-		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
-			aroundPointPos[i].z, true, 3400, 20, true,
-			0.15, 1.001);
-	}//泡生成ポイントを設置
-
-	for (int i = 0; i < 2; i++) {
-		smokeStartPoint[i] = ET.CopyFromCreateSmoke();//テンプレートからコピーする
-		/*初期化する*/
-		smokeStartPoint[i].InifCoordinate(4, 0, true, 3000, 20, true,
-			0.06, 1.005);
-	}
-	smokeStartPoint[0].InifCoordinate(14, 0, true, 2500, 20, true,
-		0.06, 1.005);
-	smokeStartPoint[1].InifCoordinate(-12, 0, true, 2500, 20, true,
-		0.06, 1.005);
-}
+//void ShipMain::InifThisShip(int *ShipHandle, int *SShadowH, int ShipNum,
+//	EffectTemplate ET, SoundLoader *SL) {
+//	SetPictureHandle(ShipHandle);
+//	SetShadowHandle(SShadowH);
+//	//GetDataFromShipdata(ShipNum);
+//	thisShipType = ShipNum;
+//	MemorySecure();//メモリ確保
+//	LoadSound(SL);//音を読み込む
+//	FindThosePoint();//あたり判定用ポイントを取得する
+//
+//	/*あたり判定用ポイントを利用して泡生成ポイントを作る*/
+//	bubblePointCount = AUTO_SHIP_DATA::AROUND_POINT;
+//	for (int i = 0; i < AUTO_SHIP_DATA::AROUND_POINT; i++) {
+//		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
+//		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
+//			aroundPointPos[i].z, true, 3400, 20, true,
+//			0.15, 1.001,TypeOfEffect::BUBBLE);
+//	}//泡生成ポイントを設置
+//
+//	for (int i = 0; i < 2; i++) {
+//		smokeStartPoint[i] = ET.CopyFromCreateSmoke();//テンプレートからコピーする
+//		/*初期化する*/
+//		smokeStartPoint[i].InifCoordinate(4, 0, true, 3000, 20, true,
+//			0.06, 1.005);
+//	}
+//	smokeStartPoint[0].InifCoordinate(14, 0, true, 2500, 20, true,
+//		0.06, 1.005);
+//	smokeStartPoint[1].InifCoordinate(-12, 0, true, 2500, 20, true,
+//		0.06, 1.005);
+//}
 
 /*ファイル読み込みが失敗したらfalseを戻る*/
 bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
@@ -99,7 +99,7 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 		/*初期化する*/
 		smokeStartPoint[i].InifCoordinate(doubleData[pointer],
 			doubleData[pointer + 1], true, smokeTime, 20, true,
-			0.06, 1.005);
+			0.3, 1.005,TypeOfEffect::SMOKE);
 		pointer += 2;
 	}
 
@@ -163,7 +163,7 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
 		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
 			aroundPointPos[i].z, true, 3400, 20, true,
-			0.15, 1.001);
+			0.15, 1.001,TypeOfEffect::BUBBLE);
 	}//泡生成ポイントを設置
 	
 	return true;

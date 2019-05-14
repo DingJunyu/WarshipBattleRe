@@ -7,10 +7,10 @@ class Effect
 {
 public:
 	Effect();
-	Effect(bool Movable, int continueTime, double Radian,
+	Effect(int Type, bool Movable, int continueTime, double Radian,
 		double TargetRadian, double RadianChangePerFrame, double Speed, double CoordX,
 		double CoordZ, int *GraphicHandle, bool Spread, 
-		double ZoomMutliple, double ZoomRate) : movable(Movable),
+		double ZoomMutliple, double ZoomRate) : type(Type), movable(Movable),
 		timeUp(false), endTime(GetNowCount() + continueTime),
 		radian(Radian), targetRadian(TargetRadian),
 		radianChangePerFrame(RadianChangePerFrame),
@@ -19,6 +19,7 @@ public:
 	{
 		right = rand() % 2;
 		GetGraphSize(*graphicHandle, &graphX, &graphZ);
+		nextFlame = 0;
 	}
 	~Effect();
 
@@ -56,4 +57,7 @@ private:
 	bool spread;//©•ª‚ªŠg‘å‚Å‚«‚é‚©
 	double zoomMutliple;//”{—¦
 	double zoomRate;//ƒtƒŒ[ƒ€‚²‚Æ‚ÌŠg‘å—¦
+
+	int nextFlame;
+	int flame;
 };

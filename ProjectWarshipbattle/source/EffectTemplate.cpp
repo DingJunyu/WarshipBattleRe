@@ -12,9 +12,9 @@ void EffectTemplate::InifEffectTemplate(PictureLoader *PL) {
 }
 
 void EffectTemplate::InifCreateBubble(PictureLoader *PL) {
-	createBubble.Inif(TypeOfEffect::BUBBLE,PL->ReferBubbleHandle());
+	createBubble.Inif(TypeOfEffect::BUBBLE,PL->ReferEffectList(TypeOfEffect::BUBBLE));
 }
 
 void EffectTemplate::InifCreateSmoke(PictureLoader *PL) {
-	createSmoke.Inif(TypeOfEffect::SMOKE, PL->ReferSmokeHandle());
+	createSmoke.Inif(TypeOfEffect::SMOKE, PL->ReferEffectList(TypeOfEffect::SMOKE));
 }

@@ -96,9 +96,7 @@ public:
 	int *ReferUIList(int x) { return &UIList[x]; }
 
 	//エフェクト
-	int *ReferEffectList(int num) { return &effectHandleList[num]; }
-	int *ReferBubbleHandle() { return &bubbleHandle; }
-	int *ReferSmokeHandle() { return &smokeHandle; }
+	int *ReferEffectList(int num) { return &effectHandleList[num][0]; }
 
 	//ボタン
 	int *ReferButtonHandle(int num) { return &buttonHandle[num]; }
@@ -197,9 +195,7 @@ private:
 	int **markForEnemies;
 
 	/*エフェクト*/
-	int effectHandleList[TypeOfEffect::EFFECT_AMOUNT];
-	int bubbleHandle;
-	int smokeHandle;
+	int effectHandleList[TypeOfEffect::EFFECT_AMOUNT][TypeOfEffect::EFFECT_FLAME_AMOUNT];
 
 	//ボタン
 	int *buttonHandle;

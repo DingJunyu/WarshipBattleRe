@@ -23,6 +23,12 @@ void Effect::Draw(int x,int z) {
 	realX = coordX - x - offsetOnX;
 	realZ = coordZ - z - offsetOnZ;
 
+//	if (type == TypeOfEffect::EXPLOSION||type==TypeOfEffect::RIPPLE||
+//		type == TypeOfEffect::SMOKE) {
+		nextFlame = flame % 64;
+		nextFlame /= 4;
+//	}
+
 	/*画面に入る時だけ描画を行う*/
 	if (realX > 0 && realX < Screen::SCREEN_X&&
 		realZ>0 && realZ < Screen::SCREEN_Z) {
@@ -30,8 +36,10 @@ void Effect::Draw(int x,int z) {
 			(int)coordZ - z - (int)offsetOnZ,
 			0, 0,
 			zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
-			*graphicHandle, TRUE, FALSE);
+			*(graphicHandle + nextFlame), TRUE, FALSE);
 	}
+
+	flame++;
 
 	/*テスト用*/
 	/*unsigned int Cr = GetColor(0, 0, 255);

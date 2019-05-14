@@ -2,7 +2,7 @@
 270,HP
 1,SmokePointCount
 3500,SmokeTime
--8,SmokePoint-1-x
+0,SmokePoint-1-x
 0,SmokePoint-1-z
 190,Collision-x
 40,Collision-y

@@ -13,7 +13,7 @@ public:
 
 	/*‘Š‘ÎÀ•WAˆÚ“®‚Å‚«‚é‚©AŒp‘±ŠÔAÅ‘å¶¬”AŠgU‚Å‚«‚é‚©AŠg‘å—¦AŠg‘å—¦‚ÌŠg‘å—¦*/
 	void InifCoordinate(double RCX,double RCZ, bool MA, int CT,int MACPF,
-		bool Spread,double ZoomMutliple,double ZoomRate);
+		bool Spread,double ZoomMutliple,double ZoomRate,int Type);
 
 	void Inif(int ET, int *Handle);
 	void TestDraw(double r, double s, double x, double CX, double CZ);
@@ -33,5 +33,7 @@ private:
 	bool spread;//ŠgU‚Å‚«‚é‚©
 	double zoomMutliple;
 	double zoomRate;
+
+	int type;
 };
 

@@ -149,12 +149,20 @@ void PictureLoader::LoadUserInterfaceInGame() {
 
 void PictureLoader::LoadEffect() {
 	/*エフェクト*/
-	bubbleHandle = LoadGraph(
-		"GraphicData/Effect/Bubble.png");
-	smokeHandle = LoadGraph(
-		"GraphicData/Effect/Smoke.png");
-	effectHandleList[TypeOfEffect::EXPLOSION] = LoadGraph(
-		"GraphicData/Effect/explosion.png");
+	LoadDivGraph("GraphicData/Effect/Bubble.png",
+		16, 16, 1, 64, 64, effectHandleList[TypeOfEffect::BUBBLE]);
+
+	LoadDivGraph("GraphicData/Effect/Smoke.png",
+		16, 16, 1, 64, 64, effectHandleList[TypeOfEffect::SMOKE]);
+
+	LoadDivGraph("GraphicData/Effect/explo.png",
+		16, 16, 1, 64, 64, effectHandleList[TypeOfEffect::EXPLOSION]);
+	
+	LoadDivGraph("GraphicData/Effect/ripple.png",
+		16, 16, 1, 64, 64, effectHandleList[TypeOfEffect::RIPPLE]);
+
+//	effectHandleList[TypeOfEffect::EXPLOSION][0] = LoadGraph(
+//		"GraphicData/Effect/explosion.png");
 }
 
 void PictureLoader::LoadAmmo() {
@@ -395,8 +403,10 @@ void PictureLoader::DeleteUserInterfaceInGame() {
 
 void PictureLoader::DeleteEffect(){
 	/*エフェクト*/
-	DeleteGraph(bubbleHandle);
-	DeleteGraph(smokeHandle);
+	for (int i = 0; i < 16; i++) {
+		DeleteGraph(effectHandleList[TypeOfEffect::EXPLOSION][i]);
+		DeleteGraph(effectHandleList[TypeOfEffect::RIPPLE][i]);
+	}
 }
 
 void PictureLoader::DeleteAmmo() {

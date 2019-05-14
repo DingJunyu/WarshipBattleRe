@@ -138,10 +138,12 @@ enum SerialNumberOfMapObjectHandle {
 };
 
 enum TypeOfEffect {
-	EFFECT_AMOUNT = 3,
+	EFFECT_AMOUNT = 4,
 	EXPLOSION = 0,
 	BUBBLE,
-	SMOKE
+	SMOKE,
+	RIPPLE,
+	EFFECT_FLAME_AMOUNT = 16 
 };
 
 enum TypeOfHord {

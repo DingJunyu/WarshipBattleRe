@@ -18,14 +18,14 @@ Effect EffectPoint::NewEffect(double Radian, double Speed,
 	realX = CoordX - cos(Radian) * newX + sin(Radian) * newZ;
 	realZ = CoordZ - cos(Radian) * newZ - sin(Radian) * newX;
 	/*エフェクトポイントに保存したデータを利用して新しいエフェクトを生成する*/
-	Effect E(movable,continueTime,Radian,Radian,0,Speed,realX,realZ,graphHandle,
+	Effect E(type,movable,continueTime,Radian,Radian,0,Speed,realX,realZ,graphHandle,
 		spread,zoomMutliple, zoomRate);
 	return E;//正しいステータスを持っているエフェクトを返す
 }
 
 /*相対座標、移動できるか、継続時間、最大生成数、拡散できるか、拡大率、拡大率の拡大率*/
 void EffectPoint::InifCoordinate(double RCX, double RCZ, bool MA, int CT,
-	int MACPF,bool Spread, double ZoomMutliple,double ZoomRate) {
+	int MACPF,bool Spread, double ZoomMutliple,double ZoomRate,int Type) {
 	relativeCoordX = RCX;
 	relativeCoordZ = RCZ;
 	movable = MA;
@@ -34,6 +34,7 @@ void EffectPoint::InifCoordinate(double RCX, double RCZ, bool MA, int CT,
 	spread = Spread;
 	zoomMutliple = ZoomMutliple;
 	zoomRate = ZoomRate;
+	type = Type;
 }
 
 /*初期化*/

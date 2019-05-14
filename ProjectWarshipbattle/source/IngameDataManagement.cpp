@@ -352,9 +352,9 @@ void IngameDataManagement::DrawEffectUnderShips() {
 
 /*船の上にあるエフェクトを描く*/
 void IngameDataManagement::DrawEffectBeyondShips() {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 190);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);//透明度を下がる
 	DrawThisList(&smokeList);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 210);//透明度を下がる
 	DrawThisList(&explosionList);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
 }
@@ -638,10 +638,10 @@ void IngameDataManagement::DrawStatisticBoard() {
 			*statisticBoard[StatisticBoard::LOSE], TRUE);
 
 	/*今回のデータを描く*/
-	DxLib::DrawFormatString(400, 110, Cr, "%2.3lf", hitRate);//命中率を表示
-	DxLib::DrawFormatString(400, 220, Cr, "%d", damage);
-	DxLib::DrawFormatString(400, 330, Cr, "%.1lf", alliesFleet[0].ReferDistanceMoved());
-	DxLib::DrawFormatString(400, 440, Cr, "%d", killed);
+	DxLib::DrawFormatString(380, 110, Cr, "%2.3lf", hitRate);//命中率を表示
+	DxLib::DrawFormatString(380, 220, Cr, "%d", damage);
+	DxLib::DrawFormatString(380, 330, Cr, "%.0lf", alliesFleet[0].ReferDistanceMoved());
+	DxLib::DrawFormatString(380, 440, Cr, "%d", killed);
 
 	/*記録を描く*/
 	DxLib::SetFontSize(26);
@@ -1039,17 +1039,20 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 void IngameDataManagement::NewExplosion(Coordinate2D<double> Coord) {
 	/*画像の向きがランダムです*/
 	double radian = (double)(rand() % 180) * 1.0 / 180.0 * MathAndPhysics::PI;
-	Effect effect(false, 500, radian, 0, 0, 0, Coord.x, Coord.z,
+	Effect effect(TypeOfEffect::EXPLOSION,
+		false, 500, radian, 0, 0, 0, Coord.x, Coord.z,
 		PL.ReferEffectList(TypeOfEffect::EXPLOSION), true,
-		0.04 * (double)(rand()%4), 1.05);
+		0.15 * ((double)(rand()%4) + 1), 1.05);
 
 	explosionList.push_back(effect);//生成されたものをリストの後ろに追加する
 }
 
 void IngameDataManagement::NewRipple(double coordX, double coordZ) {
-	Effect ripple(false, 1000, 0, 0, 0, 0, coordX, coordZ,
-		PL.ReferBubbleHandle(), true, 0.3, 1.09);
+	Effect ripple(TypeOfEffect::RIPPLE,
+		false, 600, 0, 0, 0, 0, coordX, coordZ,
+		PL.ReferEffectList(TypeOfEffect::RIPPLE), true, 0.45, 1.09);
 	//砲弾が消失したところに一秒後消すエフェクトを生成する
+
 	rippleList.push_back(ripple);//生成したエフェクトをリストの末に追加する
 }
 
