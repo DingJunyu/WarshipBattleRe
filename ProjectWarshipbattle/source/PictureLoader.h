@@ -10,6 +10,14 @@ public:
 
 	/*初期化関数*/
 	void AllInif() { MemorySecure(); LoadPicture(); }
+	/*初期化関数*/
+	void MemorySecure();
+	void LoadPicture();
+
+	/*メモリ回収*/
+	void FreeMemory();
+	void FreePicture();
+
 	/*メインメニュー用インターフェース*/
 	void InifForMainMenu() {
 		MemorySecure();
@@ -18,7 +26,6 @@ public:
 	}
 	/*ゲーム用インターフェース*/
 	void InifForGame() {
-		MemorySecure();
 		LoadShips();
 		LoadSea();
 		LoadUserInterfaceInGame();
@@ -48,6 +55,7 @@ public:
 		DeleteStatisticBoard();
 		FreeMemory();
 	}
+	void GetGraphSizeForGame();
 
 	//問い合わせ関数
 	//船
@@ -113,13 +121,7 @@ public:
 	int *ReferFantasyNumber() { return &fantasyNumbers[0]; }
 
 private:
-	/*初期化関数*/
-	void MemorySecure();
-	void LoadPicture();
-
-	/*メモリ回収*/
-	void FreeMemory();
-	void FreePicture();
+	
 
 	/*機能別ロード関数*/
 	/*2019.4.9読み込み部分を分解して、使う部分だけをロードするようにしたいです*/

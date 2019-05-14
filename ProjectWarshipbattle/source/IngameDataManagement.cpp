@@ -385,8 +385,27 @@ void IngameDataManagement::DrawLoading() {
 	Cr = GetColor(255, 255, 255);
 	DxLib::SetFontSize(30);
 
-	DrawString((int)(0.85*Screen::SCREEN_X),
-		(int)(0.85*Screen::SCREEN_Z), "LOADING...", Cr);
+	DrawString((int)(0.8*Screen::SCREEN_X),
+		(int)(0.8*Screen::SCREEN_Z), "LOADING...", Cr);
+
+	DxLib::ScreenFlip();
+}
+
+void IngameDataManagement::DrawLoading(int num) {
+	ClearDrawScreen();
+
+	unsigned int Cr;
+	Cr = GetColor(255, 255, 255);
+	DxLib::SetFontSize(30);
+
+	DrawString((int)(0.8*Screen::SCREEN_X),
+		(int)(0.8*Screen::SCREEN_Z), "LOADING...", Cr);
+	DrawFormatString((int)(0.8*Screen::SCREEN_X),
+		(int)(0.85*Screen::SCREEN_Z), Cr, "%d/%d", num, asyncLoadNum);
+	DrawBox(0, (int)(0.9*Screen::SCREEN_Z),
+		(int)((double)num / (double)asyncLoadNum * Screen::SCREEN_X), 
+		(int)(0.95*Screen::SCREEN_Z),
+		Cr, TRUE);
 
 	DxLib::ScreenFlip();
 }
@@ -410,8 +429,8 @@ void IngameDataManagement::FormationBoard() {
 			break;
 
 		if (ans != CommandSerial::NONE_COMMAND) {
-			CUI.SetClickTime();
-			ans -= 60;
+			CUI.SetClickTime();//押す時間を記録する
+			ans -= 60;//番号を記録する
 			if (ans % 2 == 0) {
 				if (ans >= 8 && teamBCount < maxCountInATeam) {
 					teamBCount++;
@@ -850,10 +869,27 @@ void IngameDataManagement::MoveAmmo() {
 /*                    データ関連                    */
 /****************************************************/
 void IngameDataManagement::Inif() {
+
+	PL.MemorySecure();
+
+	SetUseASyncLoadFlag(TRUE);//非同期読み込みを有効化
 	PL.InifForGame();//画像ローダー初期化
+	SL.Inif();//音声ローダー初期化
+	SetUseASyncLoadFlag(FALSE);//非同期読み込みを無効化
+
+	SetDrawScreen(DX_SCREEN_BACK);
+
+	asyncLoadNum = GetASyncLoadNum();
+
+	while (ProcessMessage() == 0) {
+		DrawLoading(asyncLoadNum - GetASyncLoadNum());
+		if(GetASyncLoadNum() ==0)
+			break;
+	}
+
+	PL.GetGraphSizeForGame();
 	UI.InifUI(&PL);//UI初期化
 	ET.InifEffectTemplate(&PL);//エフェクトテンプレート初期化
-	SL.Inif();//音声ローダー初期化
 	CT.Inif(&SL);//キーボードコントローラー初期化
 	CUI.IngameInif(&PL,&SL);//マウスコントローラー初期化
 	InifFormationBoard();
@@ -931,11 +967,13 @@ void IngameDataManagement::CheckTeamStatus() {
 }
 
 void IngameDataManagement::CheckAlliesStatus() {
-	for (auto ship = alliesFleet.begin();
-		ship != alliesFleet.end();
-		ship++) {
-		if (ship->ReferAlive())
-			return;
+	if (alliesFleet[0].ReferAlive()) {//フラグシープが沈むまで戦える
+		for (auto ship = alliesFleet.begin();
+			ship != alliesFleet.end();
+			ship++) {
+			if (ship->ReferAlive())
+				return;
+		}
 	}
 	win = false;//友軍艦隊は全滅されたら負けです
 	TEST_WIN();/*終わる状態を設置*/

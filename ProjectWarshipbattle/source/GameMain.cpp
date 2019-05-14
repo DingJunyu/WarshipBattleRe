@@ -96,23 +96,23 @@ void SingleGame_DeathMatch_Progress() {
 	IngameDataManagement IDM;
 	TeamDeathMatchControl TDMC;
 
-	/*初期化*/
-	IDM.Inif();
-	IDM.FormationBoard();
-//	WaitKey();
-	IDM.FreeFormationBoard();
+	IDM.Inif();//初期化
+	IDM.FormationBoard();//編成画面を描く
+	IDM.FreeFormationBoard();//編成に使ったメモリなどを解放する
 
 	/*ゲームメインプログレス*/
-	while (!TDMC.GameOver(IDM.TeamDestroyed())) {
-		IDM.Update();
-		if (ProcessMessage() == -1)//エラー処理
-			break;
-		if (IDM.ReferEndGame())//他の原因でゲームを終了したっら
-			break;
+	if (ProcessMessage() == 0) {
+		while (!TDMC.GameOver(IDM.TeamDestroyed())) {//一つチームが全滅まで繰り返す
+			IDM.Update();
+			if (ProcessMessage() == -1)//エラー処理
+				break;
+			if (IDM.ReferEndGame())//他の原因でゲームを終了したっら
+				break;
+		}
+		IDM.DrawLoading();//ロード画面を描く
+		/*結果発表*/
+		IDM.DrawStatisticBoard();//統計画面を描く
+		/*メモリ解放*/
 	}
-	IDM.DrawLoading();
-	/*結果発表*/
-	IDM.DrawStatisticBoard();
-	/*メモリ解放*/
 	IDM.Free();
 }

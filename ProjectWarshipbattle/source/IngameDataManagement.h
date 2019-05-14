@@ -47,6 +47,7 @@ public:
 
 	//ロード画面
 	void DrawLoading();
+	void DrawLoading(int num);
 
 
 	void FormationBoard();
@@ -86,18 +87,18 @@ private:
 
 	//描く関数
 	void DrawAll();
-	void TEST_DRAW();
-	void DrawSea();
-	void DrawShips();
-	void DrawShipsShadow();
-	void DrawShipsOnMiniMap();
+	void TEST_DRAW();//デバッグ用データ確認
+	void DrawSea();//海を描く
+	void DrawShips();//船を描く
+	void DrawShipsShadow();//影を描く
+	void DrawShipsOnMiniMap();//ミニマップを描く
 	void DrawPlanes();
-	void DrawAmmo();
+	void DrawAmmo();//弾を描く
 	void DrawBomb();
 	void DrawTorpedo();
-	void DrawThisList(std::list<Effect> *effectList);
-	void DrawEffectUnderShips();
-	void DrawEffectBeyondShips();
+	void DrawThisList(std::list<Effect> *effectList);//一種類のエフェクトを描く
+	void DrawEffectUnderShips();//船の下にあるエフェクトを描く
+	void DrawEffectBeyondShips();//船の上にあるエフェクトを描く
 	void DrawPointOfImpact();
 
 	//移動関数
@@ -201,4 +202,6 @@ private:
 	const int maxCountInATeam = 10;
 	int teamACount = 0;
 	int teamBCount = 0;
+
+	int asyncLoadNum;//非同期読み込む数
 };

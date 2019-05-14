@@ -57,12 +57,11 @@ void PictureLoader::LoadPicture() {
 }
 
 void PictureLoader::LoadShips() {
+
 	/*ÉçÅ[ÉhêÌì¨èÑómäÕ*/
 	shipHandle[4000][SerialNumberOfShipHandle::SHIP_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_TopView/BattleCrusier/BattleCrusier_TopView_00_Lvtzow.png");
-	GetGraphSize(shipHandle[4000][SerialNumberOfShipHandle::SHIP_HANDLE],
-		&shipSizeX, &shipSizeZ);
 	shipHandle[4000][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_Shadow/BattleCrusier/BattleCrusier_Shadow_01_Lvtzow.png");
@@ -91,23 +90,23 @@ void PictureLoader::LoadShips() {
 	shipHandle[5001][SerialNumberOfShipHandle::SHIP_SHADOW_HANDLE] =
 		LoadGraph(
 			"GraphicData/Ship_Shadow/BattleShip/BattleShip_Shadow_01_Dunkerque.png");
+
 }
 
 void PictureLoader::LoadSea() {
 	/*äC*/
 	mapHandle =
 		LoadGraph("GraphicData/Sea/Sea.jpg");
-	GetGraphSize(mapHandle, &mapX, &mapZ);
 }
 
 void PictureLoader::LoadUserInterfaceInGame() {
 	/*UI*/
 	matHandle = LoadGraph(
 		"GraphicData/User_Interface/UI_Mat.jpg");
-	GetGraphSize(matHandle, &matHandleX, &matHandleZ);
+	
 	shipCardMatHandle = LoadGraph(
 		"GraphicData/User_Interface/Ship_Card_Mat.jpg");
-	GetGraphSize(shipCardMatHandle, &shipCardMatHandleX, &shipCardMatHandleZ);
+	
 	UIList[UI_LIST::RADAR] = LoadGraph(
 		"GraphicData/User_Interface/Radar.png");
 	UIList[UI_LIST::FORECAST_BUTTON] = LoadGraph(
@@ -342,6 +341,15 @@ void PictureLoader::LoadFantasyNumbers() {
 		sprintf_s(fileName, 100, "GraphicData//User_Interface//Numbers//%d.png", i);
 		fantasyNumbers[i] = LoadGraph(fileName);
 	}
+}
+
+void PictureLoader::GetGraphSizeForGame() {
+	GetGraphSize(shipHandle[4000][SerialNumberOfShipHandle::SHIP_HANDLE],
+		&shipSizeX, &shipSizeZ);
+	GetGraphSize(mapHandle, &mapX, &mapZ);
+	GetGraphSize(matHandle, &matHandleX, &matHandleZ);
+	GetGraphSize(shipCardMatHandle, &shipCardMatHandleX, &shipCardMatHandleZ);
+
 }
 
 void PictureLoader::FreePicture() {
