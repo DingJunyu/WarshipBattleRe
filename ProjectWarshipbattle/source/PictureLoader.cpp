@@ -141,6 +141,14 @@ void PictureLoader::LoadUserInterfaceInGame() {
 		"GraphicData/User_Interface/Lock.png");
 	UIList[UI_LIST::MY_DIRECT] = LoadGraph(
 		"GraphicData/User_Interface/ShowPlayerDirect.png");
+	UIList[UI_LIST::UI_LOCK_ON] = LoadGraph(
+		"GraphicData/User_Interface/Ready_To_Shoot.png");
+	UIList[UI_LIST::UI_AUTO_FIRE] = LoadGraph(
+		"GraphicData/User_Interface/auto_fire_mark.png");
+	UIList[UI_LIST::CAMERA_ON_ME] = LoadGraph(
+		"GraphicData/User_Interface/camera_target_me.png");
+	UIList[UI_LIST::CAMERA_ON_ENEMY] = LoadGraph(
+		"GraphicData/User_Interface/camera_target_target.png");
 
 	/*ミニマップ*/
 	miniMapMatHandle = LoadGraph(
@@ -276,6 +284,10 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/buttons/change_camera.png");
 	buttonPressedIntheGame[CommandSerial::CHANGE_CAMERA] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/change_camera_pressed.png");
+	buttonIntheGame[CommandSerial::AUTO_FIRE] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/auto_fire.png");
+	buttonPressedIntheGame[CommandSerial::AUTO_FIRE] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/buttons/auto_fire_pressed.png");
 
 	buttonIntheGame[CommandSerial::MENU] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/menu_normal.png");

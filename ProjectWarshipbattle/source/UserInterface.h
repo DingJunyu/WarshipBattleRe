@@ -22,7 +22,8 @@ public:
 	void InifUI(PictureLoader *PL);
 
 	void DrawUI();
-	void DrawUINeedInput(ShipMain *ship);
+	void DrawUINeedInput(ShipMain *ship, bool autoFire,
+		bool changeCamera);
 
 	void DrawUIUnderShip(bool lock,Coordinate2D<double> coord,Camera camera, double radian);
 

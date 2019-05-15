@@ -132,7 +132,8 @@ void IngameDataManagement::ControlThisListShoot(std::vector<ShipMain> *shipList)
 		ship != shipList->end();
 		ship++) {
 		if (ship->ReferAlive() && //¶‚«‚Ä‚¢‚é
-			!ship->ReferControled() &&//ƒvƒŒ[ƒ„[‚Ì‘D‚¶‚á‚È‚¢
+			(!ship->ReferControled()||
+			autoFire) &&//ƒvƒŒ[ƒ„[‚Ì‘D‚¶‚á‚È‚¢‚à‚µ‚­‚ÍƒvƒŒ[ƒ„[‚Í©“®ËŒ‚g‚Á‚Ä‚¢‚È‚¢
 			ship->ReferCanIShoot()) {//ËŒ‚”ÍˆÍ“à‚É‚¢‚é
 			TestShoot(&*ship,false);//ËŒ‚
 		}
@@ -166,7 +167,9 @@ void IngameDataManagement::DrawAll() {
 
 	/*UIŠÖ˜A*/
 	UI.DrawUI();//•’Ê‚ÌUI‚ğ•`‰æ‚·‚é
-	UI.DrawUINeedInput(&*ship);//‘D‚ÌƒXƒe[ƒ^ƒX‚ÉŠÖŒW‚ª‚ ‚éUI‚ğ•`‰æ‚·‚é
+	UI.DrawUINeedInput(&*ship, autoFire,//‘DA©“®ËŒ‚ó‘Ô
+		(alliesFleet[0].fireDataFigureUp.ReferLockOn() && showLock));//ƒJƒƒ‰–Ú•W
+	//‘D‚ÌƒXƒe[ƒ^ƒX‚ÉŠÖŒW‚ª‚ ‚éUI‚ğ•`‰æ‚·‚é
 	DrawShipsOnMiniMap();//ƒ~ƒjƒ}ƒbƒv‚ğ•`‚­
 	/*ƒNƒŠƒbƒN‰Â”\‚ÈUI*/
 	CUI.Draw();//ƒ{ƒ^ƒ“‚ğ•`‚­
@@ -275,8 +278,8 @@ void IngameDataManagement::SinkingShipUpdate(ShipMain *ship) {
 	if (num) {
 		Coordinate2D<double> temp = ship->ReferCoord2D_d();
 
-		temp.x += ship->ReferShipCrashSize().x;
-		temp.z += ship->ReferShipCrashSize().z;
+		temp.x += (ship->ReferShipCrashSize().x/4);
+		temp.z += (ship->ReferShipCrashSize().z/4);
 
 		double randX, randZ;
 
@@ -399,7 +402,7 @@ void IngameDataManagement::DrawSea_New() {
 	DrawGraph((int)MCPOX, (int)MCPOZ, *PL.ReferMapHandle(), TRUE);
 	DrawGraph((int)MCPOX - (int)mapX, (int)MCPOZ, *PL.ReferMapHandle(), TRUE);
 	DrawGraph((int)MCPOX, (int)MCPOZ - (int)mapZ, *PL.ReferMapHandle(), TRUE);
-	DrawGraph((int)MCPOX - (int)mapX, (int)MCPOZ - mapZ, *PL.ReferMapHandle(), TRUE);
+	DrawGraph((int)MCPOX - (int)mapX, (int)MCPOZ - (int)mapZ, *PL.ReferMapHandle(), TRUE);
 }
 
 void IngameDataManagement::DrawMesh_Sea() {
@@ -425,9 +428,9 @@ void IngameDataManagement::DrawMesh_Sea() {
 	if (flameCount >= PL.ReferMapX())
 		flameCount = fmod(flameCount,(double)PL.ReferMapX());
 
-	flameCount += .15;
+	flameCount += .05;
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);//“§–¾“x‚ğ‰º‚ª‚é
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawGraph((int)realX,
 		(int)realZ,
 		*PL.ReferNoiseHandle(), TRUE);
@@ -663,7 +666,9 @@ void IngameDataManagement::InifFormationBoard() {
 }
 
 void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êíó‘Ô‚Éİ’u‚·‚é
-	RegisterTeam();
+	
+	if (ProcessMessage() == 0)
+		RegisterTeam();
 	
 	for (int i = 0; i < 4; i++) {
 		teamA[i].ship.DestroyMemory();
@@ -675,12 +680,15 @@ void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êí
 	std::vector<ShipCard>().swap(teamA);
 	std::vector<ShipCard>().swap(teamB);
 
-	alliesFleet[0].SetControled();//—FŒRŠÍ‘à‚Ìˆê”Ô‚Ì‘€ìŒ ‚ğæ‚é
-	enemyFlagShip = &*enemyFleet.begin();
-	CUI.InifShipList(&enemyFleet, false);
-//	CUI.InifShipList(&alliesFleet, true);
+	if (ProcessMessage() == 0) {
+		alliesFleet[0].SetControled();//—FŒRŠÍ‘à‚Ìˆê”Ô‚Ì‘€ìŒ ‚ğæ‚é
+		enemyFlagShip = &*enemyFleet.begin();
+		CUI.InifShipList(&enemyFleet, false);
+		//	CUI.InifShipList(&alliesFleet, true);
 
-	CUI.CloseFormationMenu();
+		CUI.CloseFormationMenu();
+		FC.Reset();
+	}
 }
 
 void IngameDataManagement::DrawStatisticBoard() {
@@ -873,7 +881,8 @@ void IngameDataManagement::Control() {
 		answer == CommandSerial::MENU ||
 		answer == CommandSerial::TURN_RETURN||
 		answer == CommandSerial::CHANGE_CAMERA ||
-		answer >= CommandSerial::SELECT)
+		answer >= CommandSerial::SELECT||
+		answer == CommandSerial::AUTO_FIRE)
 		if (!CUI.ReferClickable())
 			return;
 
@@ -899,6 +908,7 @@ void IngameDataManagement::Control() {
 		case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*ƒeƒXƒgƒrƒ…[*/
 		case CommandSerial::EXIT:GameOver = true; break;	/*ƒQ[ƒ€I—¹*/
 		case CommandSerial::CHANGE_CAMERA:showLock = !showLock; break;
+		case CommandSerial::AUTO_FIRE:autoFire = !autoFire; break;
 		}
 	}
 
@@ -910,6 +920,7 @@ void IngameDataManagement::Control() {
 			ship->fireDataFigureUp.LockOn_Switch();//ƒƒbƒNó‘Ô‚ğ•ÏX
 			ship->ResetReviseData();//C³ƒf[ƒ^‚ğƒŠƒZƒbƒg
 			CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//‚t‚h‚ğ•ÏX
+			autoFire = false;//©“®ËŒ‚‚ğ–³Œø‰»
 		}
 	}
 }
@@ -1004,12 +1015,13 @@ void IngameDataManagement::Inif() {
 			break;
 	}
 
-	PL.GetGraphSizeForGame();
+	Sleep(10);
+	PL.GetGraphSizeForGame();//‰æ‘œ‚Ì‘å‚«‚³‚ğİ’u‚·‚é
 	UI.InifUI(&PL);//UI‰Šú‰»
 	ET.InifEffectTemplate(&PL);//ƒGƒtƒFƒNƒgƒeƒ“ƒvƒŒ[ƒg‰Šú‰»
 	CT.Inif(&SL);//ƒL[ƒ{[ƒhƒRƒ“ƒgƒ[ƒ‰[‰Šú‰»
 	CUI.IngameInif(&PL,&SL);//ƒ}ƒEƒXƒRƒ“ƒgƒ[ƒ‰[‰Šú‰»
-	InifFormationBoard();
+	InifFormationBoard();//•Ò¬‰æ–Ê‚ğ‰Šú‰»‚·‚é
 
 	/*“Œvƒ{[ƒh[‚Ì‰Šú‰»*/
 	for (int i = StatisticBoard::SB_BACKGROUND;
@@ -1018,7 +1030,7 @@ void IngameDataManagement::Inif() {
 		statisticBoard[i] =
 		PL.ReferStatisticBoardHandle(i);
 
-	InifStatisticBoardData();
+	InifStatisticBoardData();//“Œv‰æ–Ê—pƒf[ƒ^‚ğ‰Šú‰»
 
 	for (int i = 0; i < FormationBoard::FB_NUM; i++) {
 		formationBoard[i] = PL.ReferFormationBoardHandle(i);

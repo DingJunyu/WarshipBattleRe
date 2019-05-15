@@ -1,4 +1,5 @@
 #include "UserInterface.h"
+using namespace DxLib;
 
 UserInterface::~UserInterface()
 {
@@ -11,7 +12,7 @@ void UserInterface::InifUI(PictureLoader *PL) {
 	miniMapMat = PL->ReferMiniMapMatHandle();
 	miniMapPaper = PL->ReferMiniMapPaperHandle();
 
-	for (int i = UI_LIST::RADAR; i <= UI_LIST::MY_DIRECT; i++)
+	for (int i = UI_LIST::RADAR; i <= UI_LIST::CAMERA_ON_ENEMY; i++)
 		handleList[i] = PL->ReferUIList(i);//ハンドルをコピーする
 
 	Coordinate2D<float> coord;
@@ -120,13 +121,20 @@ void UserInterface::DrawUI() {
 		USER_INTERFACE_POSITION::TEXT_BAR_TURRET_MULTI);
 }
 
-void UserInterface::DrawUINeedInput(ShipMain *ship) {
+void UserInterface::DrawUINeedInput(ShipMain *ship, bool autoFire,
+	bool changeCamera) {
 	/*汎用変数*/
 	int graphSizeX, graphSizeZ;//画像サイズ
 	int startX, startZ;//座標
 	unsigned int Cr;//色
 
 	double radian;
+
+	DrawPictureByCenterOnX(changeCamera ? UI_LIST::CAMERA_ON_ENEMY :
+		UI_LIST::CAMERA_ON_ME,
+		0.5, 0, 0.25
+	);
+
 
 	/*ロック使ってない状態*/
 	if (!ship->fireDataFigureUp.ReferLockOn()) {
@@ -162,6 +170,16 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 			radian);
 		lamps[LAMP_LIST::LOCKED].SetOnOrOff(ship->ReferCanIShoot());
 		lamps[LAMP_LIST::LOCKED].Draw();
+		/*射撃可能マーク*/
+		if (ship->ReferCanIShoot()) {
+			DrawPictureByCenter(UI_LIST::UI_LOCK_ON,
+				0.69, 0.69, 0.4);
+		}
+		/**/
+		if (autoFire) {
+			DrawPictureByLeftUp(UI_LIST::UI_AUTO_FIRE,
+				0.84, 0.8, 0.4);
+		}
 	}
 
 	/*砲塔角度指示*/
@@ -224,7 +242,7 @@ void UserInterface::DrawUINeedInput(ShipMain *ship) {
 		radian);
 
 	/*出力指示*/
-	radian = MathAndPhysics::PI * 0.65 +
+	radian = MathAndPhysics::PI * 0.65 + //ここは正しい角度を開始するための角度
 		abs(ship->ReferOutPutRate() / 1.0) *
 		MathAndPhysics::PI * 1.12;//表示範囲を指定し、角度を計算する
 	DrawRotatePicture(UI_LIST::ARROW_RED_2,

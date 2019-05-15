@@ -6,7 +6,6 @@ EffectPoint::EffectPoint()
 
 EffectPoint::~EffectPoint()
 {
-	graphHandle = nullptr;
 }
 
 Effect EffectPoint::NewEffect(double Radian, double Speed, 

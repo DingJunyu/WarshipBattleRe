@@ -24,6 +24,7 @@ enum CommandSerial {
 	FORECAST_PLUS,
 	FORECAST_MINUS,
 	CHANGE_CAMERA,
+	AUTO_FIRE,
 	REVISE_RADIAN_ON_Z_PLUS,
 	REVISE_RADIAN_ON_Z_MINUS,
 	MENU,
@@ -138,7 +139,7 @@ enum SerialNumberOfMapObjectHandle {
 };
 
 enum TypeOfEffect {
-	EFFECT_AMOUNT = 4,
+	EFFECT_AMOUNT = 5,
 	EXPLOSION = 0,
 	BUBBLE,
 	SMOKE,
@@ -153,20 +154,20 @@ enum TypeOfHord {
 };
 
 enum FormationBoard {
-	FB_NUM = 2,
+	FB_NUM = 3,
 	FB_BACKGROUND = 0,
 	FB_SHIP_CARD
 };
 
 enum StatisticBoard {
-	SB_NUM = 3,
+	SB_NUM = 4,
 	SB_BACKGROUND = 0,
 	WIN,
 	LOSE
 };
 
 enum ButtonEvent {
-	BUTTON_AMOUNT = 20,
+	BUTTON_AMOUNT = 30,
 	//メインメニューボタン集
 	NEW_GAME = 0,
 	GAME_OVER,
@@ -176,7 +177,7 @@ enum ButtonEvent {
 };
 
 enum UI_LIST {
-	AMOUNT = 20,
+	AMOUNT = 30,
 
 	RADAR = 0,
 	FORECAST_BUTTON,
@@ -193,7 +194,11 @@ enum UI_LIST {
 	SPEED_PAN,
 	ENGINE_PAN,
 	LOCK_CIRCLE,
-	MY_DIRECT
+	MY_DIRECT,
+	UI_LOCK_ON,
+	UI_AUTO_FIRE,
+	CAMERA_ON_ME,
+	CAMERA_ON_ENEMY
 };
 
 enum LAMP_LIST {

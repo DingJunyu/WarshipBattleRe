@@ -7,6 +7,8 @@ public:
 	IngameDataManagement() :MainCamera(CameraType::MAIN) {
 		TEST_SHOW_ON = false;
 		GameOver = false;
+		GameEnd = false;
+		autoFire = false;
 		counter = 0;
 		shouldIRender = false;
 		showLock = false;
@@ -159,6 +161,7 @@ private:
 
 	/*ゲームコントロール*/
 	bool win;
+	bool autoFire;//プレーヤー自動射撃ボタン
 	void DeleteUseless();
 	void DestroyShips();
 	void DestroyThisTeam(std::vector<ShipMain> *shipList);

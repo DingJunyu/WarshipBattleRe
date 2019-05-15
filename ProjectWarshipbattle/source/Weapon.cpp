@@ -6,8 +6,6 @@ Weapon::Weapon()
 
 Weapon::~Weapon()
 {
-	turrentHandle = nullptr;
-	ammoHandle = nullptr;
 }
 
 Coordinate<double> Weapon::ReferRealCoord(Coordinate<double> Coord, double r) {
