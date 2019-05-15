@@ -32,11 +32,23 @@ void Effect::Draw(int x,int z) {
 	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
 	if (realX > 0 && realX < Screen::SCREEN_X&&
 		realZ>0 && realZ < Screen::SCREEN_Z) {
-		DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
-			(int)coordZ - z - (int)offsetOnZ,
-			0, 0,
-			zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
-			*(graphicHandle + nextFlame), TRUE, FALSE);
+		switch (type) {
+		case TypeOfEffect::BUBBLE:
+		case TypeOfEffect::SMOKE:
+		default:
+			DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
+				(int)coordZ - z - (int)offsetOnZ,
+				0, 0,
+				zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
+				*(graphicHandle + nextFlame), TRUE, FALSE); break;
+		case TypeOfEffect::EXPLOSION:
+		case TypeOfEffect::RIPPLE:
+			DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
+				(int)coordZ - z - (int)offsetOnZ,
+				graphX/2, graphZ/2,
+				zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
+				*(graphicHandle + nextFlame), TRUE, FALSE); break;
+		}
 	}
 
 	flame++;

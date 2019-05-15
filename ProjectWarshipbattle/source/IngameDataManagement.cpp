@@ -24,11 +24,15 @@ void IngameDataManagement::Update() {
 	GetNewEffect();//エフェクトを生成する
 	MoveAll();//移動、状態更新
 
+	SinkingListUpdate();
 
 	CheckTeamStatus();//各艦隊の状態を確認し、一方が殲滅されたらゲーム終了
 
 	DeleteUseless();//入らないものを消す
+	RemoveSinkedShip();
 
+	if (GameEnd)
+		EndTheGame();
 
 	CheckAndPlaySound();
 	DrawAll();//全部更新した後画面を描く
@@ -142,7 +146,8 @@ void IngameDataManagement::DrawAll() {
 	auto ship = alliesFleet.begin();//イテレータで操作している船のステータスを取る
 
 	/*海を描く*/
-	DrawSea();
+	DrawSea_New();
+	DrawMesh_Sea();
 
 	//船の下のエフェクトを描画する
 	DrawEffectUnderShips();
@@ -196,6 +201,13 @@ void IngameDataManagement::DrawShips() {
 			ship->DrawSub(MainCamera);//敵軍は全部相対座標を利用して描く
 		}
 	}
+
+	if (!sinkingShip.empty()) {
+		for (auto ship = sinkingShip.begin();
+			ship != sinkingShip.end(); ship++) {
+			ship->DrawSub(MainCamera);
+		}
+	}
 }
 
 void IngameDataManagement::DrawShipsShadow() {
@@ -218,6 +230,12 @@ void IngameDataManagement::DrawShipsShadow() {
 			ship->DrawSubShadow(MainCamera);//敵軍は全部相対座標を利用して描く
 		}
 	}
+	if (!sinkingShip.empty()) {
+		for (auto ship = sinkingShip.begin();
+			ship != sinkingShip.end(); ship++) {
+			ship->DrawSubShadow(MainCamera);
+		}
+	}
 }
 
 void IngameDataManagement::DrawShipsOnMiniMap() {
@@ -237,6 +255,40 @@ void IngameDataManagement::DrawShipsOnMiniMap() {
 			UI.DrawShipOnTheMap(ship->ReferCoordX(),
 				ship->ReferCoordZ(), true);//赤いマーク
 		}
+	}
+}
+
+void IngameDataManagement::SinkingListUpdate() {
+	if (!sinkingShip.empty()) {
+		for (auto ship = sinkingShip.begin();
+			ship != sinkingShip.end(); ship++) {
+			SinkingShipUpdate(&*ship);
+		}
+	}
+}
+
+void IngameDataManagement::SinkingShipUpdate(ShipMain *ship) {
+	int num = rand() % 2;
+
+	ship->countSinkingFlame();
+
+	if (num) {
+		Coordinate2D<double> temp = ship->ReferCoord2D_d();
+
+		temp.x += ship->ReferShipCrashSize().x;
+		temp.z += ship->ReferShipCrashSize().z;
+
+		double randX, randZ;
+
+		randX = (double)(rand() % (int)ship->ReferShipCrashSize().x);
+		randZ = (double)(rand() % (int)ship->ReferShipCrashSize().z);
+
+		temp.x += cos(ship->ReferRadianOnZ()) * randX -
+			sin(ship->ReferRadianOnZ()) * randZ;
+		temp.z += cos(ship->ReferRadianOnZ()) * randZ +
+			sin(ship->ReferRadianOnZ()) * randX;
+
+		NewExplosion(temp);
 	}
 }
 
@@ -329,6 +381,68 @@ void IngameDataManagement::DrawSea() {
 	}
 }
 
+void IngameDataManagement::DrawSea_New() {
+	double mapX = PL.ReferMapX();
+	double mapZ = PL.ReferMapZ();
+	double MCPOX, MCPOZ;
+
+	if (MainCamera.ReferCameraX() > 0)
+		MCPOX = Screen::SCREEN_X / 2 - abs(MainCamera.ReferPrintOutX(mapX / 2));
+	else
+		MCPOX = Screen::SCREEN_X / 2 + abs(MainCamera.ReferPrintOutX(mapX / 2));
+
+	if (MainCamera.ReferCameraZ() > 0)
+		MCPOZ = Screen::SCREEN_Z / 2 - abs(MainCamera.ReferPrintOutZ(mapZ / 2));
+	else
+		MCPOZ = Screen::SCREEN_Z / 2 + abs(MainCamera.ReferPrintOutZ(mapZ / 2));
+
+	DrawGraph((int)MCPOX, (int)MCPOZ, *PL.ReferMapHandle(), TRUE);
+	DrawGraph((int)MCPOX - (int)mapX, (int)MCPOZ, *PL.ReferMapHandle(), TRUE);
+	DrawGraph((int)MCPOX, (int)MCPOZ - (int)mapZ, *PL.ReferMapHandle(), TRUE);
+	DrawGraph((int)MCPOX - (int)mapX, (int)MCPOZ - mapZ, *PL.ReferMapHandle(), TRUE);
+}
+
+void IngameDataManagement::DrawMesh_Sea() {
+	double mapX = PL.ReferMapX();
+	double mapZ = PL.ReferMapZ();
+
+	double MCPOX;
+	double MCPOZ;
+
+	if (MainCamera.ReferCameraX() > 0)
+		MCPOX = Screen::SCREEN_X / 2 - abs(MainCamera.ReferPrintOutX(mapX / 2));
+	else
+		MCPOX = Screen::SCREEN_X / 2 + abs(MainCamera.ReferPrintOutX(mapX / 2));
+
+	if (MainCamera.ReferCameraZ() > 0)
+		MCPOZ = Screen::SCREEN_Z / 2 - abs(MainCamera.ReferPrintOutZ(mapZ / 2));
+	else
+		MCPOZ = Screen::SCREEN_Z / 2 + abs(MainCamera.ReferPrintOutZ(mapZ / 2));
+
+	double realX = fmod(MCPOX + flameCount, mapX / 2);
+	double realZ = fmod(MCPOZ + flameCount, mapZ / 2);
+
+	if (flameCount >= PL.ReferMapX())
+		flameCount = fmod(flameCount,(double)PL.ReferMapX());
+
+	flameCount += .15;
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);//透明度を下がる
+	DrawGraph((int)realX,
+		(int)realZ,
+		*PL.ReferNoiseHandle(), TRUE);
+	DrawGraph((int)realX - PL.ReferMapX(),
+		(int)realZ,
+		*PL.ReferNoiseHandle(), TRUE);
+	DrawGraph((int)realX,
+		(int)realZ - PL.ReferMapZ(),
+		*PL.ReferNoiseHandle(), TRUE);
+	DrawGraph((int)realX - PL.ReferMapX(),
+		(int)realZ - PL.ReferMapZ(),
+		*PL.ReferNoiseHandle(), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
+}
+
 void IngameDataManagement::DrawThisList(std::list<Effect> *effectList) {
 	if (!effectList->empty())//リスト状況を確認
 		for (auto effect = effectList->begin();
@@ -343,7 +457,7 @@ void IngameDataManagement::DrawThisList(std::list<Effect> *effectList) {
 void IngameDataManagement::DrawEffectUnderShips() {
 	DrawShipsShadow();//船の影を描く
 	/*水泡演出*/
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 30);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//透明度を下がる
 	DrawThisList(&bubbleList);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);//透明度を下がる
 	DrawThisList(&rippleList);
@@ -362,7 +476,7 @@ void IngameDataManagement::DrawEffectBeyondShips() {
 void IngameDataManagement::DrawPointOfImpact() {
 	auto ship = alliesFleet.begin();
 
-	if (!ship->fireDataFigureUp.ReferLockOn())//ロックを使う時に落下地点を描画しません
+//	if (!ship->fireDataFigureUp.ReferLockOn())//ロックを使う時に落下地点を描画しません
 		ship->ShowMePointOfImpact(MainCamera);//使わない時に描画する
 }
 
@@ -739,8 +853,9 @@ void IngameDataManagement::TEST_DRAW() {
 	DrawString(110, 170, CharNum, Cr);
 }
 
-void IngameDataManagement::TEST_WIN() {
-	GameOver = true;
+void IngameDataManagement::EndTheGame() {
+	if (sinkingShip.empty())
+		GameOver = true;
 }
 
 /****************************************************/
@@ -832,12 +947,14 @@ void IngameDataManagement::MoveShips() {
 	for (auto ship = alliesFleet.begin();
 		ship != alliesFleet.end();
 		ship++) {
+		if(ship->ReferAlive())
 		ship->Move();//友軍の船を移動する
 	}
 	if(!enemyFleet.empty())//リスト確認
 	for (auto ship = enemyFleet.begin();
 		ship != enemyFleet.end();
 		ship++) {
+		if (ship->ReferAlive())
 		ship->Move();//敵の船を移動する
 	}
 }
@@ -959,6 +1076,16 @@ void IngameDataManagement::DestroyThisTeam(std::vector<ShipMain> *shipList) {
 	}
 }
 
+void IngameDataManagement::DestroyThisTeam(std::list<ShipMain> *shipList) {
+	if (!shipList->empty()) {
+		for (auto ship = shipList->begin();
+			ship != shipList->end();
+			ship++) {
+			ship->DestroyMemory();//メモリ解放
+		}
+	}
+}
+
 void IngameDataManagement::CheckTeamStatus() {
 	/*友軍の状態を確認する*/
 	CheckAlliesStatus();
@@ -976,7 +1103,7 @@ void IngameDataManagement::CheckAlliesStatus() {
 		}
 	}
 	win = false;//友軍艦隊は全滅されたら負けです
-	TEST_WIN();/*終わる状態を設置*/
+	GameEnd = true;/*終わる状態を設置*/
 }
 
 void IngameDataManagement::CheckEnemyStatus() {
@@ -987,7 +1114,7 @@ void IngameDataManagement::CheckEnemyStatus() {
 			return;
 	}
 	win = true;//敵軍艦隊は全滅されたら負けです
-	TEST_WIN();/*終わる状態を設置*/
+	GameEnd = true;/*終わる状態を設置*/
 }
 
 void IngameDataManagement::CheckAndPlaySound() {
@@ -1011,9 +1138,10 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 			ship != shipList.end();
 			ship++) {
 			if(ship->ReferAlive())
-			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 3 == 0
+			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 10 == 0
 				&& rand() % 100 > ship->ReferSpeedOnZ() * 10) {//一定の速度があれば、確率で生成する
 				//for(int i = 0; i < ship->ReferBubbleCount(); i++)
+//				if (counter % 20 == 0)
 				for (int i = 0; i < ship->ReferBubblePointCount(); i++)
 					//すべてのエフェクトポイントからエフェクトを生成する
 					bubbleList.push_back(ship->NewBubble(i));//リストの末に追加する
@@ -1025,7 +1153,7 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 			if (ship->ReferAlive())
 			if (ship->ReferOutPutRate() != 0) {
 				if ((rand() % 8 < abs(ship->ReferSpeedOnZ()) * 10)
-					&& rand() % 4 == 0) {//確率で生成する
+					&& counter % 10 == 0) {//確率で生成する
 					//for(int i = 0; i < ship->ReferSmokeCount(); i++)
 					for (int i = 0; i < ship->ReferSmokePointCount(); i++)
 						smokeList.push_back(ship->NewSmoke(i));//リストの最後に追加する
@@ -1098,7 +1226,7 @@ void IngameDataManagement::LockAndRefresh() {
 	if (counter >= 60)//60フレームごとにリセットする
 		counter = counter % 60;
 
-	shouldIRender = counter % 20 == 0 ? true : false;//毎秒三回レンダーする
+	shouldIRender = counter % 60 == 0 ? true : false;//毎秒一回レンダーする
 
 	CheckThisTeamLock(&alliesFleet, enemyFleet);
 	CheckThisTeamLock(&enemyFleet, alliesFleet);
@@ -1264,7 +1392,7 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 				NewExplosion(C2D);//当たったところに爆発エフェクトを生成
 				shell->Unusable();//弾が使えなくなる
 				
-				if (shell->ReferSerialNumber() == 1) {
+				if (shell->ReferSerialNumber() == 0) {
 					hitCount++;//ヒット数増加
 					damage += (int)shell->ReferDamage();//ダメージ数増加
 					if (!ship->ReferAlive()) {
@@ -1276,7 +1404,7 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 						killed++;
 					}
 				}
-				if (ship->ReferSerialNumber() == 1)
+				if (ship->ReferSerialNumber() == 0)
 					damageRecieved += (int)shell->ReferDamage();
 				return;
 			}
@@ -1296,9 +1424,25 @@ void IngameDataManagement::CheckTeamA(std::vector<ShipMain> *shipList) {
 			ship != shipList->end();
 			ship++) {
 			if (!ship->ReferAlive()&&!ship->ReferInList()) {
+				/*ここはアドレスをリストに追加したみたい。。。*/
 				sinkingShip.push_back(*ship);//沈んでいるリストに追加する
 				ship->PutInList();
 			}
+		}
+	}
+}
+
+void IngameDataManagement::RemoveSinkedShip() {
+	if (!sinkingShip.empty()) {
+		for (auto ship = sinkingShip.begin();
+			ship != sinkingShip.end();
+			ship++) {
+			if (ship->ReferSinkingEnding()) {
+				/*独立なメモリを使っていません、destroyMemoryはいらない*/
+				ship = sinkingShip.erase(ship);
+			}
+			if (sinkingShip.empty() || ship == sinkingShip.end())
+				break;
 		}
 	}
 }

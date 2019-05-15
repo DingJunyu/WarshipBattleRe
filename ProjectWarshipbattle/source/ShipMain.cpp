@@ -143,7 +143,7 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 			10.0, 10.0,//長さと横の長さ-まだ使っていません
 			0.0, 0.2, 100,//初期角度、ＨＰ（まだ使っていません）
 			50, 12, //装甲値（まだ使っていません）
-			PL->ReferAmmoHandle(0), weaponInitialSpeed, weaponHigh,
+			PL->ReferAmmoHandle(0), (int)weaponInitialSpeed, weaponHigh,
 			serialNumber);
 		MainWeapon[i] = Weapon;
 		MainWeapon[i].SetCoolDownTime(weaponCD);//射撃間隔を設定する
@@ -368,8 +368,8 @@ void ShipMain::TestDraw(double x, double z) {
 }
 
 void ShipMain::MemorySecure() {
-	MainParts = new ShipCrashParts[10];
-	SubParts = new ShipCrashParts[10];
+//	MainParts = new ShipCrashParts[10];
+//	SubParts = new ShipCrashParts[10];
 
 	MainWeapon = new Weapon[10];
 	SubWeapon = new Weapon[10];
@@ -380,8 +380,8 @@ void ShipMain::MemorySecure() {
 
 /*削除前に必ずこの関数を呼び出して！*/
 void ShipMain::DestroyMemory() {
-	delete[] MainParts;
-	delete[] SubParts;
+//	delete[] MainParts;
+//	delete[] SubParts;
 	delete[] MainWeapon;
 	delete[] SubWeapon;
 	delete[] bubbleStartPoint;
@@ -492,6 +492,7 @@ void ShipMain::SetWeaponTest(PictureLoader *PL) {
 	fireControllerMain.InifDistance(MainWeapon[0].ReferMaxRadianOnY(), 0);
 }
 
+
 void ShipMain::ShowMePointOfImpact(Camera camera) {
 	DrawMainPoint(camera);//落下地点を描く
 }
@@ -535,10 +536,10 @@ void ShipMain::CalMainPoint() {
 /*砲弾落下地点を○で表示する*/
 void ShipMain::DrawMainPoint(Camera camera) {
 	Coordinate<double> point = fireControllerMain.ReferAnswer();
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//透明度を下がる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);//透明度を下がる
 	DrawCircleAA((float)(point.x - camera.ReferRealCameraX()),
 		(float)(point.z-camera.ReferRealCameraZ()),
-		15,16,GetColor(255,0,0),0,0.5);
+		70,32,GetColor(52,152,219),0,2.0);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//透明度を下がる
 }
 
@@ -595,11 +596,11 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 	}
 
 	/*左へ回す時*/
-	if (differenceOnZ > 0.03) {
+	if (differenceOnZ > 0.07) {
 		TurnMainWeapon(false);
 	}
 	/*右へ回す時*/
-	else if (differenceOnZ < 0.03) {
+	else if (differenceOnZ < 0.07) {
 		TurnMainWeapon(true);
 	}
 

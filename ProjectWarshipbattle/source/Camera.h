@@ -15,6 +15,8 @@ public:
 	double ReferRealCameraZ() { return realCameraZ; }
 	double ReferPrintOutX(double PS) { return fmod(cameraX, PS); }
 	double ReferPrintOutZ(double PS) { return fmod(cameraZ, PS); }
+	double ReferPrintOutX2(double PS) { return fmod(realCameraX, PS); }
+	double ReferPrintOutZ2(double PS) { return fmod(realCameraZ, PS); }
 
 	void SetCameraX(double CX) { cameraX = CX; }
 	void SetCameraZ(double CZ) { cameraZ = CZ; }

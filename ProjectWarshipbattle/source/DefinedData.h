@@ -258,7 +258,7 @@ namespace BUTTON_POSITION_INGAME {
 	const double TURN_LEFT_Z = .7;
 
 	const double TURN_RETURN_MULTI = .06;
-	const double TURN_RETURN_X = 0.5 - .025;
+	const double TURN_RETURN_X = 0.5 - .027;
 	const double TURN_RETURN_Z = .7;
 
 	const double INCREASE_OUTPUT_MULTI = .06;
@@ -269,9 +269,9 @@ namespace BUTTON_POSITION_INGAME {
 	const double DECREASE_OUTPUT_X = 0.025;
 	const double DECREASE_OUTPUT_Z = 0.86;
 
-	const double CHANGE_CAMERA_MULTI = .06;
-	const double CHANGE_CAMERA_X = 0.72;
-	const double CHANGE_CAMERA_Z = 0.82;
+	const double CHANGE_CAMERA_MULTI = .4;
+	const double CHANGE_CAMERA_X = 0.83;
+	const double CHANGE_CAMERA_Z = .6;
 
 	const double SHIP_MARK_MULTI = .13;
 	const double SHIP_MARK_LEFT_X = .002;

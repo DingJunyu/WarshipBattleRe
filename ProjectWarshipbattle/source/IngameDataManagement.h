@@ -10,6 +10,7 @@ public:
 		counter = 0;
 		shouldIRender = false;
 		showLock = false;
+		flameCount = 0;
 	}
 	~IngameDataManagement();
 
@@ -81,14 +82,17 @@ private:
 	void ControlThisListShoot(std::vector<ShipMain> *shipList);
 
 	/*描画処理関連*/
-	long long counter;//60までカウントする
+	int counter;//60までカウントする
+	double flameCount;
 	bool shouldIRender;//探索状況更新スイッチ
 	bool showLock;
 
 	//描く関数
 	void DrawAll();
 	void TEST_DRAW();//デバッグ用データ確認
-	void DrawSea();//海を描く
+	void DrawSea();//海を描く//九枚を描くため、効率が低いになって、もう使わない
+	void DrawSea_New();//新しい四枚描くバージョン
+	void DrawMesh_Sea();
 	void DrawShips();//船を描く
 	void DrawShipsShadow();//影を描く
 	void DrawShipsOnMiniMap();//ミニマップを描く
@@ -109,6 +113,8 @@ private:
 	void MoveAmmo();
 	void CheckShipListStatus(std::vector<ShipMain> *shipList);
 	void CheckShipsStatus();//船の状態を更新する
+	void SinkingListUpdate();
+	void SinkingShipUpdate(ShipMain *ship);
 
 	//コントロール関数
 	void Control();
@@ -117,6 +123,7 @@ private:
 	bool TEST_SHOW_ON;//デバッグ画面を起用するか
 	void SIMPLE_USER_INTERFACE();//ステータスを文字にして表示する
 	bool GameOver;//ゲーム終了マーク
+	bool GameEnd;
 
 	//あたり判定など
 	void CrashDecision();//あたり判定-船と船の間
@@ -126,6 +133,7 @@ private:
 	void CheckThisTeamDecision(std::vector<ShipMain> *shipList, Ammo *shell);//このチームと弾リストの間にあたり判定を行う
 	void RemoveDestroyedShip();//沈んだ船を消す
 	void CheckTeamA(std::vector<ShipMain> *teashipListm);//沈んだ船を沈む演出リストに追加する
+	void RemoveSinkedShip();
 
 	//弾管理
 	void TestShoot(ShipMain *ship,bool me);
@@ -154,10 +162,11 @@ private:
 	void DeleteUseless();
 	void DestroyShips();
 	void DestroyThisTeam(std::vector<ShipMain> *shipList);
+	void DestroyThisTeam(std::list<ShipMain> *shipList);
 	void CheckTeamStatus();
 	void CheckAlliesStatus();
 	void CheckEnemyStatus();
-	void TEST_WIN();
+	void EndTheGame();
 
 	void DrawFormationBoard();
 	void InifFormationBoard();
@@ -199,7 +208,7 @@ private:
 	std::vector<ShipCard> teamA;
 	std::vector<ShipCard> teamB;
 
-	const int maxCountInATeam = 10;
+	const int maxCountInATeam = 6;
 	int teamACount = 0;
 	int teamBCount = 0;
 

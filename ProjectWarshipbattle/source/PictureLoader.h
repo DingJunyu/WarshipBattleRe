@@ -77,6 +77,7 @@ public:
 	int ReferMapZ() { return mapZ; }
 
 	int *ReferMapHandle() { return &mapHandle; }
+	int *ReferNoiseHandle() { return &noiseHandle; }
 
 	int *ReferStatisticBoardHandle(int x) { return &statisticBoardHandle[x]; }
 	int *ReferFormationBoardHandle(int x) { return &formationBoardHandle[x]; }

@@ -30,6 +30,8 @@ public:
 		shipMainCrash = { 180, 40, 18 };
 		controled = false;
 		canIShoot = false;
+
+		flameAfterSink = 0;
 	}
 	~ShipMain();
 
@@ -46,6 +48,10 @@ public:
 	void DestroyMemory();
 	void SetWeaponTest(PictureLoader *PL);
 	void SetWeapon();
+
+	//沈む演出関連
+	bool ReferSinkingEnding() { return flameAfterSink == sinkingFlame; }
+	void countSinkingFlame() { flameAfterSink++; }
 
 	//データ操作関数
 	void SetSerialNumber(int x) { serialNumber = x; }
@@ -256,4 +262,7 @@ private:
 
 	double distance;
 	double targetRadianOnZforMain;
+
+	const int sinkingFlame = 900;
+	int flameAfterSink;
 };
