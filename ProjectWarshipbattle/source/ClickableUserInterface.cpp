@@ -25,7 +25,7 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 	MemorySecure(CommandSerial::COUNT);
 	BC.InifForUserInterface(PL);
 
-	for (int i = CommandSerial::INCREASE_OUTPUT; 
+	for (int i = CommandSerial::TEST_VIEW_ON;
 		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		for (int j = 0; j < 6; j++)
 			buttonPosition[i][j] = 1;
