@@ -23,6 +23,7 @@ public:
 		returnToCenter = false;
 
 		forecastSeconds = 0;
+		reviseRadianOnY = 0;
 		reviseRadianOnZ = 0;
 
 		/*テスト部分*/
@@ -92,9 +93,10 @@ public:
 	/*ロックオンの状態の操作*/
 	void ChangeForecastSecond(bool up);
 	void ChangeReviseRadianOnY(bool up);
+	void ChangeReviseRadianOnZ(bool right);
 	void ResetReviseData() {
 		forecastSeconds = 0;
-		reviseRadianOnZ = 0;
+		reviseRadianOnY = 0;
 	}
 
 	//問い合わせ
@@ -166,7 +168,7 @@ public:
 	void ShowMePointOfImpact(Camera camera);
 
 
-	void TestLock(ShipMain *ship,bool render);
+	void LockAndAim(ShipMain *ship,bool render);
 
 	/*ロック*/
 	Lock fireDataFigureUp;
@@ -254,8 +256,10 @@ private:
 	const int maxForecastSecond = 15;
 	int forecastSeconds;//何秒後の位置を推測したい
 	Coordinate2D<double> nextPos;
+	double reviseRadianOnY;
 	double reviseRadianOnZ;
-	const double maxReviseRadianOnZ = MathAndPhysics::PI * (15.0 / 180.0);
+	const double maxreviseRadianOnY = MathAndPhysics::PI * (15.0 / 180.0);
+	const double maxReviseRadianOnZ = MathAndPhysics::OneDegreeRadian * 30;
 
 	void CalNextPos(ShipMain *ship);
 	void CalDistance(ShipMain *ship);

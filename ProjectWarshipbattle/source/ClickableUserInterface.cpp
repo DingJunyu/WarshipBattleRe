@@ -27,8 +27,7 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 
 	for (int i = CommandSerial::TEST_VIEW_ON;
 		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
-		for (int j = 0; j < 6; j++)
-			buttonPosition[i][j] = 1;
+			buttonPosition[i][SaveForCUI::SHOW] = 1;
 	}
 
 	/*メニュー部分*/
@@ -36,8 +35,8 @@ void ClickableUserInterface::IngameInif(PictureLoader *PL, SoundLoader *SL) {
 		BUTTON_POSITION_INGAME::MENU_Z, BUTTON_POSITION_INGAME::MENU_MULTI);
 	SetThisOne(CommandSerial::CONTINUE, BUTTON_POSITION_INGAME::CONTINUE_X,
 		BUTTON_POSITION_INGAME::CONTINUE_Z, BUTTON_POSITION_INGAME::CONTINUE_MULTI);
-	SetThisOne(CommandSerial::SETTING, BUTTON_POSITION_INGAME::SETTING_X,
-		BUTTON_POSITION_INGAME::SETTING_Z, BUTTON_POSITION_INGAME::SETTING_MULTI);
+	/*SetThisOne(CommandSerial::SETTING, BUTTON_POSITION_INGAME::SETTING_X,
+		BUTTON_POSITION_INGAME::SETTING_Z, BUTTON_POSITION_INGAME::SETTING_MULTI);*/
 	SetThisOne(CommandSerial::EXIT, BUTTON_POSITION_INGAME::EXIT_X,
 		BUTTON_POSITION_INGAME::EXIT_Z, BUTTON_POSITION_INGAME::EXIT_MULTI);
 
@@ -183,8 +182,22 @@ void ClickableUserInterface::SetThisOne(int num, double x, double z, double mt) 
 }
 
 void ClickableUserInterface::Draw() {
+	/*標準ボタン*/
 	for (int i = CommandSerial::INCREASE_OUTPUT;
-		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
+		i <= CommandSerial::MINUS; i++) {
+		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
+			BC.buttonContainer[i].DrawThisButton();
+	}
+	/*敵選択ボタン*/
+	for (int i = CommandSerial::SELECT;
+		i <= CommandSerial::SELECT + CommandSerial::SELECT_RANGE * 2;
+		i++) {
+		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
+			BC.buttonContainer[i].DrawThisButton();
+	}
+	/*編成ボタン*/
+	for (int i = CommandSerial::SELECT_IN_FORMATION;
+		i < CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		if (buttonPosition[i][SaveForCUI::SHOW] == 0)
 			BC.buttonContainer[i].DrawThisButton();
 	}

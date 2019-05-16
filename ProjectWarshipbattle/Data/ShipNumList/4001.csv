@@ -8,9 +8,9 @@
 40,Collision-y
 18,Collision-z
 28000,Mass
-38,Engine_MaxOutput
-1.3,Engine_bIncRate
-1.1,MaxSpeed
+42,Engine_MaxOutput
+1.5,Engine_bIncRate
+0.75,MaxSpeed
 2200,WeaponCoolDown
 3,WeaponDamage
 20,WeaponHigh

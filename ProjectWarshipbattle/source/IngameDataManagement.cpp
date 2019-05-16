@@ -894,16 +894,20 @@ void IngameDataManagement::Control() {
 	if (answer == CommandSerial::NONE_COMMAND)
 		return;
 
-	/*船を操作*/
 	auto ship = alliesFleet.begin();
-	ship->ControlThisShip(answer);
+
+	/*船を操作*/
+	if (ship->ReferAlive()) {
+		ship->ControlThisShip(answer);
+	}
 
 	CUI.SetClickTime();//クリックした時間を記録する
 	
 	/*select以前のコマンドの処理*/
 	if (answer < CommandSerial::SELECT) {
 		switch (answer) {
-		case CommandSerial::SHOOT:TestShoot(&alliesFleet[0],true); break;/*射撃*/
+		case CommandSerial::SHOOT:if(alliesFleet[0].ReferAlive()) 
+			TestShoot(&alliesFleet[0],true); break;/*射撃*/
 		case CommandSerial::MENU:CUI.LetMeSeeMenu();break;/*メニュー状態変更*/
 		case CommandSerial::TEST_VIEW_ON:TEST_SHOW_ON = !TEST_SHOW_ON; break;	/*テストビュー*/
 		case CommandSerial::EXIT:GameOver = true; break;	/*ゲーム終了*/
@@ -1253,7 +1257,7 @@ void IngameDataManagement::CheckThisTeamLock(std::vector<ShipMain> *shipList,
 			ship++) {
 			if(ship->ReferAlive())
 			if (ship->fireDataFigureUp.ReferLockOn()) {//もしロックは使っていれば
-				ship->TestLock(&enemyList[ship->fireDataFigureUp.ReferTarget()],
+				ship->LockAndAim(&enemyList[ship->fireDataFigureUp.ReferTarget()],
 					shouldIRender);//選んだ敵をロックする
 				//船２を目標にしてロックする
 			}

@@ -232,9 +232,9 @@ void UserInterface::DrawUINeedInput(ShipMain *ship, bool autoFire,
 		radian);
 
 	/*‘¬“xŽwŽ¦*/
-	radian = MathAndPhysics::PI * 0.65 +
+	radian = MathAndPhysics::PI * 0.65 +//‚Í‚¶‚ß‚ÌˆÊ’u
 		(ship->ReferSpeedOnZ() / MathAndPhysics::MAX_SPEED_FOR_SHIP) *
-		MathAndPhysics::PI * 1.35;
+		MathAndPhysics::PI * 1.35 * 1.5;
 	DrawRotatePicture(UI_LIST::ARROW_WHITE,
 		USER_INTERFACE_POSITION::ARROW_WHITE_SPEED_X,
 		USER_INTERFACE_POSITION::ARROW_WHITE_SPEED_Z,

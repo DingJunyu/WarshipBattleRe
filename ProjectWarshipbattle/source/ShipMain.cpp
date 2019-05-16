@@ -253,7 +253,7 @@ void ShipMain::SetEngineOutPutRate(bool up) {
 	if (up&&currentEngineOutPutRate < 1.0f) {//範囲内であれば
 		currentEngineOutPutRate += 0.25f;	//増加する
 	}
-	if (!up&&currentEngineOutPutRate > -0.25f) {//範囲内であれば
+	if (!up&&currentEngineOutPutRate > -0.5f) {//範囲内であれば
 		currentEngineOutPutRate -= 0.25f; //減少する
 	}
 	mainEngine.SetOutPutPercentage(currentEngineOutPutRate);//今の出力を与える
@@ -316,8 +316,8 @@ void ShipMain::ControlThisShip(int Command) {;
 	case CommandSerial::TURRET_TURN_LEFT:TurnMainWeapon(false); break;
 	case CommandSerial::TURRET_PULLUP:PullMainWeapon(true); break;
 	case CommandSerial::TURRET_PULLDOWN:PullMainWeapon(false); break;
-	case CommandSerial::FORECAST_PLUS:ChangeForecastSecond(true); break;
-	case CommandSerial::FORECAST_MINUS:ChangeForecastSecond(false); break;
+	case CommandSerial::FORECAST_PLUS:ChangeReviseRadianOnZ(true); break;
+	case CommandSerial::FORECAST_MINUS:ChangeReviseRadianOnZ(false); break;
 	case CommandSerial::REVISE_RADIAN_ON_Z_PLUS:ChangeReviseRadianOnY(true); break;
 	case CommandSerial::REVISE_RADIAN_ON_Z_MINUS:ChangeReviseRadianOnY(false); break;
 	}
@@ -558,13 +558,12 @@ void ShipMain::ChangeForecastSecond(bool up) {
 }
 
 /*ロック管理*/
-void ShipMain::TestLock(ShipMain *ship, bool render) {
+void ShipMain::LockAndAim(ShipMain *ship, bool render) {
 
 	if (forecastSeconds == 0)
 		CalDistance(ship);//距離を計算する
 	else
 		CalNextPos(ship);
-
 
 	//目標ラジアン
 	double differenceOnY;
@@ -578,12 +577,13 @@ void ShipMain::TestLock(ShipMain *ship, bool render) {
 		//予測を使う時は予測地点を使う、使わない時は敵の座標を使う
 		ReferCoord2D_d(),
 		MainWeapon[0].ReferRadianOnZ() + ReferRadianOnZ());
+	differenceOnZ += reviseRadianOnZ;//修正データを加算する
 
 	/*垂直角度の計算・修正*/
 	targetRadianForMain = fireControllerMain.CalDistanceAndTellMeRadianOnY(distance)
 		+ fireDataFigureUp.Refercorrection().y;
 
-	differenceOnY = MainWeapon[0].ReferRadianOnY() + reviseRadianOnZ
+	differenceOnY = MainWeapon[0].ReferRadianOnY() + reviseRadianOnY
 		- targetRadianForMain;
 
 	/*メイン武器の調整*/
@@ -619,9 +619,20 @@ void ShipMain::CalNextPos(ShipMain *ship) {
 	distance = Distance2D(nextPos, ReferCoord2D_d());
 }
 
+/*距離修正データ*/
 void ShipMain::ChangeReviseRadianOnY(bool up) {
-	if (reviseRadianOnZ <= maxReviseRadianOnZ && !up)
-		reviseRadianOnZ += MathAndPhysics::PI * MathAndPhysics::OneDegree * 0.25;
-	if (reviseRadianOnZ >= -maxReviseRadianOnZ && up)
-		reviseRadianOnZ -= MathAndPhysics::PI * MathAndPhysics::OneDegree * 0.25;
+	if (reviseRadianOnY <= maxreviseRadianOnY && !up)
+		reviseRadianOnY += MathAndPhysics::OneDegreeRadian * 0.25;
+	if (reviseRadianOnY >= -maxreviseRadianOnY && up)
+		reviseRadianOnY -= MathAndPhysics::OneDegreeRadian * 0.25;
+}
+
+/*角度修正データ*/
+void ShipMain::ChangeReviseRadianOnZ(bool right) {
+	if (reviseRadianOnZ <= maxReviseRadianOnZ && !right) {
+		reviseRadianOnZ += MathAndPhysics::OneDegreeRadian * 0.5;
+	}
+	if (maxReviseRadianOnZ >= -maxReviseRadianOnZ && right) {
+		reviseRadianOnZ -= MathAndPhysics::OneDegreeRadian * 0.5;
+	 }
 }

@@ -297,10 +297,10 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/buttons/continue_normal.png");
 	buttonPressedIntheGame[CommandSerial::CONTINUE] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/continue_pressed.png");
-	buttonIntheGame[CommandSerial::SETTING] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/buttons/option_normal.png");
-	buttonPressedIntheGame[CommandSerial::SETTING] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/buttons/option_pressed.png");
+	//buttonIntheGame[CommandSerial::SETTING] = LoadGraph(
+	//	"GraphicData/Interactive_User_Interface/buttons/option_normal.png");
+	//buttonPressedIntheGame[CommandSerial::SETTING] = LoadGraph(
+	//	"GraphicData/Interactive_User_Interface/buttons/option_pressed.png");
 	buttonIntheGame[CommandSerial::EXIT] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/buttons/endgame_normal.png");
 	buttonPressedIntheGame[CommandSerial::EXIT] = LoadGraph(

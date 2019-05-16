@@ -109,7 +109,7 @@
     <ProjectGuid>{8FF90C4A-0D31-4323-ADFB-069AB1E9C3F3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ProjectWarshipbattle</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
