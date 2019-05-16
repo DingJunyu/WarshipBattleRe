@@ -49,7 +49,9 @@ enum CommandSerial {
 
 	SELECT_RANGE = 10,
 
-	SELECT_IN_FORMATION = 60//ï“ê¨óp
+	SELECT_IN_FORMATION = 60,//ï“ê¨óp
+
+	EXIT_IN_FORMATION = 76
 };
 
 //CUIÇÃíÜÇ…ï€ë∂Ç≥ÇÍÇΩÇ‡ÇÃÇ∆ÇªÇÃî‘çÜ
@@ -154,9 +156,10 @@ enum TypeOfHord {
 };
 
 enum FormationBoard {
-	FB_NUM = 3,
+	FB_NUM = 4,
 	FB_BACKGROUND = 0,
-	FB_SHIP_CARD
+	FB_SHIP_CARD,
+	FB_FLAG
 };
 
 enum StatisticBoard {
@@ -232,7 +235,7 @@ namespace BUTTON_POSITION_INGAME {
 
 	const double EXIT_MULTI = .08;
 	const double EXIT_X = .85;
-	const double EXIT_Z = .20;
+	const double EXIT_Z = .14;
 
 	const double SHOOT_MULTI = .06;
 	const double SHOOT_X = .63;
@@ -384,6 +387,9 @@ struct CrashSize3d {
 /*2Dç¿ïWï€ë∂*/
 template <typename T>
 struct Coordinate2D {
+	Coordinate2D() { x = 0; z = 0; }
+	Coordinate2D(T X, T Z) : x(X), z(Z) {}
+
 	T x;
 	T z;
 
@@ -445,6 +451,10 @@ namespace MathAndPhysics {
 
 	const double ShipCardRate = 0.2;
 	const double FantasyNumRate = 0.2;
+}
+
+namespace TIME_NEEDED {
+	const int ONE_MINUTE = 60000;
 }
 
 namespace GameDefine {

@@ -2,6 +2,8 @@
 
 AllMovableObjects::~AllMovableObjects()
 {
+	pictureHandle = nullptr;
+	shadowHandle = nullptr;
 }
 
 void AllMovableObjects::Move() {

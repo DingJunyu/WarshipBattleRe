@@ -14,7 +14,7 @@ public:
 		timeUp(false), endTime(GetNowCount() + continueTime),
 		radian(Radian), targetRadian(TargetRadian),
 		radianChangePerFrame(RadianChangePerFrame),
-		speed(Speed), coordX(CoordX), coordZ(CoordZ), graphicHandle(GraphicHandle),
+		speed(Speed), coord(CoordX,CoordZ), graphicHandle(GraphicHandle),
 		spread(Spread), zoomMutliple(ZoomMutliple), zoomRate(ZoomRate)
 	{
 		right = rand() % 2;
@@ -24,6 +24,7 @@ public:
 	~Effect();
 
 	void Draw(int x, int z);
+	void DrawMark(Coordinate2D<int> Coord);//命中などを描く時に使う描画方式
 	void Move();
 
 	//時間に過ぎたら消す
@@ -41,15 +42,15 @@ private:
 	double radian;//ラジアン
 	double targetRadian;//目標ラジアン
 	double radianChangePerFrame;//毎フレームの変更角度
-	double coordX;
-	double coordZ;
+	Coordinate2D<double> coord;
+
 	double speed;//移動速度
 	bool right;//右に移動するか
 	//画像データ
 	int *graphicHandle;
 	int graphX;
 	int graphZ;
-	int *animationHandle;
+
 	//消失時間
 	int endTime;
 	bool timeUp;

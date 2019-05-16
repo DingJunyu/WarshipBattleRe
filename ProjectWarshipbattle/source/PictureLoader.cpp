@@ -355,6 +355,8 @@ void PictureLoader::LoadFormationBoard() {
 		"GraphicData/Back_Ground/team_menu.jpg");
 	formationBoardHandle[FormationBoard::FB_SHIP_CARD] = LoadGraph(
 		"GraphicData/Back_Ground/Ship_Card.png");
+	formationBoardHandle[FormationBoard::FB_FLAG] = LoadGraph(
+		"GraphicData/Back_Ground/flag.png");
 }
 
 void PictureLoader::LoadFantasyNumbers() {

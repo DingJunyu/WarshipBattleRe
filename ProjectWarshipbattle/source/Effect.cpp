@@ -20,14 +20,13 @@ void Effect::Draw(int x,int z) {
 	double realX, realZ;
 
 	/*カメラの座標と偏移と今の座標を合わせて、書くべきところの座標を計算する*/
-	realX = coordX - x - offsetOnX;
-	realZ = coordZ - z - offsetOnZ;
+	realX = coord.x - x - offsetOnX;
+	realZ = coord.z - z - offsetOnZ;
 
-//	if (type == TypeOfEffect::EXPLOSION||type==TypeOfEffect::RIPPLE||
-//		type == TypeOfEffect::SMOKE) {
-		nextFlame = flame % 64;
-		nextFlame /= 4;
-//	}
+	/*アニメーションコントロール*/
+	nextFlame = flame % 64;
+	nextFlame /= 4;
+
 
 	/*画面に入る時だけ描画を行う*/
 	if (realX > 0 && realX < Screen::SCREEN_X&&
@@ -36,15 +35,15 @@ void Effect::Draw(int x,int z) {
 		case TypeOfEffect::BUBBLE:
 		case TypeOfEffect::SMOKE:
 		default:
-			DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
-				(int)coordZ - z - (int)offsetOnZ,
+			DrawRotaGraph3((int)coord.x - x - (int)offsetOnX,
+				(int)coord.z - z - (int)offsetOnZ,
 				0, 0,
 				zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
 				*(graphicHandle + nextFlame), TRUE, FALSE); break;
 		case TypeOfEffect::EXPLOSION:
 		case TypeOfEffect::RIPPLE:
-			DrawRotaGraph3((int)coordX - x - (int)offsetOnX,
-				(int)coordZ - z - (int)offsetOnZ,
+			DrawRotaGraph3((int)coord.x - x - (int)offsetOnX,
+				(int)coord.z - z - (int)offsetOnZ,
 				graphX/2, graphZ/2,
 				zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
 				*(graphicHandle + nextFlame), TRUE, FALSE); break;
@@ -55,7 +54,13 @@ void Effect::Draw(int x,int z) {
 
 	/*テスト用*/
 	/*unsigned int Cr = GetColor(0, 0, 255);
-	DrawPixel(coordX - x, coordZ - z, Cr);*/
+	DrawPixel(coord.x - x, coord.z - z, Cr);*/
+}
+
+void Effect::DrawMark(Coordinate2D<int> Coord) {
+	DrawExtendGraph((int)coord.x,(int)coord.z,
+		(int)(coord.x+graphX*zoomMutliple),(int)(coord.z+graphZ*zoomMutliple),
+		*graphicHandle,TRUE);
 }
 
 void Effect::Check() {
@@ -89,6 +94,6 @@ void Effect::Move() {
 		radian -= (double)((rand() % 2) / 180.0f) * MathAndPhysics::PI;
 
 	//移動する
-	coordX += cos(radian)*speed;
-	coordZ += sin(radian)*speed;
+	coord.x += cos(radian)*speed;
+	coord.z += sin(radian)*speed;
 }

@@ -1,6 +1,7 @@
 #include "ButtonCollection.h"
 
 ButtonCollection::~ButtonCollection(){
+	buttonContainer = nullptr;
 }
 
 //メインメニュー用初期化
@@ -33,7 +34,7 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 			PL->ReferButtonIntheGame(CommandSerial::SELECT));
 	}
 	for (int i = CommandSerial::SELECT_IN_FORMATION;
-		i <= CommandSerial::SELECT_IN_FORMATION + 16; i++) {
+		i < CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		if (i % 2 == 0)
 			buttonContainer[i].Inif(
 				PL->ReferButtonIntheGame(CommandSerial::PLUS),
@@ -43,6 +44,9 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 				PL->ReferButtonIntheGame(CommandSerial::MINUS),
 				PL->ReferButtonPressedIntheGame(CommandSerial::MINUS));
 	}
+	buttonContainer[CommandSerial::EXIT_IN_FORMATION].Inif(
+		PL->ReferButtonIntheGame(CommandSerial::EXIT),
+		PL->ReferButtonPressedIntheGame(CommandSerial::EXIT));
 }
 
 //メモリ解放

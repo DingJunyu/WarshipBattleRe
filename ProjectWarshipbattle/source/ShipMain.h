@@ -267,6 +267,6 @@ private:
 	double distance;
 	double targetRadianOnZforMain;
 
-	const int sinkingFlame = 900;
+	const int sinkingFlame = 360;
 	int flameAfterSink;
 };

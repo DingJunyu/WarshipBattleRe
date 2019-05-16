@@ -622,17 +622,17 @@ void ShipMain::CalNextPos(ShipMain *ship) {
 /*距離修正データ*/
 void ShipMain::ChangeReviseRadianOnY(bool up) {
 	if (reviseRadianOnY <= maxreviseRadianOnY && !up)
-		reviseRadianOnY += MathAndPhysics::OneDegreeRadian * 0.25;
+		reviseRadianOnY += MathAndPhysics::OneDegreeRadian * 0.15;
 	if (reviseRadianOnY >= -maxreviseRadianOnY && up)
-		reviseRadianOnY -= MathAndPhysics::OneDegreeRadian * 0.25;
+		reviseRadianOnY -= MathAndPhysics::OneDegreeRadian * 0.15;
 }
 
 /*角度修正データ*/
 void ShipMain::ChangeReviseRadianOnZ(bool right) {
 	if (reviseRadianOnZ <= maxReviseRadianOnZ && !right) {
-		reviseRadianOnZ += MathAndPhysics::OneDegreeRadian * 0.5;
+		reviseRadianOnZ += MathAndPhysics::OneDegreeRadian * 0.2;
 	}
 	if (maxReviseRadianOnZ >= -maxReviseRadianOnZ && right) {
-		reviseRadianOnZ -= MathAndPhysics::OneDegreeRadian * 0.5;
+		reviseRadianOnZ -= MathAndPhysics::OneDegreeRadian * 0.2;
 	 }
 }

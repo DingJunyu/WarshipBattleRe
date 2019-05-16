@@ -1,6 +1,8 @@
 #include "Button.h"
 
 Button::~Button() {
+	buttonHandle = nullptr;
+	buttonPressedHandle = nullptr;
 }
 
 void Button::Inif(int *bH, int *bPH) {

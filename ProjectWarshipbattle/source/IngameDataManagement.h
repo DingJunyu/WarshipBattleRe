@@ -12,7 +12,9 @@ public:
 		counter = 0;
 		shouldIRender = false;
 		showLock = false;
+		shouldIContinue = true;
 		flameCount = 0;
+		flagShipNum = 0;
 	}
 	~IngameDataManagement();
 
@@ -22,7 +24,7 @@ public:
 
 	//ゲームを初期化操作
 	//ここの関数にファイル操作も含む
-	void Inif();
+	bool Inif();
 	void Free();
 
 	//カメラ用座標問い合わせ
@@ -53,7 +55,7 @@ public:
 	void DrawLoading(int num);
 
 
-	void FormationBoard();
+	bool FormationBoard();
 	void RegisterTeam();
 	void FreeFormationBoard();
 
@@ -162,6 +164,8 @@ private:
 	/*ゲームコントロール*/
 	bool win;
 	bool autoFire;//プレーヤー自動射撃ボタン
+	bool shouldIContinue;
+	int flagShipNum;
 	void DeleteUseless();
 	void DestroyShips();
 	void DestroyThisTeam(std::vector<ShipMain> *shipList);
@@ -188,6 +192,7 @@ private:
 	std::list<Effect> smokeList;//雲リスト
 	std::list<Effect> explosionList;//爆発リスト
 	std::list<Effect> rippleList;//水泡リスト(砲弾落下地)
+	std::list<Effect> normalEffectList;
 
 	/*統計*/
 	void InifStatisticBoardData() {

@@ -91,17 +91,18 @@ int MainMenu(){
 }
 
 void SingleGame_DeathMatch_Progress() {
+	bool canGotoNextStep = false;
 	
 	//ゲーム管理の部品を宣言
 	IngameDataManagement IDM;
 	TeamDeathMatchControl TDMC;
 
-	IDM.Inif();//初期化
-	IDM.FormationBoard();//編成画面を描く
+	canGotoNextStep = IDM.Inif();//初期化
+	canGotoNextStep = IDM.FormationBoard();//編成画面を描く
 	IDM.FreeFormationBoard();//編成に使ったメモリなどを解放する
 
 	/*ゲームメインプログレス*/
-	if (ProcessMessage() == 0) {
+	if (ProcessMessage() == 0 && canGotoNextStep) {
 		while (!TDMC.GameOver(IDM.TeamDestroyed())) {//一つチームが全滅まで繰り返す
 			IDM.Update();
 			if (ProcessMessage() == -1)//エラー処理

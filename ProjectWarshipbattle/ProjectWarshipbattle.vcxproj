@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ErrorMessege.h" />
     <ClInclude Include="source\AirWeapon.h" />
     <ClInclude Include="source\AI_Action.h" />
     <ClInclude Include="source\AllMovableObjects.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="source\EffectPoint.h" />
     <ClInclude Include="source\EffectTemplate.h" />
     <ClInclude Include="source\Engine.h" />
+    <ClInclude Include="source\ErrorMessege.h" />
     <ClInclude Include="source\FireController.h" />
     <ClInclude Include="Source\FlagShipAI.h" />
     <ClInclude Include="source\FrameControl.h" />
@@ -81,6 +83,7 @@
     <ClCompile Include="source\EffectPoint.cpp" />
     <ClCompile Include="source\EffectTemplate.cpp" />
     <ClCompile Include="source\Engine.cpp" />
+    <ClCompile Include="source\ErrorMessege.cpp" />
     <ClCompile Include="source\FireController.cpp" />
     <ClCompile Include="Source\FlagShipAI.cpp" />
     <ClCompile Include="source\FrameControl.cpp" />

@@ -278,13 +278,17 @@ void IngameDataManagement::SinkingShipUpdate(ShipMain *ship) {
 	if (num) {
 		Coordinate2D<double> temp = ship->ReferCoord2D_d();
 
-		temp.x += (ship->ReferShipCrashSize().x/4);
-		temp.z += (ship->ReferShipCrashSize().z/4);
+		temp.x -= ship->ReferShipCrashSize().x / 8;
+		temp.z -= ship->ReferShipCrashSize().z / 8;
 
 		double randX, randZ;
 
-		randX = (double)(rand() % (int)ship->ReferShipCrashSize().x);
-		randZ = (double)(rand() % (int)ship->ReferShipCrashSize().z);
+		randX = (double)(rand() % (int)ship->ReferShipCrashSize().x/2);
+		if (rand() % 2 == 0)
+			randX = -randX;
+		randZ = (double)(rand() % (int)ship->ReferShipCrashSize().z/2);
+		if (rand() % 2 == 0)
+			randZ = -randZ;
 
 		temp.x += cos(ship->ReferRadianOnZ()) * randX -
 			sin(ship->ReferRadianOnZ()) * randZ;
@@ -527,25 +531,33 @@ void IngameDataManagement::DrawLoading(int num) {
 	DxLib::ScreenFlip();
 }
 
-void IngameDataManagement::FormationBoard() {
+bool IngameDataManagement::FormationBoard() {
 	while (1) {
 		if (ProcessMessage() == -1)//ƒEƒBƒ“ƒh‚ğ•Â‚¶‚é³‚µ‚­I—¹‚Å‚«‚é‚æ‚¤‚É‚·‚é
 			break;
 
-		
-
 		int ans = CommandSerial::NONE_COMMAND;//ƒI[ƒ_[‚ğæ‚é
 
 		if (CUI.ReferClickable())
-			ans=CUI.CheckChoice();
+			ans = CUI.CheckChoice();
+		
 		
 
-		if (ans == GAME_START &&//‚à‚µƒQ[ƒ€ƒXƒ^[ƒg‚ğ‰Ÿ‚µ‚½‚ç
-			teamACount!=0 &&//“¯‚É—¼ƒ`[ƒ€‚Í‹ó‚Å‚È‚¯‚ê‚Î
-			teamBCount!=0)
-			break;
+		if (ans == GAME_START) {//‚à‚µƒQ[ƒ€ƒXƒ^[ƒg‚ğ‰Ÿ‚µ‚½‚ç
+			int flagShipCount = teamA[flagShipNum].ReferNumber();
+			if (flagShipCount != 0 &&//“¯‚É—¼ƒ`[ƒ€‚Í‹ó‚Å‚È‚¯‚ê‚Î
+				teamBCount != 0) {
+				break;
+			}
+		}
 
-		if (ans != CommandSerial::NONE_COMMAND) {
+		if (ans == CommandSerial::EXIT_IN_FORMATION) {
+			shouldIContinue = false;
+			return false;
+		}
+
+		if (ans >= CommandSerial::SELECT_IN_FORMATION &&
+			ans < CommandSerial::SELECT_IN_FORMATION + 16) {
 			CUI.SetClickTime();//‰Ÿ‚·ŠÔ‚ğ‹L˜^‚·‚é
 			ans -= 60;//”Ô†‚ğ‹L˜^‚·‚é
 			if (ans % 2 == 0) {
@@ -570,15 +582,53 @@ void IngameDataManagement::FormationBoard() {
 			}
 		}
 
+		/*ƒtƒ‰ƒOƒV[ƒv‘I‘ğ•”•ª*/
+		Coordinate2D<int> mousePos;
+		if(GetMouseInput() == MOUSE_INPUT_LEFT)
+			GetMousePoint(&mousePos.x, &mousePos.z);
+		for (int i = 0; i < 4; i++) {
+			if (teamA[i].Clicked({ 70,100 + 120 * i }, mousePos)) {
+				int tempF = i;
+				for (int j = 0; j < 4; j++) {
+					if (tempF == j)continue;
+					if (teamA[j].ReferFlag())
+						teamA[j].ChangeFlagStatus();
+				}
+				flagShipNum = i;
+			}
+		}
+
 		DrawFormationBoard();
 	}
+	return true;
 }
 
 void IngameDataManagement::RegisterTeam() {
 	int count = 0;
 	Coordinate<double> coord{ -500, -10, 200 };
 
+	for (int i = 0; i < teamA[flagShipNum].ReferNumber(); i++) {
+		count++;
+		alliesFleet.push_back(ShipMain());
+		auto ship = alliesFleet.end();
+		ship--;
+
+		coord.x -= 300;//íŠÍ‚ÌŠÔ‚ÌŠÔŠu‚ğæ‚é
+
+		ship->SetCoord(coord);
+		ship->SetRadianOnZ(0);
+		if (!ship->InifThisShip(&PL, ET, &SL, teamA[flagShipNum].ship.ReferShipType(),
+			flagShipNum)) {
+			DrawString(10, 10, "ƒtƒ@ƒCƒ‹“Ç‚İ‚Ş¸”s", GetColor(255, 255, 255));
+			DxLib::ScreenFlip();
+			WaitKey();
+			exit(1);
+		}
+	}
+
 	for (int i = 0; i < 4; i++) {
+		if (i == flagShipNum)
+			continue;
 		for (int j = 0; j < teamA[i].ReferNumber(); j++) {
 			count++;
 			alliesFleet.push_back(ShipMain());
@@ -663,11 +713,13 @@ void IngameDataManagement::InifFormationBoard() {
 	teamB[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
 	teamB[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
 	teamB[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
+
+	teamA[flagShipNum].SetFlag();
 }
 
 void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êíó‘Ô‚Éİ’u‚·‚é
 	
-	if (ProcessMessage() == 0)
+	if (ProcessMessage() == 0 && shouldIContinue)
 		RegisterTeam();
 	
 	for (int i = 0; i < 4; i++) {
@@ -680,15 +732,15 @@ void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êí
 	std::vector<ShipCard>().swap(teamA);
 	std::vector<ShipCard>().swap(teamB);
 
-	if (ProcessMessage() == 0) {
+	if (ProcessMessage() == 0 && shouldIContinue) {
 		alliesFleet[0].SetControled();//—FŒRŠÍ‘à‚Ìˆê”Ô‚Ì‘€ìŒ ‚ğæ‚é
 		enemyFlagShip = &*enemyFleet.begin();
 		CUI.InifShipList(&enemyFleet, false);
 		//	CUI.InifShipList(&alliesFleet, true);
-
-		CUI.CloseFormationMenu();
-		FC.Reset();
 	}
+
+	CUI.CloseFormationMenu();
+	FC.Reset();
 }
 
 void IngameDataManagement::DrawStatisticBoard() {
@@ -760,7 +812,7 @@ void IngameDataManagement::DrawStatisticBoard() {
 			*statisticBoard[StatisticBoard::LOSE], TRUE);
 
 	/*¡‰ñ‚Ìƒf[ƒ^‚ğ•`‚­*/
-	DxLib::DrawFormatString(380, 110, Cr, "%2.3lf", hitRate);//–½’†—¦‚ğ•\¦
+	DxLib::DrawFormatString(380, 110, Cr, "%2.3lf", hitRate * 100);//–½’†—¦‚ğ•\¦
 	DxLib::DrawFormatString(380, 220, Cr, "%d", damage);
 	DxLib::DrawFormatString(380, 330, Cr, "%.0lf", alliesFleet[0].ReferDistanceMoved());
 	DxLib::DrawFormatString(380, 440, Cr, "%d", killed);
@@ -862,6 +914,7 @@ void IngameDataManagement::TEST_DRAW() {
 }
 
 void IngameDataManagement::EndTheGame() {
+	showLock = false;
 	if (sinkingShip.empty())
 		GameOver = true;
 }
@@ -1000,7 +1053,9 @@ void IngameDataManagement::MoveAmmo() {
 /****************************************************/
 /*                    ƒf[ƒ^ŠÖ˜A                    */
 /****************************************************/
-void IngameDataManagement::Inif() {
+bool IngameDataManagement::Inif() {
+
+	long long startTime = GetTickCount();
 
 	PL.MemorySecure();
 
@@ -1017,6 +1072,9 @@ void IngameDataManagement::Inif() {
 		DrawLoading(asyncLoadNum - GetASyncLoadNum());
 		if(GetASyncLoadNum() ==0)
 			break;
+		if (GetTickCount() - startTime > TIME_NEEDED::ONE_MINUTE ) {
+			return false;
+		}
 	}
 
 	Sleep(10);
@@ -1042,6 +1100,8 @@ void IngameDataManagement::Inif() {
 
 
 	CUI.SetFormationMenuStatus();/*‚±‚±‚ÍƒeƒXƒgƒo[ƒWƒ‡ƒ“*/
+
+	return true;
 }
 
 /*g‚Á‚½ƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é*/
@@ -1068,6 +1128,7 @@ void IngameDataManagement::Free() {
 	smokeList.clear();
 	explosionList.clear();
 	rippleList.clear();
+	normalEffectList.clear();
 }
 
 /*§ŒÀŠÔ’´‚¦‚½‚à‚Ì‚ğÁ‚·*/
