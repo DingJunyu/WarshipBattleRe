@@ -179,6 +179,8 @@ void IngameDataManagement::DrawAll() {
 	/*テストインフォメーション*/
 	if (TEST_SHOW_ON)
 		TEST_DRAW();
+
+	DrawErrorList();
 	
 	DxLib::ScreenFlip();
 }
@@ -1046,6 +1048,7 @@ void IngameDataManagement::Free() {
 
 /*制限時間超えたものを消す*/
 void IngameDataManagement::DeleteUseless() {
+	CheckErrorList();
 	DeleteUselessEffect();//時間切りエフェクトを消す
 	DeleteUselessAmmo();//海に落ちた砲弾を消す
 	RemoveDestroyedShip();//沈んだ船を沈むリストに追加する
