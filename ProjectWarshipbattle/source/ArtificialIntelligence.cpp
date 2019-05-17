@@ -92,12 +92,12 @@ void ArtificialIntelligence::CalWaypointDis() {
 void ArtificialIntelligence::SetSpeed(double TGoutputRate) {
 	/*ウェイポイントとの距離によって速度が変わります*/
 	if (wayPointDis >= DistanceRange::CLOSING)
-		outPutRate = 1.0;
+		outPutRate = 1;
 	else if (wayPointDis <= DistanceRange::SLOW_DOWN
 		&& wayPointDis > DistanceRange::STOP)
 		outPutRate = 0.25;
 	else if (wayPointDis <= DistanceRange::STOP)
-		outPutRate = 0;
+		outPutRate = -0.3;
 	else
-		outPutRate = TGoutputRate;
+		outPutRate = TGoutputRate - 0.05;
 }

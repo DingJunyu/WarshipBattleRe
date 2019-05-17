@@ -23,6 +23,7 @@ public:
 	int ReferNumbefofGuns() { return numberofGuns; }
 	int ReferReloadTime() { return reloadTime; }
 	int ReferLastShootedTime() { return lastShootedTime; }
+	int ReferDamage() { return damage; }
 	double ReferCalibre() { return calibre; }
 	double ReferRelativeCoordX() { return relativeCoordX; }
 	double ReferRelativeCoordZ() { return relativeCoordZ; }

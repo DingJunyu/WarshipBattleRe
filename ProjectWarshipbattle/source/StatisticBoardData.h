@@ -12,8 +12,7 @@ public:
 	void Inif(int *handle);
 	void Read(bool Res);
 	bool Update();
-	void Free();
-
+	
 	void GetDis(double dis) { S_data.movedDis = dis; }
 	void CountShoot() { S_data.shootCount++; }
 	void CountHit() { S_data.hitCount++; }
@@ -43,4 +42,5 @@ private:
 
 	bool win;
 	bool press;
+	long long int pressFrame;
 };

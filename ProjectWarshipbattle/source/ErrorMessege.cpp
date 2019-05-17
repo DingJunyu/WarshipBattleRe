@@ -10,19 +10,20 @@ ErrorMessege::ErrorMessege(const char *Mes, Coordinate2D<int> LeftUp,
 }
 
 ErrorMessege::ErrorMessege() {
+
+}
+
+ErrorMessege::~ErrorMessege(){
 	mes = nullptr;
 }
 
-ErrorMessege::~ErrorMessege()
-{
-}
-
 void ErrorMessege::DrawMessege() {
+	SetTrans(80);
 	DrawBox(leftUp.x,leftUp.z,
-		rightDown.x,rightDown.z, GetColor(52,73,94),TRUE);
-
+		rightDown.x,rightDown.z, GetColor(231, 76, 60),TRUE);
+	ResetTrans();
 	DxLib::SetFontSize(20);
 
-	DrawFormatString(leftUp.x, leftUp.z,
+	DrawFormatString(leftUp.x + 5, leftUp.z + 5,
 		GetColor(255, 255, 255), mes);
 }

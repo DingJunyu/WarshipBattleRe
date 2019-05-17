@@ -471,6 +471,8 @@ namespace MathAndPhysics {
 
 	const double ShipCardRate = 0.2;
 	const double FantasyNumRate = 0.2;
+
+	const double Change_Distance = 47;
 }
 
 namespace TIME_NEEDED {

@@ -57,13 +57,16 @@ void StatisticBoardData::Read(bool Res) {
 
 bool StatisticBoardData::Update() {
 	if (!press && frameCount >= 10)
-		if (CheckHitKeyAll() || GetMouseInput()!=0)
+		if (CheckHitKeyAll() || GetMouseInput() != 0) {
 			press = true;
+			pressFrame = frameCount;
+			rewind(stdin);
+		}
 
 	frameCount++;
 	Draw();
-	if (frameCount >= 300 || press) {
-		if (CheckHitKeyAll() && GetInputChar(TRUE) || GetMouseInput()!=0 )
+	if (frameCount >= 300 || (press && frameCount - pressFrame >= 30)) {
+		if (CheckHitKeyAll() && GetInputChar(TRUE) || GetMouseInput() != 0)
 			return true;
 	}
 	return false;

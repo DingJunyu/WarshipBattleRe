@@ -1,6 +1,7 @@
 #pragma once
 #include"DxLib.h"
 #include"DefinedData.h"
+#include"OtherFunctions.h"
 
 class ErrorMessege
 {

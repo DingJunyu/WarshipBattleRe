@@ -61,12 +61,14 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 	while (1) {
 		fscanf_s(filePointer,"%[^,]", &readData[count], 20);//”š‚ğ“Ç‚Ş
 		doubleData[count] = atof(readData[count]);
-		fscanf_s(filePointer,"%*[,]%s", &trash, 20);
+		if (doubleData[count] != 999999)
+			fscanf_s(filePointer, "%*[,]%s", &trash, 20);
 
-		count++;
-		if (feof(filePointer))/*“Ç‚İ‚İ’†~*/
+		if (feof(filePointer) || doubleData[count] == 999999)/*“Ç‚İ‚İ’†~*/
 			break;
+		count++;
 	}
+	fscanf_s(filePointer, "%*[,]%s", name, 100);
 
 	fclose(filePointer);//ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
 

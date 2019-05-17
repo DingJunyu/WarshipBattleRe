@@ -101,6 +101,8 @@ public:
 
 	//問い合わせ
 	int ReferShipType() { return shipType; }
+	const char * ReferName() { return name; }
+	int ReferMaxHP() { return maxHitPoint; }
 	/*移動関連*/
 	bool ReferReturnOn() { return returnToCenter; }
 	double ReferChangingRadian() { return currentRadian; }
@@ -129,6 +131,7 @@ public:
 		return MainWeapon[0].ReferMaxRadianOnY();
 	}
 	double ReferMainMaxRange() { return fireControllerMain.ReferMaxRange(); }
+	int ReferDamage() { return MainWeapon[0].ReferDamage(); }
 
 	/*collision関連*/
 	double ReferShipCrashR() { return shipCrashR; }
@@ -229,7 +232,7 @@ private:
 	double radianChangePerFrame;
 	bool returnToCenter;
 	
-	std::string name;
+	char name[100];
 
 	/*音声関連*/
 	/*ホードの種類はまだ決まってないので今は使っていない*/
@@ -269,4 +272,6 @@ private:
 
 	const int sinkingFlame = 360;
 	int flameAfterSink;
+
+
 };

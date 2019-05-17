@@ -540,14 +540,21 @@ bool IngameDataManagement::FormationBoard() {
 
 		if (CUI.ReferClickable())
 			ans = CUI.CheckChoice();
-		
-		
+
+		CheckErrorList();
 
 		if (ans == GAME_START) {//‚à‚µƒQ[ƒ€ƒXƒ^[ƒg‚ğ‰Ÿ‚µ‚½‚ç
 			int flagShipCount = teamA[flagShipNum].ReferNumber();
 			if (flagShipCount != 0 &&//“¯‚É—¼ƒ`[ƒ€‚Í‹ó‚Å‚È‚¯‚ê‚Î
 				teamBCount != 0) {
 				break;
+			}
+			if (teamACount == 0 || teamBCount == 0)
+			{
+				msgList.push_back(Fleet_Empty());
+			}
+			if (flagShipCount == 0 && teamACount != 0 && teamBCount != 0) {
+				msgList.push_back(FlagShip_Empty());
 			}
 		}
 
@@ -693,6 +700,22 @@ void IngameDataManagement::DrawFormationBoard() {
 	teamB[3].DrawCard(Coordinate2D<double>{710, 460});
 
 	CUI.Draw();
+
+	Coordinate2D<int> mousePos;
+
+	GetMousePoint(&mousePos.x, &mousePos.z);
+
+	for (int i = 0; i < 4; i++) {
+		if (teamA[i].CheckMousePos({ 70,100 + 120 * i }, mousePos)) {
+			teamA[i].DrawBar(mousePos);
+		}
+		if (teamB[i].CheckMousePos({ 710,100 + 120 * i }, mousePos)) {
+			teamB[i].DrawBar(mousePos);
+		}
+	}
+
+	DrawErrorList();
+
 	DxLib::ScreenFlip();
 }
 
@@ -739,6 +762,8 @@ void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êí
 		//	CUI.InifShipList(&alliesFleet, true);
 	}
 
+	ClearErrorList();
+
 	CUI.CloseFormationMenu();
 	FC.Reset();
 }
@@ -758,45 +783,6 @@ void IngameDataManagement::DrawStatisticBoard2() {
 /****************************************************/
 /*                     ƒeƒXƒg@                     */
 /****************************************************/
-void IngameDataManagement::TEST() {
-	alliesFleet.push_back(ShipMain());//V‚µ‚¢‘D‚ğ¶¬‚·‚é
-	auto ship = alliesFleet.begin();//ƒCƒeƒŒ[ƒ^‚ğg‚Á‚Ä©•ª‚Ì‘D‚ğ‘I‚Ô
-	//‚±‚±‚Ì•”•ª‚Í‰Šú‰»ŠÖ”‚Æƒtƒ@ƒCƒ‹“Ç‚İ‚İ‚Í‚Ü‚¾o—ˆ‚Ä‚¢‚È‚¢
-	//‰Šú‰»ŠÖ”‚Í‰º‚Ì‚æ‚¤‚É‚µ‚½‚¢
-	
-
-	ship->NewCoordX(640);//V‚µ‚¢À•W‚ğ‚ ‚°‚é
-	ship->NewCoordZ(380);
-	ship->NewCoordY(-10);
-	ship->SetRadianOnZ(0);
-	if (!ship->InifThisShip(&PL, ET, &SL, 4000, 1)) {
-		DrawString(10, 10, "ƒtƒ@ƒCƒ‹“Ç‚İ‚Ş¸”s", GetColor(255, 255, 255));
-		DxLib::ScreenFlip();
-		WaitKey();
-		exit(1);
-	}
-
-
-	for (int i = 0; i < 2; i++) {
-		enemyFleet.push_back(ShipMain());//ƒeƒXƒg—p“G‘D‚ğ¶¬‚·‚é
-		auto enemyShip = enemyFleet.end();//ƒCƒeƒŒ[ƒ^‚Å‘D‚ğ‘I‚Ô
-		enemyShip--;//‚¢‚Â‚àÅŒã‚Ì‘D‚ğİ’u‚·‚é
-		double radian = (double)(rand() % 180) / 180.0*MathAndPhysics::PI;
-
-
-		enemyShip->NewCoordX(2500 + (rand() % 400) * i);
-		enemyShip->NewCoordZ(2000 + (rand() % 400) * i);
-		enemyShip->NewCoordY(-10);
-		enemyShip->SetRadianOnZ(radian);
-		if (!enemyShip->InifThisShip(&PL, ET, &SL, 5000, i + 10)) {
-			DrawString(10, 10, "ƒtƒ@ƒCƒ‹“Ç‚İ‚Ş¸”s", GetColor(255, 255, 255));
-			DxLib::ScreenFlip();
-			WaitKey();
-			exit(1);
-		}
-	}
-}
-
 void IngameDataManagement::TEST_DRAW() {
 	unsigned int Cr;
 	Cr = GetColor(255, 255, 255);
@@ -1005,6 +991,7 @@ bool IngameDataManagement::Inif() {
 	}
 
 	Sleep(10);
+	SetFontThickness(6);
 	PL.GetGraphSizeForGame();//‰æ‘œ‚Ì‘å‚«‚³‚ğİ’u‚·‚é
 	UI.InifUI(&PL);//UI‰Šú‰»
 	ET.InifEffectTemplate(&PL);//ƒGƒtƒFƒNƒgƒeƒ“ƒvƒŒ[ƒg‰Šú‰»
@@ -1014,12 +1001,9 @@ bool IngameDataManagement::Inif() {
 	statisticBoardData.Inif(PL.ReferStatisticBoardHandle(0));/*“Œvƒ{[ƒh[‚Ì‰Šú‰»*/
 	InifFormationBoard();//•Ò¬‰æ–Ê‚ğ‰Šú‰»‚·‚é
 
-	
-
 	for (int i = 0; i < FormationBoard::FB_NUM; i++) {
 		formationBoard[i] = PL.ReferFormationBoardHandle(i);
 	}
-
 
 	CUI.SetFormationMenuStatus();/*‚±‚±‚ÍƒeƒXƒgƒo[ƒWƒ‡ƒ“*/
 
@@ -1051,6 +1035,7 @@ void IngameDataManagement::Free() {
 	explosionList.clear();
 	rippleList.clear();
 	normalEffectList.clear();
+	msgList.clear();
 }
 
 /*§ŒÀŠÔ’´‚¦‚½‚à‚Ì‚ğÁ‚·*/
@@ -1444,4 +1429,31 @@ void IngameDataManagement::RemoveSinkedShip() {
 				break;
 		}
 	}
+}
+
+/*ƒGƒ‰[ˆ—*/
+void IngameDataManagement::DrawErrorList() {
+	if (!msgList.empty())
+		for (auto msg = msgList.begin();
+			msg != msgList.end();
+			msg++) {
+		msg->DrawMessege();
+	}
+}
+
+void IngameDataManagement::CheckErrorList() {
+	if(!msgList.empty())
+	for (auto msg = msgList.begin();
+		msg != msgList.end();
+		msg++) {
+		if (msg->ReferDestroy()) {
+			msg = msgList.erase(msg);
+			if (msgList.empty() || msg == msgList.end())
+				break;
+		}
+	}
+}
+
+void IngameDataManagement::ClearErrorList() {
+	msgList.empty();
 }

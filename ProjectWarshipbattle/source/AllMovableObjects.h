@@ -36,6 +36,7 @@ public:
 	{(int)coord.x,(int)coord.z}; }/*平面座標(int)*/
 
 	double ReferSpeedOnZ() { return speedOnZ; }//平面速度
+	double ReferMaxSpeedOnZ() { return maxSpeedOnZ; }
 	double ReferSpeedOnY() { return speedOnY; }//垂直速度
 	double ReferAirResistance() { return airResistance; }//空気抵抗
 	double ReferRadianOnZ() { return radianOnZ; }//平面角度
@@ -45,6 +46,8 @@ public:
 	double ReferMultiple() { return multiple; }//拡大率
 
 	double ReferDistanceMoved() { return distanceMoved; }
+
+	double ReferMass() { return mass; }
 
 	//状態問い合わせ関数
 	bool ReferAlive() { return alive; }//生きる状況確認

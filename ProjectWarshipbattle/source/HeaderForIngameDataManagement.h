@@ -33,6 +33,9 @@
 /*統計ボード*/
 #include"StatisticBoardData.h"
 
+/*エラー処理*/
+#include"ErrorMessegeContainer.h"
+
 struct EnemyWithAI {
 	ShipMain shipHere;
 	ArtificialIntelligence AI;

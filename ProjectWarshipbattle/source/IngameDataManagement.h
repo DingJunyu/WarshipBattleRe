@@ -47,13 +47,9 @@ public:
 	//統計データ
 	int ShootCount();//実現はあとでいい
 
-	//すべてのテストはここで行う
-	void TEST();
-
 	//ロード画面
 	void DrawLoading();
 	void DrawLoading(int num);
-
 
 	bool FormationBoard();
 	void RegisterTeam();
@@ -179,6 +175,11 @@ private:
 	void DrawFormationBoard();
 	void InifFormationBoard();
 
+	/*エラー処理*/
+	void DrawErrorList();
+	void CheckErrorList();
+	void ClearErrorList();
+
 	std::vector<ShipMain> alliesFleet;//自軍艦隊
 	std::vector<ShipMain> enemyFleet;//敵軍艦隊
 	ArtificialIntelligence AI;
@@ -194,6 +195,7 @@ private:
 	std::list<Effect> explosionList;//爆発リスト
 	std::list<Effect> rippleList;//水泡リスト(砲弾落下地)
 	std::list<Effect> normalEffectList;
+	std::list<ErrorMessege> msgList;
 	
 	/*編成*/
 	int *formationBoard[FormationBoard::FB_NUM];
