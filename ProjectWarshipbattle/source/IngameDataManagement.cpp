@@ -699,6 +699,12 @@ void IngameDataManagement::DrawFormationBoard() {
 	teamB[2].DrawCard(Coordinate2D<double>{710, 340});
 	teamB[3].DrawCard(Coordinate2D<double>{710, 460});
 
+	SetFontSize(35);
+	DrawFormatString(300, 16, GetColor(255, 255, 255),
+		"ëçêî%2dë‰(10ë‰Ç‹Ç≈)",teamACount);
+	DrawFormatString(670, 16, GetColor(255, 255, 255),
+		"ëçêî%2dë‰(10ë‰Ç‹Ç≈)", teamBCount);
+
 	CUI.Draw();
 
 	Coordinate2D<int> mousePos;

@@ -202,7 +202,7 @@ private:
 	std::vector<ShipCard> teamA;
 	std::vector<ShipCard> teamB;
 
-	const int maxCountInATeam = 6;
+	const int maxCountInATeam = 10;
 	int teamACount = 0;
 	int teamBCount = 0;
 
