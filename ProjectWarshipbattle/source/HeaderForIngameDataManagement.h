@@ -30,6 +30,9 @@
 /*編成部分*/
 #include"ShipCard.h"
 
+/*統計ボード*/
+#include"StatisticBoardData.h"
+
 struct EnemyWithAI {
 	ShipMain shipHere;
 	ArtificialIntelligence AI;

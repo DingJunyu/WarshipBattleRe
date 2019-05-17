@@ -743,89 +743,16 @@ void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êí
 	FC.Reset();
 }
 
-void IngameDataManagement::DrawStatisticBoard() {
-	SetDrawScreen(DX_SCREEN_BACK);
-	ClearDrawScreen();
+void IngameDataManagement::DrawStatisticBoard2() {
 
-	enum StaBoard {
-		TOTAL_KILL = 0,
-		TOTAL_MOVE,
-		TOTAL_DAMAGE,
-		TOTAL_DAMAGE_RECIEVED,
-		MAX_DAMAGE,
-		MAX_MOVE,
-		MAX_HITRATE
-	};
+	rewind(stdin);
 
-	double boardData[7] = { 0,0,0,0,0,0,0 };//‰Šú‰»
-
-	FILE *filePointer;//ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^[
-	char fileName[100] = "Data//TopScore//TopScore.txt";
-
-	/*‚à‚µ•Û‘¶‚³‚ê‚½ƒf[ƒ^‚ª‚ ‚éê‡‚Í‚»‚Ì‚Ü‚Ü“Ç‚İ‚Ş*/
-	if ((fopen_s(&filePointer, fileName, "r")) == 0) {
-
-		for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
-			fscanf_s(filePointer, "%lf", &boardData[i]);
-		fclose(filePointer);
+	statisticBoardData.Read(win);
+	while (ProcessMessage() == 0) {
+		if (statisticBoardData.Update())
+			break;
+		FC.Wait();
 	}
-
-	fopen_s(&filePointer, fileName, "w");
-
-	/*ŒvZ‚Ì•”•ª*/
-	if (shootCount == 0)/*ƒ[ƒ‚Ì‚à³‚µ‚­•\¦‚Å‚«‚é*/
-		shootCount = 1;
-	hitRate = (double)hitCount / (double)shootCount;
-
-	/*‹L˜^‚ğXV*/
-	boardData[TOTAL_KILL] += (double)killed;
-	boardData[TOTAL_MOVE] += alliesFleet[0].ReferDistanceMoved();
-	boardData[TOTAL_DAMAGE] += (double)damage;
-	boardData[TOTAL_DAMAGE_RECIEVED] += (double)damageRecieved;
-	if (damage > MAX_DAMAGE)
-		boardData[MAX_DAMAGE] = damage;
-	if (alliesFleet[0].ReferDistanceMoved() >
-		boardData[MAX_MOVE])
-		boardData[MAX_MOVE] = alliesFleet[0].ReferDistanceMoved();
-	if (hitRate > boardData[MAX_HITRATE])
-		boardData[MAX_HITRATE] = hitRate;
-
-	for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
-		fprintf_s(filePointer, "%lf\n", boardData[i]);
-
-	fclose(filePointer);//ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
-
-	/*•`‰æF*/
-	unsigned int Cr;
-	Cr = GetColor(255, 255, 255);
-	DxLib::SetFontSize(40);
-
-	/*”wŒi‚ğ•`‚­*/
-	DxLib::DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z, 
-		*statisticBoard[StatisticBoard::SB_BACKGROUND], FALSE);
-
-	if(win)
-		DxLib::DrawExtendGraph(10, 20, 210, 91,
-			*statisticBoard[StatisticBoard::WIN], TRUE);
-	else
-		DxLib::DrawExtendGraph(10, 20, 210, 91,
-			*statisticBoard[StatisticBoard::LOSE], TRUE);
-
-	/*¡‰ñ‚Ìƒf[ƒ^‚ğ•`‚­*/
-	DxLib::DrawFormatString(380, 110, Cr, "%2.3lf", hitRate * 100);//–½’†—¦‚ğ•\¦
-	DxLib::DrawFormatString(380, 220, Cr, "%d", damage);
-	DxLib::DrawFormatString(380, 330, Cr, "%.0lf", alliesFleet[0].ReferDistanceMoved());
-	DxLib::DrawFormatString(380, 440, Cr, "%d", killed);
-
-	/*‹L˜^‚ğ•`‚­*/
-	DxLib::SetFontSize(26);
-	for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
-		DxLib::DrawFormatString(940, 115 + i * 75, Cr, "%-14.1lf",boardData[i]);
-
-	DxLib::ScreenFlip();
-
-	Sleep(1000);
-	DxLib::WaitKey();
 }
 
 /****************************************************/
@@ -1083,16 +1010,11 @@ bool IngameDataManagement::Inif() {
 	ET.InifEffectTemplate(&PL);//ƒGƒtƒFƒNƒgƒeƒ“ƒvƒŒ[ƒg‰Šú‰»
 	CT.Inif(&SL);//ƒL[ƒ{[ƒhƒRƒ“ƒgƒ[ƒ‰[‰Šú‰»
 	CUI.IngameInif(&PL,&SL);//ƒ}ƒEƒXƒRƒ“ƒgƒ[ƒ‰[‰Šú‰»
+	
+	statisticBoardData.Inif(PL.ReferStatisticBoardHandle(0));/*“Œvƒ{[ƒh[‚Ì‰Šú‰»*/
 	InifFormationBoard();//•Ò¬‰æ–Ê‚ğ‰Šú‰»‚·‚é
 
-	/*“Œvƒ{[ƒh[‚Ì‰Šú‰»*/
-	for (int i = StatisticBoard::SB_BACKGROUND;
-		i <= StatisticBoard::LOSE;
-		i++)
-		statisticBoard[i] =
-		PL.ReferStatisticBoardHandle(i);
-
-	InifStatisticBoardData();//“Œv‰æ–Ê—pƒf[ƒ^‚ğ‰Šú‰»
+	
 
 	for (int i = 0; i < FormationBoard::FB_NUM; i++) {
 		formationBoard[i] = PL.ReferFormationBoardHandle(i);
@@ -1333,7 +1255,7 @@ void IngameDataManagement::InputNewAmmo(ShipMain *SM, FiringData FD ,bool me) {
 			if (SM->IsThisOneUsable(i, FD.isThisMainWeapon)) {//ËŒ‚‚ª‰Â”\‚Å‚ ‚ê‚Î
 				shellList.push_back(SM->Shoot(i,FD.isThisMainWeapon));//V‚µ‚¢’e‚ğ’Ç‰Á‚·‚é
 				if (me)
-					shootCount++;
+					statisticBoardData.CountShoot();
 			}
 		}
 	}
@@ -1470,19 +1392,19 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 				shell->Unusable();//’e‚ªg‚¦‚È‚­‚È‚é
 				
 				if (shell->ReferSerialNumber() == 0) {
-					hitCount++;//ƒqƒbƒg”‘‰Á
-					damage += (int)shell->ReferDamage();//ƒ_ƒ[ƒW”‘‰Á
+					statisticBoardData.CountHit();//ƒqƒbƒg”‘‰Á
+					statisticBoardData.CountDamage((int)shell->ReferDamage());//ƒ_ƒ[ƒW”‘‰Á
 					if (!ship->ReferAlive()) {
 						if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
 							alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ƒƒbƒNó‘Ô‚ğ•ÏX
 							ship->ResetReviseData();//C³ƒf[ƒ^‚ğƒŠƒZƒbƒg
 							CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//‚t‚h‚ğ•ÏX
 						}
-						killed++;
+						statisticBoardData.CountKilled();
 					}
 				}
 				if (ship->ReferSerialNumber() == 0)
-					damageRecieved += (int)shell->ReferDamage();
+					statisticBoardData.CountDamageRec((int)shell->ReferDamage());
 				return;
 			}
 		}

@@ -59,7 +59,7 @@ public:
 	void RegisterTeam();
 	void FreeFormationBoard();
 
-	void DrawStatisticBoard();
+	void DrawStatisticBoard2();
 private:
 	//他のコントローラー
 	PictureLoader PL;//画像ローダー
@@ -70,6 +70,7 @@ private:
 	EffectTemplate ET;//エフェクトテンプレート
 	SoundLoader SL;//音声ローダー
 	ClickableUserInterface CUI;//クリックできるUI
+	StatisticBoardData statisticBoardData;
 
 	/*AI管理*/
 	FlagShipAI flagShipAI;
@@ -193,23 +194,6 @@ private:
 	std::list<Effect> explosionList;//爆発リスト
 	std::list<Effect> rippleList;//水泡リスト(砲弾落下地)
 	std::list<Effect> normalEffectList;
-
-	/*統計*/
-	void InifStatisticBoardData() {
-		shootCount = 0;
-		hitCount = 0;
-		movedDis = 0;
-		damage = 0; damageRecieved = 0;
-		killed = 0;
-	}
-	int *statisticBoard[StatisticBoard::SB_NUM];
-	int shootCount;
-	int hitCount;
-	double hitRate;
-	double movedDis;
-	int damage;
-	int damageRecieved;
-	int killed;
 	
 	/*編成*/
 	int *formationBoard[FormationBoard::FB_NUM];

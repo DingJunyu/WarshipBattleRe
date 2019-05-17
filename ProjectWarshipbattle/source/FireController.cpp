@@ -52,6 +52,7 @@ double FireController::CalDistanceAndTellMeRadianOnY(double Distance) {
 		return maxRadian;
 	if (Distance < distance[FIRE_DISTANCE::ANGLE_0_P])
 		return minRadian;
+	return 0;
 }
 
 /*“ñ•ª–@‚Å‹ï‘ÌŠp“x‚ðŒvŽZ‚·‚é*/

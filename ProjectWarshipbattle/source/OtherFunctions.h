@@ -34,3 +34,15 @@ void NextPoint(Coordinate2D<double> *coord, double radian, double speed, int fra
 void RandomPoint(Coordinate2D<double> *coord, double nextX, double nextZ,
 	int Range);
 void NextPoint(Coordinate2D<double> *coord, double radian, double dis);
+
+/*•¶š—ñ‚ğ•`‰æ‚·‚éŠÖ”*/
+void DrawString_Trans(
+	int size, Coordinate2D<int> Coord, int trans,
+	const char *str, unsigned int Cr);
+void DrawString_Trans(
+	int size, Coordinate2D<int> Coord, int trans,
+	int num, unsigned int Cr);
+
+void SetTrans(int trans);
+void SetTrans(long long trans);
+void ResetTrans();

@@ -81,7 +81,6 @@ enum ShipType {
 	CVE//8
 };
 
-
 //ÉJÉÅÉâéÌóﬁî‘çÜ
 enum CameraType {
 	MAIN = 0,
@@ -362,6 +361,27 @@ enum AmmoType {
 	MEDIUM_CALIBER,
 	HEAVY_CALIBER,
 	HUGE_CALIBER
+};
+
+struct StatisticData {
+
+	StatisticData() {
+		shootCount = 0;
+		hitCount = 0;
+		hitRate = 0;
+		movedDis = 0;
+		damage = 0;
+		damageRecieved = 0;
+		killed = 0;
+	}
+
+	int shootCount;
+	int hitCount;
+	double hitRate;
+	double movedDis;
+	int damage;
+	int damageRecieved;
+	int killed;
 };
 
 struct Choice {

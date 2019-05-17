@@ -93,3 +93,33 @@ void NextPoint(Coordinate2D<double> *coord, double radian, double dis) {
 	coord->x += cos(radian) * dis;
 	coord->z += sin(radian) * dis;
 }
+
+void DrawString_Trans(
+	int size, Coordinate2D<int> Coord, int trans,
+	const char *str, unsigned int Cr){
+	SetFontSize(size);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, trans);//透明度を下がる
+	DrawString(Coord.x, Coord.z, str, Cr);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
+}
+
+void DrawString_Trans(
+	int size, Coordinate2D<int> Coord, int trans,
+	int num, unsigned int Cr) {
+	SetFontSize(size);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, trans);//透明度を下がる
+	DrawFormatString(Coord.x, Coord.z, Cr, "%d", num);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//描画モードをもとに戻る
+}
+
+void SetTrans(int trans) {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, trans);
+}
+
+void SetTrans(long long trans) {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)trans);
+}
+
+void ResetTrans() { 
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+}

@@ -59,6 +59,7 @@
     <ClInclude Include="source\ShipData.h" />
     <ClInclude Include="source\ShipMain.h" />
     <ClInclude Include="source\SoundLoader.h" />
+    <ClInclude Include="source\StatisticBoardData.h" />
     <ClInclude Include="source\TeamDeathMatchControl.h" />
     <ClInclude Include="source\Torpedo.h" />
     <ClInclude Include="source\TorpedoLoader.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="source\ShipData.cpp" />
     <ClCompile Include="source\ShipMain.cpp" />
     <ClCompile Include="source\SoundLoader.cpp" />
+    <ClCompile Include="source\StatisticBoardData.cpp" />
     <ClCompile Include="source\TeamDeathMatchControl.cpp" />
     <ClCompile Include="source\Torpedo.cpp" />
     <ClCompile Include="source\TorpedoLoader.cpp" />

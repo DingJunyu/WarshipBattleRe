@@ -112,7 +112,7 @@ void SingleGame_DeathMatch_Progress() {
 		}
 		IDM.DrawLoading();//ロード画面を描く
 		/*結果発表*/
-		IDM.DrawStatisticBoard();//統計画面を描く
+		IDM.DrawStatisticBoard2();//統計画面を描く
 		/*メモリ解放*/
 	}
 	IDM.Free();
