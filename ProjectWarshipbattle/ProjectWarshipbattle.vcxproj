@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ErrorMessege.h" />
     <ClInclude Include="source\AirWeapon.h" />
     <ClInclude Include="source\AI_Action.h" />
     <ClInclude Include="source\AllMovableObjects.h" />

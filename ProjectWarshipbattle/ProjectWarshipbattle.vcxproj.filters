@@ -144,9 +144,6 @@
     <ClInclude Include="source\ShipCard.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ErrorMessege.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="source\ErrorMessege.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>

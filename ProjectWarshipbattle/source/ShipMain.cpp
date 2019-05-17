@@ -165,7 +165,7 @@ bool ShipMain::InifThisShip(PictureLoader *PL, EffectTemplate ET,
 		bubbleStartPoint[i] = ET.CopyFromCreateBubble();
 		bubbleStartPoint[i].InifCoordinate(aroundPointPos[i].x,
 			aroundPointPos[i].z, true, 3400, 20, true,
-			0.15, 1.001,TypeOfEffect::BUBBLE);
+			0.3, 1.001,TypeOfEffect::BUBBLE);
 	}//泡生成ポイントを設置
 	
 	return true;

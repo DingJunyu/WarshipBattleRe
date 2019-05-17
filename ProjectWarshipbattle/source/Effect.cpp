@@ -30,7 +30,7 @@ void Effect::Draw(int x,int z) {
 
 	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
 	if (realX > 0 && realX < Screen::SCREEN_X&&
-		realZ>0 && realZ < Screen::SCREEN_Z) {
+		realZ > 0 && realZ < Screen::SCREEN_Z) {
 		switch (type) {
 		case TypeOfEffect::BUBBLE:
 		case TypeOfEffect::SMOKE:

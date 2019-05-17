@@ -1131,7 +1131,7 @@ void IngameDataManagement::NewEffectForShips(std::vector<ShipMain> shipList) {
 			ship != shipList.end();
 			ship++) {
 			if(ship->ReferAlive())
-			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 10 == 0
+			if (abs(ship->ReferSpeedOnZ()) > 0.05 && rand() % 30 == 0
 				&& rand() % 100 > ship->ReferSpeedOnZ() * 10) {//ˆê’è‚Ì‘¬“x‚ª‚ ‚ê‚ÎAŠm—¦‚Å¶¬‚·‚é
 				//for(int i = 0; i < ship->ReferBubbleCount(); i++)
 //				if (counter % 20 == 0)
