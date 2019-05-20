@@ -38,8 +38,7 @@ void ArtificialIntelligence::InBattle(ShipMain *me,
 				if (temp < targetDis) {//¡‚Ì‹——£‚æ‚è¬‚³‚¯‚ê‚Î
 					targetDis = temp;//ˆê”Ô‹ß‚¢“G‚ğ‘I‚Ô
 					me->fireDataFigureUp.SetNumber(count);
-				}
-			}
+				}			}
 			count++;//‡”Ô‚ğ‘‚â‚·
 		}
 	}

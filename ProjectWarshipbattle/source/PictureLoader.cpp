@@ -322,23 +322,15 @@ void PictureLoader::LoadButtonInGame() {
 		"GraphicData/Interactive_User_Interface/GameMenu/minus.png");
 	buttonPressedIntheGame[CommandSerial::MINUS] = LoadGraph(
 		"GraphicData/Interactive_User_Interface/GameMenu/minus_pressed.png");
-/*	buttonIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/up.png");
-	buttonPressedIntheGame[CommandSerial::FORMATION_UP] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/up.png");
-	buttonIntheGame[CommandSerial::FORMATION_DOWN] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/down.png");
-	buttonPressedIntheGame[CommandSerial::FORMATION_DOWN] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/down.png");
-	buttonIntheGame[CommandSerial::FORMATION_RIGHT] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/right.png");
-	buttonPressedIntheGame[CommandSerial::FORMATION_RIGHT] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/right.png");
-	buttonIntheGame[CommandSerial::FORMATION_LEFT] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/left.png");
-	buttonPressedIntheGame[CommandSerial::FORMATION_LEFT] = LoadGraph(
-		"GraphicData/Interactive_User_Interface/GameMenu/left.png");*/
-
+	
+	buttonIntheGame[CommandSerial::RANDOM_FORMATION] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/random_formation.png");
+	buttonPressedIntheGame[CommandSerial::RANDOM_FORMATION] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/random_formation_pressed.png");
+	buttonIntheGame[CommandSerial::CLEAR_FORMATION] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/clear_formation.png");
+	buttonPressedIntheGame[CommandSerial::CLEAR_FORMATION] = LoadGraph(
+		"GraphicData/Interactive_User_Interface/GameMenu/clear_formation_pressed.png");
 }
 
 void PictureLoader::LoadStatisticBoard() {

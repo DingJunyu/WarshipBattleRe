@@ -591,6 +591,19 @@ bool IngameDataManagement::FormationBoard() {
 			}
 		}
 
+		if (ans == CommandSerial::RANDOM_FORMATION) {
+			CUI.SetClickTime();
+			ClearTeam();//ƒ‰ƒ“ƒ_ƒ€‘O‚ÉƒNƒŠƒA‚·‚é
+			int temp = rand() % 10 + 1;
+			SetRandom(temp, 0, true, &teamACount);
+			SetRandom(temp, 0, false, &teamBCount);
+		}
+
+		if (ans == CommandSerial::CLEAR_FORMATION) {
+			CUI.SetClickTime();
+			ClearTeam();
+		}
+
 		/*ƒtƒ‰ƒOƒV[ƒv‘I‘ğ•”•ª*/
 		Coordinate2D<int> mousePos;
 		if(GetMouseInput() == MOUSE_INPUT_LEFT)
@@ -783,7 +796,8 @@ void IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êí
 void IngameDataManagement::DrawStatisticBoard2() {
 
 	rewind(stdin);
-
+	statisticBoardData.GetDis(alliesFleet[0].ReferDistanceMoved()*
+		MathAndPhysics::Change_Distance/3600);
 	statisticBoardData.Read(win);
 	while (ProcessMessage() == 0) {
 		if (statisticBoardData.Update())
@@ -1283,11 +1297,11 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = alliesFleet.begin();
 			ship1 != alliesFleet.end();
 			ship1++) {
-			if (ship1->ReferAlive())//¶‚«‚éó‘ÔŠm”F
+			if (!ship1->ReferSinkingEnding())//¶‚«‚éó‘ÔŠm”F
 			for (auto ship2 = enemyFleet.begin();
 				ship2 != enemyFleet.end();
 				ship2++) {
-				if (ship2->ReferAlive())//¶‚«‚éó‘ÔŠm”F
+				if (!ship2->ReferSinkingEnding())//¶‚«‚éó‘ÔŠm”F
 				if (PointsToCollisionbox(&*ship1, &*ship2)) {
 					ship1->Unmove(); ship1->ResetStatus();//‘D‚ğ’â~‚·‚é
 					ship2->Unmove(); ship2->ResetStatus();
@@ -1298,13 +1312,13 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = enemyFleet.begin();
 			ship1 != enemyFleet.end();
 			ship1++) {
-			if (ship1->ReferAlive())//¶‚«‚éó‘ÔŠm”F
+			if (!ship1->ReferSinkingEnding())//¶‚«‚éó‘ÔŠm”F
 				for (auto ship2 = enemyFleet.begin();
 					ship2 != enemyFleet.end();
 					ship2++) {
 				if (ship1 == ship2)//©•ª‚Æ‚Ì‚ ‚½‚è”»’è‚ğ‚µ‚Ü‚¹‚ñ
 					continue;
-				if (ship2->ReferAlive())//¶‚«‚éó‘ÔŠm”F
+				if (!ship2->ReferSinkingEnding())//¶‚«‚éó‘ÔŠm”F
 					if (PointsToCollisionbox(&*ship1, &*ship2)) {
 						ship1->Unmove(); ship1->ResetStatus();//‘D‚ğ’â~‚·‚é
 						ship2->Unmove(); ship2->ResetStatus();
@@ -1315,13 +1329,13 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = alliesFleet.begin();
 			ship1 != alliesFleet.end();
 			ship1++) {
-			if (ship1->ReferAlive())//¶‚«‚éó‘ÔŠm”F
+			if (!ship1->ReferSinkingEnding())//¶‚«‚éó‘ÔŠm”F
 				for (auto ship2 = alliesFleet.begin();
 					ship2 != alliesFleet.end();
 					ship2++) {
 				if (ship1 == ship2)//©•ª‚Æ‚Ì‚ ‚½‚è”»’è‚ğ‚µ‚Ü‚¹‚ñ
 					continue;
-				if (ship2->ReferAlive())//¶‚«‚éó‘ÔŠm”F
+				if (!ship2->ReferSinkingEnding())//¶‚«‚éó‘ÔŠm”F
 					if (PointsToCollisionbox(&*ship1, &*ship2)) {
 						ship1->Unmove(); ship1->ResetStatus();//‘D‚ğ’â~‚·‚é
 						ship2->Unmove(); ship2->ResetStatus();
@@ -1333,7 +1347,7 @@ void IngameDataManagement::CrashDecision() {
 
 bool IngameDataManagement::PointsToCollisionbox(ShipMain *ship1, ShipMain *ship2) {
 	for (int i = 0; i < ship1->ReferCollisionPointAmount(); i++) {
-		if (!ship2->ReferAlive())//‘D‚É‚Ìó‘Ô‚ğŠm”F
+		if (ship2->ReferSinkingEnding())//‘D‚É‚Ìó‘Ô‚ğŠm”F
 			break;//€‚ñ‚¾‚çI‚í‚é
 
 		Coordinate<double> temp;
@@ -1484,4 +1498,13 @@ void IngameDataManagement::SetRandom(int left, int num, bool teamA, int *teamCou
 	if (left <= 0)
 		return;
 	SetRandom(left, num + 1, teamA, teamCount);
+}
+
+void IngameDataManagement::ClearTeam() {
+	for (int i = 0; i < 4; i++) {
+		teamA[i].SetNumber(0);
+		teamB[i].SetNumber(0);
+	}
+	teamACount = 0;
+	teamBCount = 0;
 }

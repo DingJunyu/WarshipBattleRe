@@ -220,6 +220,7 @@ private:
 	}
 
 	void SetRandom(int left, int num, bool teamA, int *teamCount);
+	void ClearTeam();
 
 	int asyncLoadNum;//”ñ“¯Šú“Ç‚İ‚Ş”
 };

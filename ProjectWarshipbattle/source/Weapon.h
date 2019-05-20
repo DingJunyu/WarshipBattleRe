@@ -48,9 +48,9 @@ public:
 	void SetCoolDownTime(int time) { reloadTime = time; }
 	void Turn(bool right) {
 		if (right)
-			radianOnZ += MathAndPhysics::PI * (1.0 / 180.0);
+			radianOnZ += MathAndPhysics::PI * (0.2 / 180.0);
 		else
-			radianOnZ -= MathAndPhysics::PI * (1.0 / 180.0);
+			radianOnZ -= MathAndPhysics::PI * (0.2 / 180.0);
 	}
 	bool Pull(bool up);
 

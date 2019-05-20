@@ -97,7 +97,7 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 1 && !press) {
 			SetTrans(frameCount - seconds + 100);
 		}
-		DxLib::DrawFormatString(380, 110, Cr, "%2.3lf", S_data.hitRate * 100);
+		DxLib::DrawFormatString(380, 110, Cr, "%2.1lf%%", S_data.hitRate * 100);
 		ResetTrans();
 	}
 	if (frameCount >= seconds  || press) {
@@ -111,14 +111,14 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 3 && !press) {
 			SetTrans(frameCount - seconds * 2 + 100);
 		}
-		DxLib::DrawFormatString(380, 330, Cr, "%.0lf", S_data.movedDis);
+		DxLib::DrawFormatString(380, 330, Cr, "%.0lfŠC—¢", S_data.movedDis);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 3 || press) {
 		if (frameCount < seconds * 4 && !press) {
 			SetTrans(frameCount - seconds * 3 + 100);
 		}
-		DxLib::DrawFormatString(380, 440, Cr, "%d", S_data.killed);
+		DxLib::DrawFormatString(380, 440, Cr, "%dÇ", S_data.killed);
 		ResetTrans();
 	}
 

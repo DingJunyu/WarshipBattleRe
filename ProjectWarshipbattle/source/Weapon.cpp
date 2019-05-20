@@ -52,7 +52,7 @@ bool Weapon::ReferShootable() {
 bool Weapon::Pull(bool up) {
 	if (up) {
 		if (radianOnY <= maxRadianOnY) {
-			radianOnY += MathAndPhysics::PI*(double)(0.25 / 180.0);
+			radianOnY += MathAndPhysics::PI*(double)(0.1 / 180.0);
 			return false;
 		}
 		radianOnY = maxRadianOnY;
@@ -60,7 +60,7 @@ bool Weapon::Pull(bool up) {
 	}
 	else {
 		if (radianOnY >= 0) {
-			radianOnY -= MathAndPhysics::PI*(double)(0.25 / 180.0);
+			radianOnY -= MathAndPhysics::PI*(double)(0.1 / 180.0);
 			return false;
 		}
 		radianOnY = 0;

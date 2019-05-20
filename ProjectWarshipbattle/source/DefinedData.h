@@ -32,6 +32,8 @@ enum CommandSerial {
 //	SETTING,
 	EXIT,
 	GAME_START,
+	RANDOM_FORMATION,
+	CLEAR_FORMATION,
 	PLUS,
 	MINUS,
 //	FORMATION_UP,
@@ -51,6 +53,7 @@ enum CommandSerial {
 
 	SELECT_IN_FORMATION = 60,//編成用
 
+	/*編成メニュー新オーダー*/
 	EXIT_IN_FORMATION = 76
 };
 
