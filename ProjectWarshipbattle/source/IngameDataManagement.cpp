@@ -740,10 +740,14 @@ void IngameDataManagement::InifFormationBoard() {
 	teamA[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
 	teamA[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
 
+	SetRandom(6,0,true,&teamACount);//ランダムに生成する
+
 	teamB[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1);
 	teamB[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
 	teamB[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
 	teamB[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
+
+	SetRandom(6, 0, false, &teamBCount);//ランダムに生成する
 
 	teamA[flagShipNum].SetFlag();
 }
@@ -1465,4 +1469,19 @@ void IngameDataManagement::CheckErrorList() {
 
 void IngameDataManagement::ClearErrorList() {
 	msgList.empty();
+}
+
+void IngameDataManagement::SetRandom(int left, int num, bool teamA, int *teamCount) {
+	int temp = 0;
+	temp = rand() % left + 1;
+	if (temp > maxCountInATeam / 3) {//一種類の船の数を多すぎにならないように
+		temp /= 2;
+	}
+	if (left <= 2)//最後残った部分全部あげる
+		temp = left;
+	SetThisShipCount(teamCount, num, temp, teamA);
+	left -= temp;
+	if (left <= 0)
+		return;
+	SetRandom(left, num + 1, teamA, teamCount);
 }

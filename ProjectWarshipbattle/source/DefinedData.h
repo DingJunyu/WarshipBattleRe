@@ -236,9 +236,9 @@ namespace BUTTON_POSITION_INGAME {
 	const double EXIT_X = .85;
 	const double EXIT_Z = .14;
 
-	const double SHOOT_MULTI = .06;
+	const double SHOOT_MULTI = .24;
 	const double SHOOT_X = .63;
-	const double SHOOT_Z = .88;
+	const double SHOOT_Z = .81;
 
 	const double TURRET_TURN_LEFT_MULTI = .06;
 	const double TURRET_TURN_LEFT_X = .63;
@@ -268,13 +268,13 @@ namespace BUTTON_POSITION_INGAME {
 	const double TURN_RETURN_X = 0.5 - .027;
 	const double TURN_RETURN_Z = .7;
 
-	const double INCREASE_OUTPUT_MULTI = .06;
+	const double INCREASE_OUTPUT_MULTI = .24;
 	const double INCREASE_OUTPUT_X = 0.025;
-	const double INCREASE_OUTPUT_Z = 0.82;
+	const double INCREASE_OUTPUT_Z = 0.79;
 	
-	const double DECREASE_OUTPUT_MULTI = .06;
+	const double DECREASE_OUTPUT_MULTI = .24;
 	const double DECREASE_OUTPUT_X = 0.025;
-	const double DECREASE_OUTPUT_Z = 0.86;
+	const double DECREASE_OUTPUT_Z = 0.88;
 
 	const double CHANGE_CAMERA_MULTI = .4;
 	const double CHANGE_CAMERA_X = 0.83;
@@ -289,12 +289,12 @@ namespace BUTTON_POSITION_INGAME {
 
 namespace USER_INTERFACE_POSITION {
 	const double RADAR_A_MULTI = .04;
-	const double RADAR_A_X = .665;
+	const double RADAR_A_X = .705;
 	const double RADAR_A_Z = .79;
 
 	const double ARROW_RED_A_MULTI = .036;
-	const double ARROW_RED_A_X = .6928;
-	const double ARROW_RED_A_Z = .8345;
+	const double ARROW_RED_A_X = RADAR_A_X + .0278;
+	const double ARROW_RED_A_Z = RADAR_A_Z + .0445;
 
 	const double ARROW_WHITE_SPEED_MULTI = .08;
 	const double ARROW_WHITE_SPEED_X = .14;

@@ -205,6 +205,21 @@ private:
 	const int maxCountInATeam = 10;
 	int teamACount = 0;
 	int teamBCount = 0;
+	bool SetThisShipCount(int *Count,int number,int Amount,bool TeamA) {
+		if (*Count + Amount <= maxCountInATeam) {
+			(*Count) += Amount;
+			if (TeamA) {
+				teamA[number].SetNumber(Amount);
+			}
+			else {
+				teamB[number].SetNumber(Amount);
+			}
+			return true;
+		}
+		return false;//変更失敗時にファルスを返す
+	}
+
+	void SetRandom(int left, int num, bool teamA, int *teamCount);
 
 	int asyncLoadNum;//非同期読み込む数
 };

@@ -11,8 +11,8 @@
 42,Engine_MaxOutput
 1.5,Engine_bIncRate
 0.75,MaxSpeed
-2200,WeaponCoolDown
-3,WeaponDamage
+4400,WeaponCoolDown
+14,WeaponDamage
 20,WeaponHigh
 17,WeaponInitialSpeed
 9,WeaponCount

@@ -20,6 +20,8 @@ public:
 	void DrawNumber(Coordinate2D<int> coord);
 	void DrawBar(Coordinate2D<int> coord);//引数はマウスの座標
 
+	void SetNumber(int num) { NumberChoosed = num; }
+
 	void ChangeFlagStatus() { flag = false; }
 	void SetFlag() { flag = true; }
 	void Plus() { NumberChoosed++; if (NumberChoosed > 10) NumberChoosed = 10; }
