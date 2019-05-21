@@ -1,6 +1,7 @@
 #pragma once
 #include"DxLib.h"
 #include"DefinedData.h"
+#include"Camera.h"
 #include<time.h>
 #include<cmath>
 class Effect
@@ -23,7 +24,7 @@ public:
 	}
 	~Effect();
 
-	void Draw(int x, int z);
+	void Draw(Camera CM);
 	void DrawMark(Coordinate2D<int> Coord);//–½’†‚È‚Ç‚ð•`‚­Žž‚ÉŽg‚¤•`‰æ•ûŽ®
 	void Move();
 

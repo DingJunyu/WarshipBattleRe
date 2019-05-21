@@ -539,9 +539,11 @@ void ShipMain::CalMainPoint() {
 void ShipMain::DrawMainPoint(Camera camera) {
 	Coordinate<double> point = fireControllerMain.ReferAnswer();
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);//“§–¾“x‚ð‰º‚ª‚é
-	DrawCircleAA((float)(point.x - camera.ReferRealCameraX()),
-		(float)(point.z-camera.ReferRealCameraZ()),
-		70,32,GetColor(52,152,219),0,2.0);
+	DrawCircleAA((float)((point.x - camera.ReferRealCameraX())*camera.ReferZoomRatio()),
+		(float)((point.z - camera.ReferRealCameraZ())*camera.ReferZoomRatio()),
+		float(lockCircleR * camera.ReferZoomRatio() * camera.ReferZoomRatio()),
+		lockCirclePosNum, GetColor(52, 152, 219),
+		FALSE, lockCircleThick);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//“§–¾“x‚ð‰º‚ª‚é
 }
 

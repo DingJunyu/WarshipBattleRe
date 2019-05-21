@@ -102,12 +102,12 @@ void StatisticBoardData::Draw() {
 			*(handleList + StatisticBoard::LOSE), TRUE);
 
 	/*今回のデータを描く*/
-	if (frameCount >= 0 || press) {
+	if (frameCount >= 0 || press) {//一度クリックしました、または時間が過ぎましたら
 		if (frameCount < seconds * 1 && !press) {
-			SetTrans(frameCount - seconds + 100);
+			SetTrans(frameCount - seconds + 100);//透過度がどんどん上がるように
 		}
 		DxLib::DrawFormatString(380, 110, Cr, "%2.1lf%%", S_data.hitRate * 100);
-		ResetTrans();
+		ResetTrans();//透過度をリセット
 	}
 	if (frameCount >= seconds  || press) {
 		if (frameCount < seconds * 2 && !press) {
@@ -120,7 +120,7 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 3 && !press) {
 			SetTrans(frameCount - seconds * 2 + 100);
 		}
-		DxLib::DrawFormatString(380, 325, Cr, "%.0lf海里", S_data.movedDis);
+		DxLib::DrawFormatString(380, 325, Cr, "%.1lf海里", S_data.movedDis);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 3 || press) {

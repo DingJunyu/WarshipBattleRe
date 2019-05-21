@@ -8,7 +8,7 @@ Effect::~Effect()
 {
 }
 
-void Effect::Draw(int x,int z) {
+void Effect::Draw(Camera CM) {
 	double rotateX = 0;
 	double rotateZ = 0;
 	double offsetOnX;
@@ -20,8 +20,11 @@ void Effect::Draw(int x,int z) {
 	double realX, realZ;
 
 	/*カメラの座標と偏移と今の座標を合わせて、書くべきところの座標を計算する*/
-	realX = coord.x - x - offsetOnX;
-	realZ = coord.z - z - offsetOnZ;
+	realX = coord.x - CM.ReferRealCameraX() - offsetOnX * CM.ReferZoomRatio();
+	realZ = coord.z - CM.ReferRealCameraZ() - offsetOnZ * CM.ReferZoomRatio();
+
+	realX *= CM.ReferZoomRatio();
+	realZ *= CM.ReferZoomRatio();
 
 	/*アニメーションコントロール*/
 	nextFlame = flame % 64;
@@ -29,23 +32,27 @@ void Effect::Draw(int x,int z) {
 
 
 	/*画面に入る時だけ描画を行う*/
-	if (realX > 0 && realX < Screen::SCREEN_X&&
-		realZ > 0 && realZ < Screen::SCREEN_Z) {
+	if (realX > 0 && realX < Screen::SCREEN_X * 1 / CM.ReferZoomRatio() &&
+		realZ > 0 && realZ < Screen::SCREEN_Z * 1 / CM.ReferZoomRatio()) {
 		switch (type) {
 		case TypeOfEffect::BUBBLE:
 		case TypeOfEffect::SMOKE:
 		default:
-			DrawRotaGraph3((int)coord.x - x - (int)offsetOnX,
-				(int)coord.z - z - (int)offsetOnZ,
+			DrawRotaGraph3((int)realX,
+				(int)realZ,
 				0, 0,
-				zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
+				zoomMutliple* CM.ReferZoomRatio(),
+				zoomMutliple* CM.ReferZoomRatio(),
+				radian - MathAndPhysics::PI / 4,
 				*(graphicHandle + nextFlame), TRUE, FALSE); break;
 		case TypeOfEffect::EXPLOSION:
 		case TypeOfEffect::RIPPLE:
-			DrawRotaGraph3((int)coord.x - x - (int)offsetOnX,
-				(int)coord.z - z - (int)offsetOnZ,
+			DrawRotaGraph3((int)realX,
+				(int)realZ,
 				graphX/2, graphZ/2,
-				zoomMutliple, zoomMutliple, radian - MathAndPhysics::PI / 4,
+				zoomMutliple* CM.ReferZoomRatio(), 
+				zoomMutliple* CM.ReferZoomRatio(),
+				radian - MathAndPhysics::PI / 4,
 				*(graphicHandle + nextFlame), TRUE, FALSE); break;
 		}
 	}
@@ -54,7 +61,7 @@ void Effect::Draw(int x,int z) {
 
 	/*テスト用*/
 	/*unsigned int Cr = GetColor(0, 0, 255);
-	DrawPixel(coord.x - x, coord.z - z, Cr);*/
+	DrawPixel(coord.x - CM.ReferRealCameraX(), coord.z - CM.ReferRealCameraZ(), Cr);*/
 }
 
 void Effect::DrawMark(Coordinate2D<int> Coord) {

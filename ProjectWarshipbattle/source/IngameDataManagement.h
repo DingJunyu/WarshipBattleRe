@@ -15,6 +15,7 @@ public:
 		shouldIContinue = true;
 		flameCount = 0;
 		flagShipNum = 0;
+		multipleRate = 0.5;
 	}
 	~IngameDataManagement();
 
@@ -95,7 +96,9 @@ private:
 	void TEST_DRAW();//デバッグ用データ確認
 	void DrawSea();//海を描く//九枚を描くため、効率が低いになって、もう使わない
 	void DrawSea_New();//新しい四枚描くバージョン
+	void DrawSea_New_Extend();
 	void DrawMesh_Sea();
+	void DrawMesh_Sea_Extend();
 	void DrawShips();//船を描く
 	void DrawShipsShadow();//影を描く
 	void DrawShipsOnMiniMap();//ミニマップを描く
@@ -225,4 +228,6 @@ private:
 	void ClearTeam();
 
 	int asyncLoadNum;//非同期読み込む数
+
+	double multipleRate;
 };

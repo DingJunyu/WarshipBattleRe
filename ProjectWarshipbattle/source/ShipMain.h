@@ -273,5 +273,8 @@ private:
 	const int sinkingFlame = 360;
 	int flameAfterSink;
 
+	const float lockCircleR = 70;
+	const int lockCirclePosNum = 70;
+	const float lockCircleThick = 2.0;
 
 };

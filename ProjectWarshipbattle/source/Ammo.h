@@ -1,5 +1,6 @@
 #pragma once
 #include "AllMovableObjects.h"
+#include "Camera.h"
 class Ammo :
 	public AllMovableObjects
 {
@@ -39,7 +40,7 @@ public:
 	int ReferSerialNumber() { return serialNumber; }
 	
 	//’Êí•`‰æ
-	void Draw(int x,int z);
+	void Draw(Camera CM);
 	//Á‚·‘O‚Ì“®‰æ‰‰o
 	void DrawDelete(int x, int z);
 	bool FallIntoWater() { 
@@ -62,5 +63,7 @@ private:
 
 	/*¯•Ê”Ô†*/
 	int serialNumber;
+
+	const double multipleRate = 0.08;
 };
 

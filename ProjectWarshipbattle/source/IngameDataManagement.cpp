@@ -147,8 +147,8 @@ void IngameDataManagement::DrawAll() {
 	auto ship = alliesFleet.begin();//ÉCÉeÉåÅ[É^Ç≈ëÄçÏÇµÇƒÇ¢ÇÈëDÇÃÉXÉeÅ[É^ÉXÇéÊÇÈ
 
 	/*äCÇï`Ç≠*/
-	DrawSea_New();
-	DrawMesh_Sea();
+	DrawSea_New_Extend();
+	DrawMesh_Sea_Extend();
 
 	//ëDÇÃâ∫ÇÃÉGÉtÉFÉNÉgÇï`âÊÇ∑ÇÈ
 	DrawEffectUnderShips();
@@ -411,6 +411,108 @@ void IngameDataManagement::DrawSea_New() {
 	DrawGraph((int)MCPOX - (int)mapX, (int)MCPOZ - (int)mapZ, *PL.ReferMapHandle(), TRUE);
 }
 
+void IngameDataManagement::DrawSea_New_Extend() {
+	double mapX = PL.ReferMapX();
+	double mapZ = PL.ReferMapZ();
+	double MCPOX, MCPOZ;
+	double multiple = MainCamera.ReferZoomRatio();
+
+	if (MainCamera.ReferCameraX() > 0)
+		MCPOX = Screen::SCREEN_X / 2 - 
+		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
+	else
+		MCPOX = Screen::SCREEN_X / 2 + 
+		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
+
+	if (MainCamera.ReferCameraZ() > 0)
+		MCPOZ = Screen::SCREEN_Z / 2 - 
+		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
+	else
+		MCPOZ = Screen::SCREEN_Z / 2 + 
+		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
+
+	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
+		(int)(MCPOX + mapX * multiple), 
+		(int)(MCPOZ + mapZ * multiple),
+		*PL.ReferMapHandle(), TRUE);
+	DrawExtendGraph((int)(MCPOX - mapX * multiple),
+		(int)MCPOZ,
+		(int)(MCPOX - mapX * multiple +
+			mapX * multiple),
+		(int)(MCPOZ + mapZ  * multiple),
+		*PL.ReferMapHandle(), TRUE);
+	DrawExtendGraph((int)MCPOX, 
+		(int)(MCPOZ - mapZ * multiple),
+		(int)(MCPOX + mapX * multiple),
+		(int)(MCPOZ - mapZ * multiple + 
+			mapZ * multiple),
+		*PL.ReferMapHandle(), TRUE);
+	DrawExtendGraph((int)(MCPOX - mapX * multiple),
+		(int)(MCPOZ - mapZ * multiple),
+		(int)(MCPOX - mapX * multiple + 
+			mapX * multiple),
+		(int)(MCPOZ - mapZ * multiple + 
+			mapZ * multiple),
+		*PL.ReferMapHandle(), TRUE);
+}
+
+void IngameDataManagement::DrawMesh_Sea_Extend() {
+	double mapX = PL.ReferMapX();
+	double mapZ = PL.ReferMapZ();
+	double multiple = MainCamera.ReferZoomRatio();
+
+	double MCPOX;
+	double MCPOZ;
+
+	if (MainCamera.ReferCameraX() > 0)
+		MCPOX = Screen::SCREEN_X / 2 - 
+		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
+	else
+		MCPOX = Screen::SCREEN_X / 2 +
+		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
+
+	if (MainCamera.ReferCameraZ() > 0)
+		MCPOZ = Screen::SCREEN_Z / 2 - 
+		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
+	else
+		MCPOZ = Screen::SCREEN_Z / 2 + 
+		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
+
+	double realX = fmod(MCPOX + flameCount, mapX / 2);
+	double realZ = fmod(MCPOZ + flameCount, mapZ / 2);
+
+	if (flameCount >= mapX / 3)
+		flameCount = fmod(flameCount, mapX / 3);
+
+	flameCount += .05;
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//ìßñæìxÇâ∫Ç™ÇÈ
+	DrawExtendGraph((int)realX, (int)realZ,
+		(int)(realX + mapX * multiple),
+		(int)(realZ + mapZ * multiple),
+		*PL.ReferNoiseHandle(), TRUE);
+	DrawExtendGraph((int)(realX - mapX * multiple),
+		(int)realZ,
+		(int)(realX - mapX * multiple + 
+			mapX * multiple),
+		(int)(realZ + mapX * multiple),
+		*PL.ReferNoiseHandle(), TRUE);
+	DrawExtendGraph((int)realX,
+		(int)(realZ - mapZ * multiple),
+		(int)(realX + mapX * multiple), 
+		(int)(realZ - mapZ * multiple +
+			mapZ * multiple),
+		*PL.ReferNoiseHandle(), TRUE);
+	DrawExtendGraph((int)(realX - mapX * multiple),
+		(int)(realZ - mapZ * multiple),
+		(int)(realX - mapX * multiple +
+			mapX * multiple),
+		(int)(realZ - mapZ * multiple + 
+			mapZ * multiple),
+		*PL.ReferNoiseHandle(), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ï`âÊÉÇÅ[ÉhÇÇ‡Ç∆Ç…ñﬂÇÈ
+}
+
 void IngameDataManagement::DrawMesh_Sea() {
 	double mapX = PL.ReferMapX();
 	double mapZ = PL.ReferMapZ();
@@ -432,7 +534,7 @@ void IngameDataManagement::DrawMesh_Sea() {
 	double realZ = fmod(MCPOZ + flameCount, mapZ / 2);
 
 	if (flameCount >= PL.ReferMapX())
-		flameCount = fmod(flameCount,(double)PL.ReferMapX());
+		flameCount = fmod(flameCount, (double)PL.ReferMapX());
 
 	flameCount += .05;
 
@@ -452,13 +554,13 @@ void IngameDataManagement::DrawMesh_Sea() {
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ï`âÊÉÇÅ[ÉhÇÇ‡Ç∆Ç…ñﬂÇÈ
 }
 
+
 void IngameDataManagement::DrawThisList(std::list<Effect> *effectList) {
 	if (!effectList->empty())//ÉäÉXÉgèÛãµÇämîF
 		for (auto effect = effectList->begin();
 			effect != effectList->end();
 			effect++) {
-		effect->Draw((int)MainCamera.ReferRealCameraX(),
-			(int)MainCamera.ReferRealCameraZ());//ëäëŒç¿ïWÇóòópÇµÇƒï`Ç≠
+		effect->Draw(MainCamera);//ëäëŒç¿ïWÇóòópÇµÇƒï`Ç≠
 	}
 }
 
@@ -494,8 +596,7 @@ void IngameDataManagement::DrawAmmo() {
 	for (auto shell = shellList.begin();
 		shell != shellList.end();
 		shell++) {
-		shell->Draw((int)MainCamera.ReferRealCameraX(),
-			(int)MainCamera.ReferRealCameraZ());//ëäëŒç¿ïWÇóòópÇµÇƒï`âÊÇ∑ÇÈ
+		shell->Draw(MainCamera);//ëäëŒç¿ïWÇóòópÇµÇƒï`âÊÇ∑ÇÈ
 	}
 }
 
@@ -638,7 +739,7 @@ bool IngameDataManagement::RegisterTeam() {
 		coord.x -= 300;//êÌäÕÇÃä‘ÇÃä‘äuÇéÊÇÈ
 
 		if (!GetShipDataFromFile(coord, 0,
-			&*ship, teamA[i].ship.ReferShipType(),
+			&*ship, teamA[flagShipNum].ship.ReferShipType(),
 			i)) {
 			return false;
 		}
@@ -802,7 +903,6 @@ bool IngameDataManagement::FreeFormationBoard() {//ÉtÉäÅ[ÇµÇΩå„Ç…ÉÅÉjÉÖÅ[Çí èÌè
 }
 
 void IngameDataManagement::DrawStatisticBoard2() {
-
 	rewind(stdin);
 	statisticBoardData.GetDis(alliesFleet[0].ReferDistanceMoved()*
 		MathAndPhysics::Change_Distance/3600);
@@ -881,7 +981,7 @@ void IngameDataManagement::Control() {
 		answer == CommandSerial::MENU ||
 		answer == CommandSerial::TURN_RETURN||
 		answer == CommandSerial::CHANGE_CAMERA ||
-		answer >= CommandSerial::SELECT||
+		(answer >= CommandSerial::SELECT && answer < CommandSerial::ZOOM_IN)||
 		answer == CommandSerial::AUTO_FIRE)
 		if (!CUI.ReferClickable())
 			return;
@@ -913,6 +1013,13 @@ void IngameDataManagement::Control() {
 		case CommandSerial::EXIT:GameOver = true; break;	/*ÉQÅ[ÉÄèIóπ*/
 		case CommandSerial::CHANGE_CAMERA:showLock = !showLock; break;
 		case CommandSerial::AUTO_FIRE:autoFire = !autoFire; break;
+		}
+	}
+
+	else if (answer >= CommandSerial::ZOOM_IN) {
+		switch (answer) {
+		case CommandSerial::ZOOM_IN:MainCamera.ZoomIn(); break;
+		case CommandSerial::ZOOM_OUT:MainCamera.ZoomOut(); break;
 		}
 	}
 

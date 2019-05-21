@@ -163,6 +163,8 @@ void AllMovableObjects::DrawSub(Camera CM) {
 	/*Ž©•ª‚ÌÀ•W‚ÆƒJƒƒ‰À•W‚ð‡‚í‚¹‚ÄŒvŽZ‚·‚é*/
 	double coordX = coord.x - CM.ReferRealCameraX();
 	double coordZ = coord.z - CM.ReferRealCameraZ();
+	coordX *= CM.ReferZoomRatio();
+	coordZ *= CM.ReferZoomRatio();
 
 	//–{‘Ì‚ð•`‚­
 	/*‰æ–Ê‚É“ü‚éŽž‚¾‚¯•`‰æ‚ðs‚¤*/
@@ -171,7 +173,9 @@ void AllMovableObjects::DrawSub(Camera CM) {
 		DrawRotaGraph3((int)(coordX),
 			(int)(coordZ),
 			(int)(length / 2), (int)(width / 2),
-			multiple, multiple, radianOnZ,
+			multiple * CM.ReferZoomRatio(), 
+			multiple * CM.ReferZoomRatio(), 
+			radianOnZ,
 			*pictureHandle, TRUE, FALSE);
 	}
 }
@@ -182,8 +186,10 @@ void AllMovableObjects::DrawSubShadow(Camera CM) {
 	int shadowDistanceOnZ = 2;
 
 	/*À•W‚ÆƒJƒƒ‰À•W‚ð‡‚í‚¹‚ÄŒvŽZ‚·‚é*/
-	double coordX = coord.x - CM.ReferRealCameraX() + shadowDistanceOnX;
-	double coordZ = coord.z - CM.ReferRealCameraZ() + shadowDistanceOnZ;
+	double coordX = coord.x - CM.ReferRealCameraX();
+	double coordZ = coord.z - CM.ReferRealCameraZ();
+	coordX *= CM.ReferZoomRatio();
+	coordZ *= CM.ReferZoomRatio();
 
 	//ƒJƒƒ‰‚ÌÀ•W‚ðŽæ‚Á‚Ä‰f‚·À•W‚ðŒvŽZ‚·‚é
 	//‰e‚ð•`‚­
@@ -191,10 +197,11 @@ void AllMovableObjects::DrawSubShadow(Camera CM) {
 	if (coordX > 0 - 100 && coordX < Screen::SCREEN_X + 100 && coordZ>0 - 100 &&
 		coordZ < Screen::SCREEN_Z + 100) {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 170);//“§–¾“x‚ð‰º‚ª‚é
-		DrawRotaGraph3((int)(coordX),
-			(int)(coordZ),
+		DrawRotaGraph3((int)(coordX) + shadowDistanceOnX,
+			(int)(coordZ) + shadowDistanceOnZ,
 			(int)(length / 2), (int)(width / 2),
-			multiple, multiple, radianOnZ,
+			multiple * CM.ReferZoomRatio(),
+			multiple * CM.ReferZoomRatio(), radianOnZ,
 			*shadowHandle, TRUE, FALSE);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	}//•`‰æƒ‚[ƒh‚ð‚à‚Æ‚É–ß‚é

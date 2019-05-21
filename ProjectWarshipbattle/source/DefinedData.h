@@ -4,6 +4,9 @@ namespace Screen {
 	const int SCREEN_Z = 760;
 	const int COLOR = 32;
 	const double MULTIPLE = (double)SCREEN_X / 1280.0;
+	const double DEFAULT_MULTIPLE = 1.0;
+	const double MAX_MULTIPLE = 1.5;
+	const double MIN_MULTIPLE = 0.4;
 }
 
 //コントローラー用指令集
@@ -54,7 +57,11 @@ enum CommandSerial {
 	SELECT_IN_FORMATION = 60,//編成用
 
 	/*編成メニュー新オーダー*/
-	EXIT_IN_FORMATION = 76
+	EXIT_IN_FORMATION = 76,
+
+	/*ZoomIn、ZoomOut*/
+	ZOOM_IN = 200,
+	ZOOM_OUT = 201
 };
 
 //CUIの中に保存されたものとその番号

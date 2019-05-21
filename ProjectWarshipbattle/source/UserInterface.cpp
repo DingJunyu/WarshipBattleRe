@@ -392,9 +392,11 @@ void UserInterface::DrawRotatePicture2(int SN, double X, double Z, double Multip
 
 /*ロックの円を描く*/
 void UserInterface::DrawCircle(Coordinate2D<double> coord, Camera camera) {
-	DrawRotatePicture2(UI_LIST::LOCK_CIRCLE, coord.x - camera.ReferRealCameraX(), 
-		coord.z - camera.ReferRealCameraZ(),
-		USER_INTERFACE_POSITION::LOCK_CIRCLE, radian_returnTheLockCircle);
+	DrawRotatePicture2(UI_LIST::LOCK_CIRCLE, 
+		(coord.x - camera.ReferRealCameraX())*camera.ReferZoomRatio(), 
+		(coord.z - camera.ReferRealCameraZ())*camera.ReferZoomRatio(),
+		USER_INTERFACE_POSITION::LOCK_CIRCLE * camera.ReferZoomRatio(),
+		radian_returnTheLockCircle);
 	radian_returnTheLockCircle += MathAndPhysics::PI / 720;
 }
 
@@ -408,6 +410,8 @@ void UserInterface::DrawMyCircle(Camera camera, double radian) {
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);//透明度を下がる
 	DrawRotatePicture2(UI_LIST::MY_DIRECT,
-		xOnScreen, zOnScreen, USER_INTERFACE_POSITION::MY_DIRECT_MULTI, radian);
+		xOnScreen, zOnScreen, 
+		USER_INTERFACE_POSITION::MY_DIRECT_MULTI * camera.ReferZoomRatio(),
+		radian);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//透明度を戻る
 }

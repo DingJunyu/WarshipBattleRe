@@ -16,19 +16,23 @@ void Ammo::SetData() {
 	GetGraphSize(*ammoHandle, &graphX, &graphZ);
 }
 
-void Ammo::Draw(int x,int z){
+void Ammo::Draw(Camera CM){
 	double realX, realZ;
 	/*自分野座標とカメラ座標を合わせて計算する*/
-	realX = ReferCoordX() - x;
-	realZ = ReferCoordZ() - z;
+	realX = ReferCoordX() - CM.ReferRealCameraX();
+	realZ = ReferCoordZ() - CM.ReferRealCameraZ();
+	realX *= CM.ReferZoomRatio();
+	realZ *= CM.ReferZoomRatio();
 
 	/*画面に入る時だけ描画を行う*/
 	if (realX > 0 && realX < Screen::SCREEN_X&&
 		realZ>0 && realZ < Screen::SCREEN_Z) {
-		DrawRotaGraph3((int)ReferCoordX() - x,
-			(int)ReferCoordZ() - z,
+		DrawRotaGraph3((int)realX,
+			(int)realZ,
 			graphX / 2, graphZ / 2,
-			0.08, 0.08, ReferRadianOnZ(),
+			multipleRate * CM.ReferZoomRatio(),
+			multipleRate * CM.ReferZoomRatio(),
+			ReferRadianOnZ(),
 			*ammoHandle, TRUE, FALSE);
 	}
 }

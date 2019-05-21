@@ -1,11 +1,13 @@
 #pragma once
 #include"DefinedData.h"
 #include"IncludeForAll.h"
-const double ZOOM_RATE = 1.0f;
+const double ZOOM_RATE = 0.009f;
 class Camera
 {
 public:
-	Camera(int CT): cameraType(CT) {}
+	Camera(int CT): cameraType(CT) {
+		zoomRatio = Screen::DEFAULT_MULTIPLE;
+	}
 	~Camera();
 
 	//カメラ座標問い合わせ
@@ -31,12 +33,12 @@ public:
 	void GetXZ(double X, double Z) { 
 		GetX(X); GetZ(Z);
 		//カメラの左上の座標を計算する
-		realCameraX = cameraX - Screen::SCREEN_X / 2;
-		realCameraZ = cameraZ - Screen::SCREEN_Z / 2;
+		realCameraX = cameraX - Screen::SCREEN_X / 2 * 1/zoomRatio;
+		realCameraZ = cameraZ - Screen::SCREEN_Z / 2 * 1/zoomRatio;
 	}
 	//カメラ倍率設定
-	void ZoomIn() { zoomRatio += ZOOM_RATE; }
-	void ZoomOut() { zoomRatio -= ZOOM_RATE; }
+	void ZoomIn();
+	void ZoomOut();
 	//カメラ倍率問い合わせ
 	double ReferZoomRatio() { return zoomRatio; }
 
