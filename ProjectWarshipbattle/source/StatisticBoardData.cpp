@@ -4,6 +4,8 @@ StatisticBoardData::StatisticBoardData()
 {
 	boardData[7] = { 0 };
 	press = false;
+	for (int i = 0; i < 7; i++)
+		newHighScore[i] = false;
 }
 
 StatisticBoardData::~StatisticBoardData()
@@ -41,13 +43,19 @@ void StatisticBoardData::Read(bool Res) {
 	boardData[TOTAL_MOVE] += S_data.movedDis;
 	boardData[TOTAL_DAMAGE] += (double)S_data.damage;
 	boardData[TOTAL_DAMAGE_RECIEVED] += (double)S_data.damageRecieved;
-	if (S_data.damage > MAX_DAMAGE)
+	if (S_data.damage > MAX_DAMAGE) {
 		boardData[MAX_DAMAGE] = S_data.damage;
+		newHighScore[MAX_DAMAGE] = true;
+	}
 	if (S_data.movedDis >
-		boardData[MAX_MOVE])
+		boardData[MAX_MOVE]) {
 		boardData[MAX_MOVE] = S_data.movedDis;
-	if (S_data.hitRate > boardData[MAX_HITRATE])
+		newHighScore[MAX_MOVE] = true;
+	}
+	if (S_data.hitRate > boardData[MAX_HITRATE]) {
 		boardData[MAX_HITRATE] = S_data.hitRate;
+		newHighScore[MAX_HITRATE] = true;
+	}
 
 	for (int i = TOTAL_KILL; i <= MAX_HITRATE; i++)
 		fprintf_s(filePointer, "%lf\n", boardData[i]);
@@ -72,6 +80,7 @@ bool StatisticBoardData::Update() {
 	return false;
 }
 
+/*この部分の座標は直接してしましたので、解像度が変わる時に変更する必要がある*/
 void StatisticBoardData::Draw() {
 	SetDrawScreen(DX_SCREEN_BACK);
 	ClearDrawScreen();
@@ -86,10 +95,10 @@ void StatisticBoardData::Draw() {
 		*(handleList + StatisticBoard::SB_BACKGROUND), FALSE);
 
 	if (win)
-		DxLib::DrawExtendGraph(10, 20, 210, 91,
+		DxLib::DrawExtendGraph(40, 520, 460, 691,
 			*(handleList + StatisticBoard::WIN), TRUE);
 	else
-		DxLib::DrawExtendGraph(10, 20, 210, 91,
+		DxLib::DrawExtendGraph(40, 520, 460, 691,
 			*(handleList + StatisticBoard::LOSE), TRUE);
 
 	/*今回のデータを描く*/
@@ -111,14 +120,14 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 3 && !press) {
 			SetTrans(frameCount - seconds * 2 + 100);
 		}
-		DxLib::DrawFormatString(380, 330, Cr, "%.0lf海里", S_data.movedDis);
+		DxLib::DrawFormatString(380, 325, Cr, "%.0lf海里", S_data.movedDis);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 3 || press) {
 		if (frameCount < seconds * 4 && !press) {
 			SetTrans(frameCount - seconds * 3 + 100);
 		}
-		DxLib::DrawFormatString(380, 440, Cr, "%d隻", S_data.killed);
+		DxLib::DrawFormatString(380, 435, Cr, "%d隻", S_data.killed);
 		ResetTrans();
 	}
 
@@ -131,9 +140,18 @@ void StatisticBoardData::Draw() {
 			if (frameCount - seconds * 4 < seconds * 5 + seconds * i && !press) {
 				SetTrans(frameCount - seconds * 4 + seconds * i + 100);
 			}
+			if (newHighScore[i])
+				DrawStar({ 545,110 + i * 75 }, { 595 , 160 + i * 75 });
 			DxLib::DrawFormatString(940, 115 + i * 75, Cr, "%-14.1lf", boardData[i]);
 			ResetTrans();
 		}
 	}
 	DxLib::ScreenFlip();
+}
+
+void StatisticBoardData::DrawStar(Coordinate2D<int> coord, Coordinate2D<int> coord2) {
+	DrawExtendGraph(coord.x, coord.z,
+		coord2.x, coord2.z, *(handleList + ((frameCount % 60 > 30) ? +
+		StatisticBoard::NEW_LIGHT :
+		StatisticBoard::NEW_DARK)), TRUE);
 }

@@ -165,10 +165,12 @@ enum FormationBoard {
 };
 
 enum StatisticBoard {
-	SB_NUM = 4,
+	SB_NUM = 5,
 	SB_BACKGROUND = 0,
 	WIN,
-	LOSE
+	LOSE,
+	NEW_LIGHT,
+	NEW_DARK
 };
 
 enum ButtonEvent {

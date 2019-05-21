@@ -98,8 +98,10 @@ void SingleGame_DeathMatch_Progress() {
 	TeamDeathMatchControl TDMC;
 
 	canGotoNextStep = IDM.Inif();//初期化
+	if (ProcessMessage() == 0 && canGotoNextStep)
 	canGotoNextStep = IDM.FormationBoard();//編成画面を描く
-	IDM.FreeFormationBoard();//編成に使ったメモリなどを解放する
+	if (ProcessMessage() == 0 && canGotoNextStep)
+	canGotoNextStep = IDM.FreeFormationBoard();//編成に使ったメモリなどを解放する
 
 	/*ゲームメインプログレス*/
 	if (ProcessMessage() == 0 && canGotoNextStep) {

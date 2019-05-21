@@ -594,7 +594,7 @@ bool IngameDataManagement::FormationBoard() {
 		if (ans == CommandSerial::RANDOM_FORMATION) {
 			CUI.SetClickTime();
 			ClearTeam();//ÉâÉìÉ_ÉÄëOÇ…ÉNÉäÉAÇ∑ÇÈ
-			int temp = rand() % 10 + 1;
+			int temp = rand() % 9 + 1;
 			SetRandom(temp, 0, true, &teamACount);
 			SetRandom(temp, 0, false, &teamBCount);
 		}
@@ -625,7 +625,7 @@ bool IngameDataManagement::FormationBoard() {
 	return true;
 }
 
-void IngameDataManagement::RegisterTeam() {
+bool IngameDataManagement::RegisterTeam() {
 	int count = 0;
 	Coordinate<double> coord{ -500, -10, 200 };
 
@@ -637,14 +637,10 @@ void IngameDataManagement::RegisterTeam() {
 
 		coord.x -= 300;//êÌäÕÇÃä‘ÇÃä‘äuÇéÊÇÈ
 
-		ship->SetCoord(coord);
-		ship->SetRadianOnZ(0);
-		if (!ship->InifThisShip(&PL, ET, &SL, teamA[flagShipNum].ship.ReferShipType(),
-			flagShipNum)) {
-			DrawString(10, 10, "ÉtÉ@ÉCÉãì«Ç›çûÇﬁé∏îs", GetColor(255, 255, 255));
-			DxLib::ScreenFlip();
-			WaitKey();
-			exit(1);
+		if (!GetShipDataFromFile(coord, 0,
+			&*ship, teamA[i].ship.ReferShipType(),
+			i)) {
+			return false;
 		}
 	}
 
@@ -659,13 +655,10 @@ void IngameDataManagement::RegisterTeam() {
 
 			coord.x -= 300;//êÌäÕÇÃä‘ÇÃä‘äuÇéÊÇÈ
 
-			ship->SetCoord(coord);
-			ship->SetRadianOnZ(0);
-			if (!ship->InifThisShip(&PL, ET, &SL, teamA[i].ship.ReferShipType(), i)) {
-				DrawString(10, 10, "ÉtÉ@ÉCÉãì«Ç›çûÇﬁé∏îs", GetColor(255, 255, 255));
-				DxLib::ScreenFlip();
-				WaitKey();
-				exit(1);
+			if (!GetShipDataFromFile(coord, 0,
+				&*ship, teamA[i].ship.ReferShipType(),
+				i + teamA[flagShipNum].ReferNumber())) {//ÉtÉâÉOÉVÅ[ÉvÇÃÉ^ÉCÉvÇÃà íuÇ©ÇÁè˜ÇÈ
+				return false;
 			}
 		}
 	}
@@ -682,17 +675,28 @@ void IngameDataManagement::RegisterTeam() {
 
 			coord.x += 300;//êÌäÕÇÃä‘ÇÃä‘äuÇéÊÇÈ
 
-			ship->SetCoord(coord);
-			ship->SetRadianOnZ(MathAndPhysics::PI);
-			if (!ship->InifThisShip(&PL, ET, &SL, teamB[i].ship.ReferShipType(), 
+			if (!GetShipDataFromFile(coord, MathAndPhysics::PI,
+				&*ship, teamB[i].ship.ReferShipType(), 
 				i + CommandSerial::SELECT_RANGE + 1)) {
-				DrawString(10, 10, "ÉtÉ@ÉCÉãì«Ç›çûÇﬁé∏îs", GetColor(255, 255, 255));
-				DxLib::ScreenFlip();
-				WaitKey();
-				exit(1);
+				return false;
 			}
 		}
 	}
+	return true;
+}
+
+bool IngameDataManagement::GetShipDataFromFile(Coordinate<double> Coord,
+	double radian, ShipMain *ship, int shipType,int num) {
+	ship->SetCoord(Coord);
+	ship->SetRadianOnZ(radian);
+	if (!ship->InifThisShip(&PL, ET, &SL, shipType,
+		num)) {
+		DrawString(10, 10, "ÉtÉ@ÉCÉãì«Ç›çûÇﬁé∏îs", GetColor(255, 255, 255));
+		DxLib::ScreenFlip();
+		WaitKey();
+		return false;
+	}
+	return true;
 }
 
 void IngameDataManagement::DrawFormationBoard() {
@@ -740,7 +744,7 @@ void IngameDataManagement::DrawFormationBoard() {
 	DxLib::ScreenFlip();
 }
 
-void IngameDataManagement::InifFormationBoard() {
+bool IngameDataManagement::InifFormationBoard() {
 	for (int i = 0; i < 4; i++) {
 		teamA.push_back(ShipCard(PL.ReferFormationBoardHandle(FormationBoard::FB_SHIP_CARD),
 			PL.ReferFantasyNumber()));
@@ -748,27 +752,29 @@ void IngameDataManagement::InifFormationBoard() {
 			PL.ReferFantasyNumber()));
 	}
 	
-	teamA[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1);
-	teamA[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
-	teamA[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
-	teamA[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
+	if (!teamA[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1)) return false;
+	if (!teamA[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1)) return false;
+	if (!teamA[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1)) return false;
+	if (!teamA[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1)) return false;
 
-	SetRandom(6,0,true,&teamACount);//ÉâÉìÉ_ÉÄÇ…ê∂ê¨Ç∑ÇÈ
+	SetRandom(6, 0, true, &teamACount);//ÉâÉìÉ_ÉÄÇ…ê∂ê¨Ç∑ÇÈ
 
-	teamB[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1);
-	teamB[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1);
-	teamB[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1);
-	teamB[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1);
+	if (!teamB[0].ship.InifThisShip(&PL, ET, &SL, 4000, 1)) return false;
+	if (!teamB[1].ship.InifThisShip(&PL, ET, &SL, 5000, 1)) return false;
+	if (!teamB[2].ship.InifThisShip(&PL, ET, &SL, 4001, 1)) return false;
+	if (!teamB[3].ship.InifThisShip(&PL, ET, &SL, 5001, 1)) return false;
 
 	SetRandom(6, 0, false, &teamBCount);//ÉâÉìÉ_ÉÄÇ…ê∂ê¨Ç∑ÇÈ
 
 	teamA[flagShipNum].SetFlag();
+	return true;
 }
 
-void IngameDataManagement::FreeFormationBoard() {//ÉtÉäÅ[ÇµÇΩå„Ç…ÉÅÉjÉÖÅ[Çí èÌèÛë‘Ç…ê›íuÇ∑ÇÈ
+bool IngameDataManagement::FreeFormationBoard() {//ÉtÉäÅ[ÇµÇΩå„Ç…ÉÅÉjÉÖÅ[Çí èÌèÛë‘Ç…ê›íuÇ∑ÇÈ
 	
 	if (ProcessMessage() == 0 && shouldIContinue)
-		RegisterTeam();
+		if (!RegisterTeam())
+			return false;
 	
 	for (int i = 0; i < 4; i++) {
 		teamA[i].ship.DestroyMemory();
@@ -791,6 +797,8 @@ void IngameDataManagement::FreeFormationBoard() {//ÉtÉäÅ[ÇµÇΩå„Ç…ÉÅÉjÉÖÅ[Çí èÌè
 
 	CUI.CloseFormationMenu();
 	FC.Reset();
+
+	return true;
 }
 
 void IngameDataManagement::DrawStatisticBoard2() {
@@ -1025,7 +1033,13 @@ bool IngameDataManagement::Inif() {
 	CUI.IngameInif(&PL,&SL);//É}ÉEÉXÉRÉìÉgÉçÅ[ÉâÅ[èâä˙âª
 	
 	statisticBoardData.Inif(PL.ReferStatisticBoardHandle(0));/*ìùåvÉ{Å[ÉhÅ[ÇÃèâä˙âª*/
-	InifFormationBoard();//ï“ê¨âÊñ Çèâä˙âªÇ∑ÇÈ
+	if (!InifFormationBoard()) {//ï“ê¨âÊñ Çèâä˙âªÇ∑ÇÈ
+		DrawString(30, 30, "ÉtÉ@ÉCÉãì«Ç›çûÇﬁé∏îs\nÉ^ÉCÉgÉãÇ…ñﬂÇËÇ‹Ç∑",
+			GetColor(255, 255, 255));
+		DxLib::ScreenFlip();
+		WaitKey();
+		return false;
+	}
 
 	for (int i = 0; i < FormationBoard::FB_NUM; i++) {
 		formationBoard[i] = PL.ReferFormationBoardHandle(i);
@@ -1495,7 +1509,7 @@ void IngameDataManagement::SetRandom(int left, int num, bool teamA, int *teamCou
 		temp = left;
 	SetThisShipCount(teamCount, num, temp, teamA);
 	left -= temp;
-	if (left <= 0)
+	if (left <= 0 || num + 1 >= 4)
 		return;
 	SetRandom(left, num + 1, teamA, teamCount);
 }

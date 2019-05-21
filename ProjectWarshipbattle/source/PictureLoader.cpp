@@ -340,6 +340,10 @@ void PictureLoader::LoadStatisticBoard() {
 		"GraphicData/Back_Ground/win.png");
 	statisticBoardHandle[StatisticBoard::LOSE] = LoadGraph(
 		"GraphicData/Back_Ground/lose.png");
+	statisticBoardHandle[StatisticBoard::NEW_LIGHT] = LoadGraph(
+		"GraphicData/Back_Ground/new_light.png");
+	statisticBoardHandle[StatisticBoard::NEW_DARK] = LoadGraph(
+		"GraphicData/Back_Ground/new_dark.png");
 }
 
 void PictureLoader::LoadFormationBoard() {

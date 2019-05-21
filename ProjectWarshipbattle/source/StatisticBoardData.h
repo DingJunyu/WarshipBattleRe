@@ -22,6 +22,7 @@ public:
 
 private:
 	void Draw();
+	void DrawStar(Coordinate2D<int> coord, Coordinate2D<int> coord2);
 
 	long long int frameCount;
 	int *handleList;//
@@ -43,4 +44,5 @@ private:
 	bool win;
 	bool press;
 	long long int pressFrame;
+	bool newHighScore[7];
 };

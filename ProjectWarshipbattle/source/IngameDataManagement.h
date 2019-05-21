@@ -52,8 +52,10 @@ public:
 	void DrawLoading(int num);
 
 	bool FormationBoard();
-	void RegisterTeam();
-	void FreeFormationBoard();
+	bool RegisterTeam();
+	bool GetShipDataFromFile(Coordinate<double> Coord,double radian,ShipMain *ship,
+		int shipType, int num);
+	bool FreeFormationBoard();
 
 	void DrawStatisticBoard2();
 private:
@@ -173,7 +175,7 @@ private:
 	void EndTheGame();
 
 	void DrawFormationBoard();
-	void InifFormationBoard();
+	bool InifFormationBoard();
 
 	/*ÉGÉâÅ[èàóù*/
 	void DrawErrorList();

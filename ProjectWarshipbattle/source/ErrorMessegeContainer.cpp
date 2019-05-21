@@ -9,3 +9,8 @@ ErrorMessege FlagShip_Empty() {
 	return ErrorMessege("フラグシープが必要だ",
 		{ 50,650 }, { 350,680 });
 }
+
+ErrorMessege PressToContinue() {
+	return ErrorMessege("Press AnyKey to Continue",
+		{ 400,650 }, { 700,680 });
+}
