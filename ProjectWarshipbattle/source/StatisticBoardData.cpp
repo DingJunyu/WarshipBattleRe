@@ -106,7 +106,7 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 1 && !press) {
 			SetTrans(frameCount - seconds + 100);//透過度がどんどん上がるように
 		}
-		DxLib::DrawFormatString(380, 110, Cr, "%2.1lf%%", S_data.hitRate * 100);
+		DxLib::DrawFormatString(380, 110, Cr, "%4.1lf%%", S_data.hitRate * 100);
 		ResetTrans();//透過度をリセット
 	}
 	if (frameCount >= seconds  || press) {

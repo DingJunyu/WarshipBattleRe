@@ -423,14 +423,14 @@ void IngameDataManagement::DrawSea_New_Extend() {
 		MCPOX = Screen::SCREEN_X / 2-
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 	else
-		MCPOX = Screen::SCREEN_X / 2+
+		MCPOX =
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 
 	if (MainCamera.ReferCameraZ() > 0)
 		MCPOZ = Screen::SCREEN_Z / 2-
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 	else
-		MCPOZ = Screen::SCREEN_Z / 2+
+		MCPOZ =
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 
 	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
@@ -464,20 +464,18 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 
 	if (MainCamera.ReferCameraX() > 0)
 		MCPOX = Screen::SCREEN_X / 2 -
-		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
+		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2)) + flameCount;
 	else
-		MCPOX = Screen::SCREEN_X / 2 +
-		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
+		MCPOX =
+		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2)) + flameCount;
 
 	if (MainCamera.ReferCameraZ() > 0)
 		MCPOZ = Screen::SCREEN_Z / 2 -
-		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
+		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2)) + flameCount;
 	else
-		MCPOZ = Screen::SCREEN_Z / 2 +
-		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
+		MCPOZ =
+		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2)) + flameCount;
 
-	double realX = fmod(MCPOX + flameCount, mapX / 2);
-	double realZ = fmod(MCPOZ + flameCount, mapZ / 2);
 
 	if (flameCount >= mapX / 4)
 		flameCount = fmod(flameCount, mapX / 4);
@@ -485,24 +483,24 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 	flameCount += .05;
 
 	SetTrans(90);//透明度を下がる
-	DrawExtendGraph((int)realX, (int)realZ,
-		(int)(realX + mapX * multiple),
-		(int)(realZ + mapZ * multiple),
+	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
+		(int)(MCPOX + mapX * multiple),
+		(int)(MCPOZ + mapZ * multiple),
 		*PL.ReferNoiseHandle(), TRUE);
-	DrawExtendGraph((int)(realX - mapX * multiple),
-		(int)realZ,
-		(int)(realX),
-		(int)(realZ + mapX * multiple),
+	DrawExtendGraph((int)(MCPOX - mapX * multiple),
+		(int)MCPOZ,
+		(int)(MCPOX),
+		(int)(MCPOZ + mapX * multiple),
 		*PL.ReferNoiseHandle(), TRUE);
-	DrawExtendGraph((int)realX,
-		(int)(realZ - mapZ * multiple),
-		(int)(realX + mapX * multiple), 
-		(int)(realZ),
+	DrawExtendGraph((int)MCPOX,
+		(int)(MCPOZ - mapZ * multiple),
+		(int)(MCPOX + mapX * multiple), 
+		(int)(MCPOZ),
 		*PL.ReferNoiseHandle(), TRUE);
-	DrawExtendGraph((int)(realX - mapX * multiple),
-		(int)(realZ - mapZ * multiple),
-		(int)(realX),
-		(int)(realZ),
+	DrawExtendGraph((int)(MCPOX - mapX * multiple),
+		(int)(MCPOZ - mapZ * multiple),
+		(int)(MCPOX),
+		(int)(MCPOZ),
 		*PL.ReferNoiseHandle(), TRUE);
 	ResetTrans();//描画モードをもとに戻る
 }
@@ -514,16 +512,10 @@ void IngameDataManagement::DrawMesh_Sea() {
 	double MCPOX;
 	double MCPOZ;
 
-	if (MainCamera.ReferCameraX() > 0)
-		MCPOX = Screen::SCREEN_X / 2 - abs(MainCamera.ReferPrintOutX(mapX / 2));
-	else
-		MCPOX = Screen::SCREEN_X / 2 + abs(MainCamera.ReferPrintOutX(mapX / 2));
+	MCPOX = Screen::SCREEN_X / 2 - MainCamera.ReferPrintOutX(mapX / 2);
 
-	if (MainCamera.ReferCameraZ() > 0)
-		MCPOZ = Screen::SCREEN_Z / 2 - abs(MainCamera.ReferPrintOutZ(mapZ / 2));
-	else
-		MCPOZ = Screen::SCREEN_Z / 2 + abs(MainCamera.ReferPrintOutZ(mapZ / 2));
-
+	MCPOZ = Screen::SCREEN_Z / 2 - MainCamera.ReferPrintOutZ(mapZ / 2);
+	
 	double realX = fmod(MCPOX + flameCount, mapX / 2);
 	double realZ = fmod(MCPOZ + flameCount, mapZ / 2);
 
@@ -756,7 +748,6 @@ bool IngameDataManagement::RegisterTeam() {
 	Coordinate<double> coord{ -500, -10, 200 };
 
 	for (int i = 0; i < teamA[flagShipNum].ReferNumber(); i++) {
-		count++;
 		alliesFleet.push_back(ShipMain());
 		auto ship = alliesFleet.end();
 		ship--;
@@ -765,47 +756,48 @@ bool IngameDataManagement::RegisterTeam() {
 
 		if (!GetShipDataFromFile(coord, 0,
 			&*ship, teamA[flagShipNum].ship.ReferShipType(),
-			i)) {
+			count)) {
 			return false;
 		}
+		count++;
 	}
 
 	for (int i = 0; i < 4; i++) {
 		if (i == flagShipNum)
 			continue;
 		for (int j = 0; j < teamA[i].ReferNumber(); j++) {
-			count++;
+
 			alliesFleet.push_back(ShipMain());
 			auto ship = alliesFleet.end();
 			ship--;
-
 			coord.x -= 300;//戦艦の間の間隔を取る
 
 			if (!GetShipDataFromFile(coord, 0,
 				&*ship, teamA[i].ship.ReferShipType(),
-				i + teamA[flagShipNum].ReferNumber())) {//フラグシープのタイプの位置から譲る
+				count)) {//フラグシープのタイプの位置から譲る
 				return false;
 			}
+			count++;
 		}
 	}
 
 	coord = { 3000,-10,1800 };
-	count = 0;
+	count = 11;
 
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < teamB[i].ReferNumber(); j++) {
-			count++;
+
 			enemyFleet.push_back(ShipMain());
 			auto ship = enemyFleet.end();
 			ship--;
-
 			coord.x += 300;//戦艦の間の間隔を取る
 
 			if (!GetShipDataFromFile(coord, MathAndPhysics::PI,
 				&*ship, teamB[i].ship.ReferShipType(), 
-				i + CommandSerial::SELECT_RANGE + 1)) {
+				count)) {
 				return false;
 			}
+			count++;
 		}
 	}
 	return true;
@@ -1444,11 +1436,11 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = alliesFleet.begin();
 			ship1 != alliesFleet.end();
 			ship1++) {
-			if (!ship1->ReferSinkingEnding())//生きる状態確認
+			if (ship1->ReferAlive())//生きる状態確認
 			for (auto ship2 = enemyFleet.begin();
 				ship2 != enemyFleet.end();
 				ship2++) {
-				if (!ship2->ReferSinkingEnding())//生きる状態確認
+				if (ship2->ReferAlive())//生きる状態確認
 				if (PointsToCollisionbox(&*ship1, &*ship2)) {
 					ship1->Unmove(); ship1->ResetStatus();//船を停止する
 					ship2->Unmove(); ship2->ResetStatus();
@@ -1459,13 +1451,13 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = enemyFleet.begin();
 			ship1 != enemyFleet.end();
 			ship1++) {
-			if (!ship1->ReferSinkingEnding())//生きる状態確認
+			if (ship1->ReferAlive())//生きる状態確認
 				for (auto ship2 = enemyFleet.begin();
 					ship2 != enemyFleet.end();
 					ship2++) {
 				if (ship1 == ship2)//自分とのあたり判定をしません
 					continue;
-				if (!ship2->ReferSinkingEnding())//生きる状態確認
+				if (ship2 -> ReferAlive())//生きる状態確認
 					if (PointsToCollisionbox(&*ship1, &*ship2)) {
 						ship1->Unmove(); ship1->ResetStatus();//船を停止する
 						ship2->Unmove(); ship2->ResetStatus();
@@ -1476,13 +1468,13 @@ void IngameDataManagement::CrashDecision() {
 		for (auto ship1 = alliesFleet.begin();
 			ship1 != alliesFleet.end();
 			ship1++) {
-			if (!ship1->ReferSinkingEnding())//生きる状態確認
+			if (ship1->ReferAlive())//生きる状態確認
 				for (auto ship2 = alliesFleet.begin();
 					ship2 != alliesFleet.end();
 					ship2++) {
 				if (ship1 == ship2)//自分とのあたり判定をしません
 					continue;
-				if (!ship2->ReferSinkingEnding())//生きる状態確認
+				if (ship2->ReferAlive())//生きる状態確認
 					if (PointsToCollisionbox(&*ship1, &*ship2)) {
 						ship1->Unmove(); ship1->ResetStatus();//船を停止する
 						ship2->Unmove(); ship2->ResetStatus();
@@ -1537,41 +1529,42 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 		for (auto ship = shipList->begin();
 			ship != shipList->end();
 			ship++) {
-		if (shell->ReferSerialNumber() != ship->ReferSerialNumber()) {
-			//弾と船のあたり判定を行う
-			if (crash3DtoPoint(ship->ReferCoord(),
-				shell->ReferCoord(),ship->ReferShipCrashSize(),
-				ship->ReferRadianOnZ()))
-			if(ship->ReferAlive()){
-				//当たったら
-				ship->SufferDamage((int)shell->ReferDamage());//ダメージを与える
-				Coordinate2D<double> C2D = { shell->ReferCoordX(),
-				shell->ReferCoordZ() };
-				NewExplosion(C2D);//当たったところに爆発エフェクトを生成
-				shell->Unusable();//弾が使えなくなる
-				
-				if (shell->ReferSerialNumber() == 0) {
-					statisticBoardData.CountHit();//ヒット数増加
-					statisticBoardData.CountDamage((int)shell->ReferDamage());//ダメージ数増加
-					if (!ship->ReferAlive()) {
-						statisticBoardData.CountKilled();
-					}
-				}
-				if (ship->ReferSerialNumber() == 0)
-					statisticBoardData.CountDamageRec((int)shell->ReferDamage());
+		if (shell->ReferUsable())
+			if (shell->ReferSerialNumber() != ship->ReferSerialNumber()) {
+				//弾と船のあたり判定を行う
+				if (crash3DtoPoint(ship->ReferCoord(),
+					shell->ReferCoord(), ship->ReferShipCrashSize(),
+					ship->ReferRadianOnZ()))
+					if (ship->ReferAlive()) {
+						//当たったら
+						ship->SufferDamage((int)shell->ReferDamage());//ダメージを与える
+						Coordinate2D<double> C2D = { shell->ReferCoordX(),
+						shell->ReferCoordZ() };
+						NewExplosion(C2D);//当たったところに爆発エフェクトを生成
+						shell->Unusable();//弾が使えなくなる
 
-				/*ロックを使えない時にロックを解除する*/
-				if (!ship->ReferAlive() && alliesFleet[0].fireDataFigureUp.ReferTarget() ==
-					ship->ReferSerialNumber()) {
-					if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
-						alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ロック状態を変更
-						ship->ResetReviseData();//修正データをリセット
-						CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//ＵＩを変更
+						if (shell->ReferSerialNumber() == 0) {
+							statisticBoardData.CountHit();//ヒット数増加
+							statisticBoardData.CountDamage((int)shell->ReferDamage());//ダメージ数増加
+							if (!ship->ReferAlive()) {
+								statisticBoardData.CountKilled();
+							}
+						}
+						if (ship->ReferSerialNumber() == 0)
+							statisticBoardData.CountDamageRec((int)shell->ReferDamage());
+
+						/*ロックを使えない時にロックを解除する*/
+						if (!ship->ReferAlive() && alliesFleet[0].fireDataFigureUp.ReferTarget() ==
+							ship->ReferSerialNumber()) {
+							if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
+								alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ロック状態を変更
+								ship->ResetReviseData();//修正データをリセット
+								CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//ＵＩを変更
+							}
+						}
+						return;
 					}
-				}
-				return;
 			}
-		}
 	}
 }
 

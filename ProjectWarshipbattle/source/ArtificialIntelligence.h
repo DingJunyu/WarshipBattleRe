@@ -26,7 +26,7 @@ public:
 	double ReferOutPutRateNeededNow() { return outPutRate; }
 
 private:
-	const double disToFront = 50;
+	const double disToFront = 10;
 
 	double range;//
 	double targetDis;//–Ú•W‚Æ‚Ì‹——£

@@ -17,6 +17,9 @@ void ArtificialIntelligence::Move(ShipMain me, ShipMain target) {
 	CalWaypointDis();//距離を図る
 	CalTargetRadian();//角度を計算する
 	SetRadianNeeded();//必要な角度を計算する
+	CalDistance(target.ReferCoord2D_d());
+	if ( targetDis < DistanceRange::STOP)
+		radianNeededNow = target.ReferChangingRadian();
 	SetSpeed(target.ReferOutPutRate());//必要な速度を設置する
 }
 
