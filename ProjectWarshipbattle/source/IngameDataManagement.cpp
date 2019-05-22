@@ -420,17 +420,17 @@ void IngameDataManagement::DrawSea_New_Extend() {
 	double multiple = MainCamera.ReferZoomRatio();
 
 	if (MainCamera.ReferCameraX() > 0)
-		MCPOX = Screen::SCREEN_X / 2 - 
+		MCPOX = Screen::SCREEN_X / 2-
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 	else
-		MCPOX = Screen::SCREEN_X / 2 + 
+		MCPOX = Screen::SCREEN_X / 2+
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 
 	if (MainCamera.ReferCameraZ() > 0)
-		MCPOZ = Screen::SCREEN_Z / 2 - 
+		MCPOZ = Screen::SCREEN_Z / 2-
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 	else
-		MCPOZ = Screen::SCREEN_Z / 2 + 
+		MCPOZ = Screen::SCREEN_Z / 2+
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 
 	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
@@ -439,22 +439,18 @@ void IngameDataManagement::DrawSea_New_Extend() {
 		*PL.ReferMapHandle(), TRUE);
 	DrawExtendGraph((int)(MCPOX - mapX * multiple),
 		(int)MCPOZ,
-		(int)(MCPOX - mapX * multiple +
-			mapX * multiple),
+		(int)(MCPOX),
 		(int)(MCPOZ + mapZ  * multiple),
 		*PL.ReferMapHandle(), TRUE);
 	DrawExtendGraph((int)MCPOX, 
 		(int)(MCPOZ - mapZ * multiple),
 		(int)(MCPOX + mapX * multiple),
-		(int)(MCPOZ - mapZ * multiple + 
-			mapZ * multiple),
+		(int)(MCPOZ),
 		*PL.ReferMapHandle(), TRUE);
 	DrawExtendGraph((int)(MCPOX - mapX * multiple),
 		(int)(MCPOZ - mapZ * multiple),
-		(int)(MCPOX - mapX * multiple + 
-			mapX * multiple),
-		(int)(MCPOZ - mapZ * multiple + 
-			mapZ * multiple),
+		(int)(MCPOX),
+		(int)(MCPOZ),
 		*PL.ReferMapHandle(), TRUE);
 }
 
@@ -467,24 +463,24 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 	double MCPOZ;
 
 	if (MainCamera.ReferCameraX() > 0)
-		MCPOX = Screen::SCREEN_X / 2 - 
+		MCPOX = Screen::SCREEN_X / 2 -
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 	else
 		MCPOX = Screen::SCREEN_X / 2 +
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 
 	if (MainCamera.ReferCameraZ() > 0)
-		MCPOZ = Screen::SCREEN_Z / 2 - 
+		MCPOZ = Screen::SCREEN_Z / 2 -
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 	else
-		MCPOZ = Screen::SCREEN_Z / 2 + 
+		MCPOZ = Screen::SCREEN_Z / 2 +
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 
 	double realX = fmod(MCPOX + flameCount, mapX / 2);
 	double realZ = fmod(MCPOZ + flameCount, mapZ / 2);
 
-	if (flameCount >= mapX / 3)
-		flameCount = fmod(flameCount, mapX / 3);
+	if (flameCount >= mapX / 4)
+		flameCount = fmod(flameCount, mapX / 4);
 
 	flameCount += .05;
 
@@ -495,22 +491,18 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 		*PL.ReferNoiseHandle(), TRUE);
 	DrawExtendGraph((int)(realX - mapX * multiple),
 		(int)realZ,
-		(int)(realX - mapX * multiple + 
-			mapX * multiple),
+		(int)(realX),
 		(int)(realZ + mapX * multiple),
 		*PL.ReferNoiseHandle(), TRUE);
 	DrawExtendGraph((int)realX,
 		(int)(realZ - mapZ * multiple),
 		(int)(realX + mapX * multiple), 
-		(int)(realZ - mapZ * multiple +
-			mapZ * multiple),
+		(int)(realZ),
 		*PL.ReferNoiseHandle(), TRUE);
 	DrawExtendGraph((int)(realX - mapX * multiple),
 		(int)(realZ - mapZ * multiple),
-		(int)(realX - mapX * multiple +
-			mapX * multiple),
-		(int)(realZ - mapZ * multiple + 
-			mapZ * multiple),
+		(int)(realX),
+		(int)(realZ),
 		*PL.ReferNoiseHandle(), TRUE);
 	ResetTrans();//•`‰æƒ‚[ƒh‚ð‚à‚Æ‚É–ß‚é
 }
@@ -711,12 +703,16 @@ bool IngameDataManagement::FormationBoard() {
 			}
 			if (ans % 2 == 1) {
 				if (ans >= 8 && teamBCount > 0) {
-					teamBCount--;
-					teamB[(ans - 8) / 2].Minus();
+					if (teamB[(ans - 8) / 2].ReferNumber() > 0) {
+						teamBCount--;
+						teamB[(ans - 8) / 2].Minus();
+					}
 				}
 				if (ans < 8 && teamACount > 0) {
-					teamACount--;
-					teamA[ans / 2].Minus();
+					if (teamA[ans / 2].ReferNumber() > 0) {
+						teamACount--;
+						teamA[ans / 2].Minus();
+					}
 				}
 			}
 		}
