@@ -550,8 +550,10 @@ void ShipMain::DrawMainPoint(Camera camera) {
 /*í“¬•”•ª*/
 void ShipMain::SufferDamage(int damage) {
 	hitPoint -= damage;
-	if (hitPoint <= 0)
+	if (hitPoint <= 0) {
+		hitPoint = 0;
 		Killed();
+	}
 }
 /*ƒƒbƒNƒIƒ“‚Ì‘€ì*/
 void ShipMain::ChangeForecastSecond(bool up) {

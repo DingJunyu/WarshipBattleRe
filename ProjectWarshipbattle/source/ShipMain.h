@@ -103,6 +103,7 @@ public:
 	int ReferShipType() { return shipType; }
 	const char * ReferName() { return name; }
 	int ReferMaxHP() { return maxHitPoint; }
+	int ReferHP() { return hitPoint; }
 	/*ˆÚ“®ŠÖ˜A*/
 	bool ReferReturnOn() { return returnToCenter; }
 	double ReferChangingRadian() { return currentRadian; }

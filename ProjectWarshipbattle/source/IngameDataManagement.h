@@ -110,6 +110,8 @@ private:
 	void DrawEffectUnderShips();//船の下にあるエフェクトを描く
 	void DrawEffectBeyondShips();//船の上にあるエフェクトを描く
 	void DrawPointOfImpact();
+	void DrawHPBar();
+	void DrawBarForATeam(std::vector<ShipMain> shipList, bool left);
 
 	//移動関数
 	void MoveAll();

@@ -6,6 +6,7 @@
 #include"ShipMain.h"
 #include"Lamp.h"
 #include"Camera.h"
+#include"OtherFunctions.h"
 #include<cmath>
 class UserInterface
 {
@@ -16,6 +17,7 @@ public:
 		rightSCMStartX(0), rightSCMStartZ(0), mapMatSize(Screen::SCREEN_X / 8),
 		mapPaperSize(mapMatSize - 10) {
 		radian_returnTheLockCircle = 0;
+		SetColorBox();
 	}
 	~UserInterface();
 
@@ -24,6 +26,7 @@ public:
 	void DrawUI();
 	void DrawUINeedInput(ShipMain *ship, bool autoFire,
 		bool changeCamera);
+	void DrawHPBar(Coordinate2D<double> coord, int HP, int maxHP);
 
 	void DrawUIUnderShip(bool lock,Coordinate2D<double> coord,Camera camera, double radian);
 
@@ -40,6 +43,9 @@ private:
 		double Radian);
 	void DrawRotatePicture2(int SN, double X, double Z, double Multiple,
 		double Radian);
+
+	void DrawBoxWithPerAndCr(Coordinate2D<double> LeftUp, Coordinate2D<double> RightDown,
+		double Percentage,int Cr);
 	
 
 	/*UIの背景部分*/
@@ -65,10 +71,30 @@ private:
 	void DrawCircle(Coordinate2D<double> coord, Camera camera);
 	void DrawMyCircle(Camera camera, double radian);
 
+	
+
 	/*各パーツのハンドル*/
 	int *handleList[UI_LIST::AMOUNT];
 	/*ランプの宣言*/
 	Lamp lamps[LAMP_LIST::LAMP_AMOUNT];
+
+	enum COLOR_MARK {
+		CR_AMOUNT = 20,
+		GREEN = 0,
+		RED,
+		BLUE,
+		BLACK,
+		WHITE,
+		MIDNIGHT,//ブラックに近い
+		GRENADIER,//赤に近い
+		LOCHMARA,//青に近い
+		MY_SIN,//黄色に近い
+		TENNE,//オレンジに近い
+		MEDIUM_SEA_GREEN
+	};
+
+	unsigned int CrBox[CR_AMOUNT];
+	void SetColorBox();
 	
 };
 

@@ -7,9 +7,6 @@ IngameDataManagement::~IngameDataManagement()
 
 /*ƒƒCƒ“ƒ‹[ƒg*/
 void IngameDataManagement::Update() {
-	SetDrawScreen(DX_SCREEN_BACK);//— ‰æ–Ê‚É•`‰æ‚·‚é
-	ClearDrawScreen();//‰æ–Ê‚ğƒNƒŠƒA‚·‚é
-
 	AIUpdate();//AI‚Åƒf[ƒ^‚ğXV‚·‚’‚¤
 	LockAndRefresh();//ƒƒbƒNó‘Ô‚ğXV‚·‚’‚¤
 
@@ -144,6 +141,9 @@ void IngameDataManagement::ControlThisListShoot(std::vector<ShipMain> *shipList)
 /*                     •`‰æŠÖ˜A                     */
 /****************************************************/
 void IngameDataManagement::DrawAll() {
+	SetDrawScreen(DX_SCREEN_BACK);//— ‰æ–Ê‚É•`‰æ‚·‚é
+	ClearDrawScreen();//‰æ–Ê‚ğƒNƒŠƒA‚·‚é
+
 	auto ship = alliesFleet.begin();//ƒCƒeƒŒ[ƒ^‚Å‘€ì‚µ‚Ä‚¢‚é‘D‚ÌƒXƒe[ƒ^ƒX‚ğæ‚é
 
 	/*ŠC‚ğ•`‚­*/
@@ -175,6 +175,8 @@ void IngameDataManagement::DrawAll() {
 	CUI.Draw();//ƒ{ƒ^ƒ“‚ğ•`‚­
 	CUI.DrawNeedInput(ship->fireDataFigureUp.ReferLockOn(), 
 		ship->fireDataFigureUp.ReferTarget());//ˆø”‚ª•K—v‚È•”•ª‚ğ•`‚­
+	DrawHPBar();
+	
 
 	/*ƒeƒXƒgƒCƒ“ƒtƒHƒ[ƒVƒ‡ƒ“*/
 	if (TEST_SHOW_ON)
@@ -486,7 +488,7 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 
 	flameCount += .05;
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//“§–¾“x‚ğ‰º‚ª‚é
+	SetTrans(90);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawExtendGraph((int)realX, (int)realZ,
 		(int)(realX + mapX * multiple),
 		(int)(realZ + mapZ * multiple),
@@ -510,7 +512,7 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 		(int)(realZ - mapZ * multiple + 
 			mapZ * multiple),
 		*PL.ReferNoiseHandle(), TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
+	ResetTrans();//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
 }
 
 void IngameDataManagement::DrawMesh_Sea() {
@@ -538,7 +540,7 @@ void IngameDataManagement::DrawMesh_Sea() {
 
 	flameCount += .05;
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//“§–¾“x‚ğ‰º‚ª‚é
+	SetTrans(90);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawGraph((int)realX,
 		(int)realZ,
 		*PL.ReferNoiseHandle(), TRUE);
@@ -551,7 +553,7 @@ void IngameDataManagement::DrawMesh_Sea() {
 	DrawGraph((int)realX - PL.ReferMapX(),
 		(int)realZ - PL.ReferMapZ(),
 		*PL.ReferNoiseHandle(), TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
+	ResetTrans();//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
 }
 
 
@@ -568,20 +570,20 @@ void IngameDataManagement::DrawThisList(std::list<Effect> *effectList) {
 void IngameDataManagement::DrawEffectUnderShips() {
 	DrawShipsShadow();//‘D‚Ì‰e‚ğ•`‚­
 	/*…–A‰‰o*/
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);//“§–¾“x‚ğ‰º‚ª‚é
+	SetTrans(90);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawThisList(&bubbleList);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);//“§–¾“x‚ğ‰º‚ª‚é
+	SetTrans(80);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawThisList(&rippleList);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
+	ResetTrans();//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
 }
 
 /*‘D‚Ìã‚É‚ ‚éƒGƒtƒFƒNƒg‚ğ•`‚­*/
 void IngameDataManagement::DrawEffectBeyondShips() {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);//“§–¾“x‚ğ‰º‚ª‚é
+	SetTrans(140);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawThisList(&smokeList);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 210);//“§–¾“x‚ğ‰º‚ª‚é
+	SetTrans(210);//“§–¾“x‚ğ‰º‚ª‚é
 	DrawThisList(&explosionList);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
+	ResetTrans();//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
 }
 
 void IngameDataManagement::DrawPointOfImpact() {
@@ -590,6 +592,33 @@ void IngameDataManagement::DrawPointOfImpact() {
 //	if (!ship->fireDataFigureUp.ReferLockOn())//ƒƒbƒN‚ğg‚¤‚É—‰º’n“_‚ğ•`‰æ‚µ‚Ü‚¹‚ñ
 		ship->ShowMePointOfImpact(MainCamera);//g‚í‚È‚¢‚É•`‰æ‚·‚é
 }
+
+void IngameDataManagement::DrawHPBar() {
+	DrawBarForATeam(alliesFleet,true);
+	DrawBarForATeam(enemyFleet,false);
+}
+
+void IngameDataManagement::DrawBarForATeam(std::vector<ShipMain> shipList, bool left) {
+	if (!shipList.empty()) {
+		int count = 0;
+
+		for (auto ship = shipList.begin();
+			ship != shipList.end();
+			ship++) {
+
+			Coordinate2D<double> coord;
+			coord.x = left ? BUTTON_POSITION_INGAME::SHIP_MARK_LEFT_X_COORD
+				: BUTTON_POSITION_INGAME::SHIP_MARK_RIGHT_X_COORD;
+
+			coord.z = BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z_COORD*(count + 1);
+
+			UI.DrawHPBar(coord, ship->ReferHP(),ship->ReferMaxHP());
+			
+			count++;
+		}
+	}
+}
+
 
 void IngameDataManagement::DrawAmmo() {
 	if (!shellList.empty())//ƒŠƒXƒgó‹µ‚ğŠm”F
@@ -891,7 +920,7 @@ bool IngameDataManagement::FreeFormationBoard() {//ƒtƒŠ[‚µ‚½Œã‚Éƒƒjƒ…[‚ğ’Êí
 		alliesFleet[0].SetControled();//—FŒRŠÍ‘à‚Ìˆê”Ô‚Ì‘€ìŒ ‚ğæ‚é
 		enemyFlagShip = &*enemyFleet.begin();
 		CUI.InifShipList(&enemyFleet, false);
-		//	CUI.InifShipList(&alliesFleet, true);
+		CUI.InifShipList(&alliesFleet, true);
 	}
 
 	ClearErrorList();
@@ -1020,6 +1049,7 @@ void IngameDataManagement::Control() {
 		switch (answer) {
 		case CommandSerial::ZOOM_IN:MainCamera.ZoomIn(); break;
 		case CommandSerial::ZOOM_OUT:MainCamera.ZoomOut(); break;
+		case CommandSerial::GET_DAMAGE_TEST:alliesFleet[0].SufferDamage(5);
 		}
 	}
 
@@ -1528,16 +1558,21 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 					statisticBoardData.CountHit();//ƒqƒbƒg”‘‰Á
 					statisticBoardData.CountDamage((int)shell->ReferDamage());//ƒ_ƒ[ƒW”‘‰Á
 					if (!ship->ReferAlive()) {
-						if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
-							alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ƒƒbƒNó‘Ô‚ğ•ÏX
-							ship->ResetReviseData();//C³ƒf[ƒ^‚ğƒŠƒZƒbƒg
-							CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//‚t‚h‚ğ•ÏX
-						}
 						statisticBoardData.CountKilled();
 					}
 				}
 				if (ship->ReferSerialNumber() == 0)
 					statisticBoardData.CountDamageRec((int)shell->ReferDamage());
+
+				/*ƒƒbƒN‚ğg‚¦‚È‚¢‚ÉƒƒbƒN‚ğ‰ğœ‚·‚é*/
+				if (!ship->ReferAlive() && alliesFleet[0].fireDataFigureUp.ReferTarget() ==
+					ship->ReferSerialNumber()) {
+					if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
+						alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ƒƒbƒNó‘Ô‚ğ•ÏX
+						ship->ResetReviseData();//C³ƒf[ƒ^‚ğƒŠƒZƒbƒg
+						CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//‚t‚h‚ğ•ÏX
+					}
+				}
 				return;
 			}
 		}

@@ -61,7 +61,8 @@ enum CommandSerial {
 
 	/*ZoomInÅAZoomOut*/
 	ZOOM_IN = 200,
-	ZOOM_OUT = 201
+	ZOOM_OUT = 201,
+	GET_DAMAGE_TEST
 };
 
 //CUIÇÃíÜÇ…ï€ë∂Ç≥ÇÍÇΩÇ‡ÇÃÇ∆ÇªÇÃî‘çÜ
@@ -294,9 +295,12 @@ namespace BUTTON_POSITION_INGAME {
 
 	const double SHIP_MARK_MULTI = .13;
 	const double SHIP_MARK_LEFT_X = .002;
+	const double SHIP_MARK_LEFT_X_COORD = SHIP_MARK_LEFT_X * Screen::SCREEN_X;
 	const double SHIP_MARK_RIGHT_X = .943;
+	const double SHIP_MARK_RIGHT_X_COORD = SHIP_MARK_RIGHT_X * Screen::SCREEN_X;
 	const double SHIP_MARK_START_Z = .02;
 	const double SHIP_MARK_NEXT_Z = .04;
+	const double SHIP_MARK_NEXT_Z_COORD = SHIP_MARK_NEXT_Z * Screen::SCREEN_Z;
 }
 
 namespace USER_INTERFACE_POSITION {
@@ -429,6 +433,13 @@ struct Coordinate2D {
 	void ChangeX() { x = -x; }
 	void ChangeZ() { z = -z; }
 	void ChangeXandZ() { x = -x; z = -z; }
+
+	Coordinate2D<T> operator+(const Coordinate2D<T> &b) {
+		Coordinate2D<T> coord;
+		coord.x = this->x + b.x;
+		coord.z = this->z + b.z;
+		return coord;
+	}
 };
 
 struct RadianNeededIn3D {

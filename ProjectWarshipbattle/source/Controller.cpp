@@ -48,6 +48,12 @@ int Controller::GetCommand() {
 		PlaySoundMem(*shipHordLow, DX_PLAYTYPE_BACK, TRUE);
 	}
 
+	if (KeyBuf[KEY_INPUT_9])
+		return CommandSerial::GET_DAMAGE_TEST;
+
+	if (KeyBuf[KEY_INPUT_ESCAPE])
+		return CommandSerial::EXIT;
+
 	int mouseRot = GetMouseWheelRotVol();
 
 	if (mouseRot > 0)
@@ -55,8 +61,7 @@ int Controller::GetCommand() {
 	if (mouseRot < 0)
 		return CommandSerial::ZOOM_OUT;
 
-	if (KeyBuf[KEY_INPUT_ESCAPE])
-		return CommandSerial::EXIT;
+
 
 	return CommandSerial::NONE_COMMAND;
 }

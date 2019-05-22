@@ -1,7 +1,7 @@
 #pragma once
 #include"DefinedData.h"
 #include"IncludeForAll.h"
-const double ZOOM_RATE = 0.009f;
+const double ZOOM_RATE = 0.018f;
 class Camera
 {
 public:

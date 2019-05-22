@@ -390,6 +390,13 @@ void UserInterface::DrawRotatePicture2(int SN, double X, double Z, double Multip
 	);
 }
 
+void UserInterface::DrawBoxWithPerAndCr(Coordinate2D<double> LeftUp,
+	Coordinate2D<double>Size,
+	double Percentage, int Cr) {
+	DrawBox((int)LeftUp.x, (int)LeftUp.z, (int)(LeftUp.x + Size.x*Percentage),
+		(int)(LeftUp.z + Size.z), Cr, TRUE);
+}
+
 /*ÉçÉbÉNÇÃâ~Çï`Ç≠*/
 void UserInterface::DrawCircle(Coordinate2D<double> coord, Camera camera) {
 	DrawRotatePicture2(UI_LIST::LOCK_CIRCLE, 
@@ -400,6 +407,26 @@ void UserInterface::DrawCircle(Coordinate2D<double> coord, Camera camera) {
 	radian_returnTheLockCircle += MathAndPhysics::PI / 720;
 }
 
+void UserInterface::DrawHPBar(Coordinate2D<double> coord, int HP, int maxHP) {
+	Coordinate2D<double> plus = { 73,8 };//ÇbÇtÇhÇÃâÊëúÉTÉCÉYÇ…çáÇÌÇπÇÈ
+	DrawBoxWithPerAndCr(coord, plus, 1, CrBox[BLACK]);
+
+	unsigned int tempCr;
+	double per;
+	per = (double)HP / (double)maxHP;
+
+	if (per > 0.75)
+		tempCr = CrBox[MEDIUM_SEA_GREEN];
+	else if (per > 0.5)
+		tempCr = CrBox[MY_SIN];
+	else if (per > 0.25)
+		tempCr = CrBox[TENNE];
+	else
+		tempCr = CrBox[GRENADIER];
+
+	DrawBoxWithPerAndCr(coord, plus, per, tempCr);
+}
+
 /*é©ï™ÇÃÇµÇΩÇ…Ç†ÇÈâ~Çï`Ç≠*/
 void UserInterface::DrawMyCircle(Camera camera, double radian) {
 	int xOnScreen;
@@ -408,10 +435,24 @@ void UserInterface::DrawMyCircle(Camera camera, double radian) {
 	xOnScreen = Screen::SCREEN_X / 2;
 	zOnScreen = Screen::SCREEN_Z / 2;
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);//ìßñæìxÇâ∫Ç™ÇÈ
+	SetTrans(120);
 	DrawRotatePicture2(UI_LIST::MY_DIRECT,
 		xOnScreen, zOnScreen, 
 		USER_INTERFACE_POSITION::MY_DIRECT_MULTI * camera.ReferZoomRatio(),
 		radian);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);//ìßñæìxÇñﬂÇÈ
+	ResetTrans();
+}
+
+void UserInterface::SetColorBox() {
+	CrBox[GREEN] = GetColor(0, 255, 0);
+	CrBox[RED] = GetColor(255, 0, 0);
+	CrBox[BLUE] = GetColor(0, 0, 255);
+	CrBox[BLACK] = GetColor(0, 0, 0);
+	CrBox[WHITE] = GetColor(255, 255, 255);
+	CrBox[MIDNIGHT] = GetColor(33, 47, 61);
+	CrBox[GRENADIER] = GetColor(203, 67, 53);
+	CrBox[LOCHMARA] = GetColor(36, 113, 163);
+	CrBox[MY_SIN] = GetColor(245, 176, 65);
+	CrBox[TENNE] = GetColor(211, 84, 0);
+	CrBox[MEDIUM_SEA_GREEN] = GetColor(46, 204, 113);
 }

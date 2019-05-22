@@ -103,18 +103,23 @@ void ClickableUserInterface::InifShipList(std::vector<ShipMain> *shipList, bool 
 			ship != shipList->end();
 			ship++) {
 		/*右リスト・左リストに応じて番号を取る*/
-		if (!left)
+		if (!left) {
 			number = CommandSerial::SELECT + (int)count + CommandSerial::SELECT_RANGE;
-		else
-			number = CommandSerial::SELECT + (int)count;
-
-
-		/*座標を設定する*/
-		SetThisOne(number,
-			BUTTON_POSITION_INGAME::SHIP_MARK_RIGHT_X,
-			BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
-			BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
+			/*座標を設定する*/
+			SetThisOne(number,
+				BUTTON_POSITION_INGAME::SHIP_MARK_RIGHT_X,
+				BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
+				BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
+		}
 		/*設定されたデータをボタンクラスに更新する*/
+		else {
+			number = CommandSerial::SELECT + (int)count;
+			SetThisOne(number,
+				BUTTON_POSITION_INGAME::SHIP_MARK_LEFT_X,
+				BUTTON_POSITION_INGAME::SHIP_MARK_NEXT_Z * (count + 1),
+				BUTTON_POSITION_INGAME::SHIP_MARK_MULTI);
+		}
+
 		BC.buttonContainer[number].SetXZ(
 			buttonPosition[number][SaveForCUI::COORD_X],
 			buttonPosition[number][SaveForCUI::COORD_Z],
