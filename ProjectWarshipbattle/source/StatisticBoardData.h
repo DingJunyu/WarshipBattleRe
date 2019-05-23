@@ -42,9 +42,12 @@ private:
 	double boardData[7];
 	StatisticData S_data;
 
+	/*キー押す事件を記録*/
 	bool win;
 	bool press;
 	long long int pressFrame;
+
+	/*ハイスコア*/
 	bool newHighScore[7];
 
 	ColorBox CrBox;

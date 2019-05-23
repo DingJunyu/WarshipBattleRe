@@ -17,7 +17,8 @@ enum COLOR_MARK {
 	TERRA_COTTA,//êÛÇ¢ê‘ #EC7603
 	DROVER,//êÛÇ¢â©êF #F9E79F
 	GORSE,//â©êF #FFEB3B  
-	RED_ORANGE//#F44336
+	RED_ORANGE,//#F44336
+	IRON_STONE//íÉêFÇ¡Ç€Ç¢? #795548
 };
 
 class ColorBox
@@ -32,4 +33,3 @@ private:
 	unsigned int CrBox[CR_AMOUNT];
 	void SetColorBox();
 };
-

@@ -86,8 +86,6 @@ void StatisticBoardData::Draw() {
 	ClearDrawScreen();
 
 	/*ï`âÊêF*/
-	unsigned int Cr;
-	Cr = GetColor(255, 255, 255);
 	DxLib::SetFontSize(40);
 
 	/*îwåiÇï`Ç≠*/
@@ -106,28 +104,32 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 1 && !press) {
 			SetTrans(frameCount - seconds + 100);//ìßâﬂìxÇ™Ç«ÇÒÇ«ÇÒè„Ç™ÇÈÇÊÇ§Ç…
 		}
-		DxLib::DrawFormatString(410, 110, Cr, "%4.1lf%%", S_data.hitRate * 100);
+		DxLib::DrawFormatString(410, 110, CrBox.ReferColor(WHITE), 
+			"%4.1lf%%", S_data.hitRate * 100);
 		ResetTrans();//ìßâﬂìxÇÉäÉZÉbÉg
 	}
 	if (frameCount >= seconds  || press) {
 		if (frameCount < seconds * 2 && !press) {
 			SetTrans(frameCount - seconds * 1 + 100);
 		}
-		DxLib::DrawFormatString(410, 220, Cr, "%4d", S_data.damage);
+		DxLib::DrawFormatString(410, 220, CrBox.ReferColor(WHITE),
+			"%4d", S_data.damage);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 2 || press) {
 		if (frameCount < seconds * 3 && !press) {
 			SetTrans(frameCount - seconds * 2 + 100);
 		}
-		DxLib::DrawFormatString(410, 325, Cr, "%4.1lfäCó¢", S_data.movedDis);
+		DxLib::DrawFormatString(410, 325, CrBox.ReferColor(WHITE), 
+			"%4.1lfäCó¢", S_data.movedDis);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 3 || press) {
 		if (frameCount < seconds * 4 && !press) {
 			SetTrans(frameCount - seconds * 3 + 100);
 		}
-		DxLib::DrawFormatString(410, 415, Cr, "%4dê«", S_data.killed);
+		DxLib::DrawFormatString(410, 415, CrBox.ReferColor(WHITE), 
+			"%4dê«", S_data.killed);
 		ResetTrans();
 	}
 
@@ -137,9 +139,11 @@ void StatisticBoardData::Draw() {
 		long long int num = (frameCount - seconds * 4) / seconds;
 		if (num > 6 || press)num = 6;
 		for (int i = TOTAL_KILL; i <= TOTAL_KILL + (int)num; i++) {
-			if (frameCount - seconds * 4 < seconds * 5 + seconds * i && !press) {
-				SetTrans(frameCount - seconds * 4 + seconds * i + 100);
-				DxLib::DrawFormatString(1080, 115 + i * 75, Cr, "%-14.1lf", boardData[i]);
+			if (frameCount - seconds * 4 < seconds * 5 + seconds * i || press) {
+				if (!press)
+					SetTrans(frameCount - seconds * 4 + seconds * i + 100);
+				DxLib::DrawFormatString(1080, 115 + i * 75, CrBox.ReferColor(WHITE),
+					"%-14.1lf", boardData[i]);
 			}
 			if (newHighScore[i]) {
 				DrawStar({ 645,110 + i * 75 }, { 695 , 160 + i * 75 });

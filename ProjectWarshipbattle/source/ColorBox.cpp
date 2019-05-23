@@ -1,12 +1,11 @@
 #include "ColorBox.h"
 
-ColorBox::ColorBox()
-{
+ColorBox::ColorBox(){
 	SetColorBox();
 }
 
-ColorBox::~ColorBox()
-{
+ColorBox::~ColorBox(){
+
 }
 
 void ColorBox::SetColorBox() {
@@ -25,4 +24,5 @@ void ColorBox::SetColorBox() {
 	CrBox[DROVER] = GetColor(249, 231, 159);
 	CrBox[GORSE] = GetColor(255, 235, 59);
 	CrBox[RED_ORANGE] = GetColor(244, 67, 54);
+	CrBox[IRON_STONE] = GetColor(121, 85, 72);
 }
