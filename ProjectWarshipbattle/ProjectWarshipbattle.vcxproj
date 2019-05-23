@@ -32,6 +32,7 @@
     <ClInclude Include="source\ButtonCollection.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\ClickableUserInterface.h" />
+    <ClInclude Include="source\ColorBox.h" />
     <ClInclude Include="source\Controller.h" />
     <ClInclude Include="source\DefinedData.h" />
     <ClInclude Include="source\Effect.h" />
@@ -79,6 +80,7 @@
     <ClCompile Include="source\ButtonCollection.cpp" />
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\ClickableUserInterface.cpp" />
+    <ClCompile Include="source\ColorBox.cpp" />
     <ClCompile Include="source\Controller.cpp" />
     <ClCompile Include="source\Effect.cpp" />
     <ClCompile Include="source\EffectPoint.cpp" />

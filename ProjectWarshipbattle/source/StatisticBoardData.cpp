@@ -106,28 +106,28 @@ void StatisticBoardData::Draw() {
 		if (frameCount < seconds * 1 && !press) {
 			SetTrans(frameCount - seconds + 100);//透過度がどんどん上がるように
 		}
-		DxLib::DrawFormatString(380, 110, Cr, "%4.1lf%%", S_data.hitRate * 100);
+		DxLib::DrawFormatString(410, 110, Cr, "%4.1lf%%", S_data.hitRate * 100);
 		ResetTrans();//透過度をリセット
 	}
 	if (frameCount >= seconds  || press) {
 		if (frameCount < seconds * 2 && !press) {
 			SetTrans(frameCount - seconds * 1 + 100);
 		}
-		DxLib::DrawFormatString(380, 220, Cr, "%d", S_data.damage);
+		DxLib::DrawFormatString(410, 220, Cr, "%4d", S_data.damage);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 2 || press) {
 		if (frameCount < seconds * 3 && !press) {
 			SetTrans(frameCount - seconds * 2 + 100);
 		}
-		DxLib::DrawFormatString(380, 325, Cr, "%.1lf海里", S_data.movedDis);
+		DxLib::DrawFormatString(410, 325, Cr, "%4.1lf海里", S_data.movedDis);
 		ResetTrans();
 	}
 	if (frameCount >= seconds * 3 || press) {
 		if (frameCount < seconds * 4 && !press) {
 			SetTrans(frameCount - seconds * 3 + 100);
 		}
-		DxLib::DrawFormatString(380, 435, Cr, "%d隻", S_data.killed);
+		DxLib::DrawFormatString(410, 415, Cr, "%4d隻", S_data.killed);
 		ResetTrans();
 	}
 
@@ -139,10 +139,17 @@ void StatisticBoardData::Draw() {
 		for (int i = TOTAL_KILL; i <= TOTAL_KILL + (int)num; i++) {
 			if (frameCount - seconds * 4 < seconds * 5 + seconds * i && !press) {
 				SetTrans(frameCount - seconds * 4 + seconds * i + 100);
+				DxLib::DrawFormatString(1080, 115 + i * 75, Cr, "%-14.1lf", boardData[i]);
 			}
-			if (newHighScore[i])
-				DrawStar({ 545,110 + i * 75 }, { 595 , 160 + i * 75 });
-			DxLib::DrawFormatString(940, 115 + i * 75, Cr, "%-14.1lf", boardData[i]);
+			if (newHighScore[i]) {
+				DrawStar({ 645,110 + i * 75 }, { 695 , 160 + i * 75 });
+				DxLib::DrawFormatString(1080, 115 + i * 75, 
+					((frameCount % 60>30)?
+						CrBox.ReferColor(GORSE):
+						CrBox.ReferColor(RED_ORANGE)
+						), "%-14.1lf", boardData[i]);
+			}
+			
 			ResetTrans();
 		}
 	}

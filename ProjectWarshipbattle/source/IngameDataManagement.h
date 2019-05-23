@@ -13,6 +13,10 @@ public:
 		shouldIRender = false;
 		showLock = false;
 		shouldIContinue = true;
+		
+		shouldIDraw = true;
+		haveIDrawed = false;
+
 		flameCount = 0;
 		flagShipNum = 0;
 		multipleRate = 0.5;
@@ -232,4 +236,10 @@ private:
 	int asyncLoadNum;//”ñ“¯Šú“Ç‚İ‚Ş”
 
 	double multipleRate;
+
+	/*•`‰æƒRƒ“ƒgƒ[ƒ‹*/
+	bool shouldIDraw;
+	bool haveIDrawed;
+
+	bool ShouldIDraw();
 };

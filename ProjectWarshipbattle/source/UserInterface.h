@@ -7,6 +7,7 @@
 #include"Lamp.h"
 #include"Camera.h"
 #include"OtherFunctions.h"
+#include"ColorBox.h"
 #include<cmath>
 class UserInterface
 {
@@ -17,7 +18,6 @@ public:
 		rightSCMStartX(0), rightSCMStartZ(0), mapMatSize(Screen::SCREEN_X / 8),
 		mapPaperSize(mapMatSize - 10) {
 		radian_returnTheLockCircle = 0;
-		SetColorBox();
 	}
 	~UserInterface();
 
@@ -78,23 +78,6 @@ private:
 	/*ランプの宣言*/
 	Lamp lamps[LAMP_LIST::LAMP_AMOUNT];
 
-	enum COLOR_MARK {
-		CR_AMOUNT = 20,
-		GREEN = 0,
-		RED,
-		BLUE,
-		BLACK,
-		WHITE,
-		MIDNIGHT,//ブラックに近い
-		GRENADIER,//赤に近い
-		LOCHMARA,//青に近い
-		MY_SIN,//黄色に近い
-		TENNE,//オレンジに近い
-		MEDIUM_SEA_GREEN
-	};
-
-	unsigned int CrBox[CR_AMOUNT];
-	void SetColorBox();
-	
+	ColorBox CrBox;
 };
 

@@ -32,8 +32,9 @@ void IngameDataManagement::Update() {
 		EndTheGame();
 
 	CheckAndPlaySound();
-	DrawAll();//全部更新した後画面を描く
-	FC.Wait();
+	if (ShouldIDraw())
+		DrawAll();//全部更新した後画面を描く
+	shouldIDraw = FC.Wait();
 }
 
 /*ゲームコントロール*/
@@ -132,7 +133,10 @@ void IngameDataManagement::ControlThisListShoot(std::vector<ShipMain> *shipList)
 			(!ship->ReferControled()||
 			autoFire) &&//プレーヤーの船じゃないもしくはプレーヤーは自動射撃使っていない
 			ship->ReferCanIShoot()) {//射撃範囲内にいる
-			TestShoot(&*ship,false);//射撃
+			if (ship->ReferSerialNumber() != 0)
+				TestShoot(&*ship, false);//射撃
+			else
+				TestShoot(&*ship, true);
 		}
 	}
 }
@@ -938,43 +942,45 @@ void IngameDataManagement::TEST_DRAW() {
 	unsigned int Cr;
 	Cr = GetColor(255, 255, 255);
 	auto ship = alliesFleet.begin();
-	ship->TestDraw(MainCamera.ReferRealCameraX(),
-		MainCamera.ReferRealCameraZ());
+	//ship->TestDraw(MainCamera.ReferRealCameraX(),
+	//	MainCamera.ReferRealCameraZ());
 	char CharNum[255];
 
 	DxLib::SetFontSize(15);
 	ChangeFont("ＤＦＧ龍門石碑体");
 
 	_gcvt_s(CharNum, ship->ReferSpeedOnZ() * 100, 10);
-	DrawString(10, 10, "Speed", Cr);
-	DrawString(60, 10, CharNum, Cr);
+	DrawString(60, 10, "Speed", Cr);
+	DrawString(110, 10, CharNum, Cr);
 	if (ship->ReferReturnOn()) {
-		DrawString(10, 30, "Alignment On", Cr);
+		DrawString(60, 30, "Alignment On", Cr);
 	}
 	else {
-		DrawString(10, 30, "Alignment Off", Cr);
+		DrawString(60, 30, "Alignment Off", Cr);
 	}
 	_gcvt_s(CharNum, ship->ReferChangingRadian(), 10);
-	DrawString(10, 50, "Radian(C)", Cr);
-	DrawString(100, 50, CharNum, Cr);
+	DrawString(60, 50, "Radian(C)", Cr);
+	DrawString(150, 50, CharNum, Cr);
 	_gcvt_s(CharNum, ship->ReferCoordX(), 10);
-	DrawString(10, 70, "X", Cr);
-	DrawString(30, 70, CharNum, Cr);
+	DrawString(60, 70, "X", Cr);
+	DrawString(80, 70, CharNum, Cr);
 	_gcvt_s(CharNum, ship->ReferCoordZ(), 10);
-	DrawString(10, 90, "Z", Cr);
-	DrawString(30, 90, CharNum, Cr);
+	DrawString(60, 90, "Z", Cr);
+	DrawString(80, 90, CharNum, Cr);
 	_gcvt_s(CharNum, ship->ReferRadianOnZ(), 10);
-	DrawString(10, 110, "Radian(R)", Cr);
-	DrawString(100, 110, CharNum, Cr);
+	DrawString(60, 110, "Radian(R)", Cr);
+	DrawString(150, 110, CharNum, Cr);
 	_gcvt_s(CharNum, cos(ship->ReferRadianOnZ()), 10);
-	DrawString(10, 130, "Cos", Cr);
-	DrawString(50, 130, CharNum, Cr);
+	DrawString(60, 130, "Cos", Cr);
+	DrawString(100, 130, CharNum, Cr);
 	_gcvt_s(CharNum, sin(ship->ReferRadianOnZ()), 10);
-	DrawString(10, 150, "Sin", Cr);
-	DrawString(50, 150, CharNum, Cr);
+	DrawString(60, 150, "Sin", Cr);
+	DrawString(100, 150, CharNum, Cr);
 	_gcvt_s(CharNum, ship->ReferOutPutRate(), 10);
-	DrawString(10, 170, "OutPutRate", Cr);
-	DrawString(110, 170, CharNum, Cr);
+	DrawString(60, 170, "OutPutRate", Cr);
+	DrawString(170, 170, CharNum, Cr);
+	DrawString(60, 190, "FPS:", Cr);
+	DrawFormatString(100, 190, Cr, "%2.3f", FC.ReferFPS());
 }
 
 void IngameDataManagement::EndTheGame() {
@@ -1652,4 +1658,19 @@ void IngameDataManagement::ClearTeam() {
 	}
 	teamACount = 0;
 	teamBCount = 0;
+}
+
+bool IngameDataManagement::ShouldIDraw() {
+	if (shouldIDraw)
+		return true;
+	if (!shouldIDraw && haveIDrawed) {
+		haveIDrawed = false;
+		return true;
+	}
+
+	if (!shouldIDraw) {
+		haveIDrawed = true;
+		return false;
+	}
+	return false;
 }

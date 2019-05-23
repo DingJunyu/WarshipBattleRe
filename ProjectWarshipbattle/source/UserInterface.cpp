@@ -409,20 +409,20 @@ void UserInterface::DrawCircle(Coordinate2D<double> coord, Camera camera) {
 
 void UserInterface::DrawHPBar(Coordinate2D<double> coord, int HP, int maxHP) {
 	Coordinate2D<double> plus = { 73,8 };//‚b‚t‚h‚Ì‰æ‘œƒTƒCƒY‚É‡‚í‚¹‚é
-	DrawBoxWithPerAndCr(coord, plus, 1, CrBox[BLACK]);
+	DrawBoxWithPerAndCr(coord, plus, 1, CrBox.ReferColor(BLACK));
 
 	unsigned int tempCr;
 	double per;
 	per = (double)HP / (double)maxHP;
 
 	if (per > 0.75)
-		tempCr = CrBox[MEDIUM_SEA_GREEN];
+		tempCr = CrBox.ReferColor(MEDIUM_SEA_GREEN);
 	else if (per > 0.5)
-		tempCr = CrBox[MY_SIN];
+		tempCr = CrBox.ReferColor(MY_SIN);
 	else if (per > 0.25)
-		tempCr = CrBox[TENNE];
+		tempCr = CrBox.ReferColor(TENNE);
 	else
-		tempCr = CrBox[GRENADIER];
+		tempCr = CrBox.ReferColor(GRENADIER);
 
 	DrawBoxWithPerAndCr(coord, plus, per, tempCr);
 }
@@ -441,18 +441,4 @@ void UserInterface::DrawMyCircle(Camera camera, double radian) {
 		USER_INTERFACE_POSITION::MY_DIRECT_MULTI * camera.ReferZoomRatio(),
 		radian);
 	ResetTrans();
-}
-
-void UserInterface::SetColorBox() {
-	CrBox[GREEN] = GetColor(0, 255, 0);
-	CrBox[RED] = GetColor(255, 0, 0);
-	CrBox[BLUE] = GetColor(0, 0, 255);
-	CrBox[BLACK] = GetColor(0, 0, 0);
-	CrBox[WHITE] = GetColor(255, 255, 255);
-	CrBox[MIDNIGHT] = GetColor(33, 47, 61);
-	CrBox[GRENADIER] = GetColor(203, 67, 53);
-	CrBox[LOCHMARA] = GetColor(36, 113, 163);
-	CrBox[MY_SIN] = GetColor(245, 176, 65);
-	CrBox[TENNE] = GetColor(211, 84, 0);
-	CrBox[MEDIUM_SEA_GREEN] = GetColor(46, 204, 113);
 }

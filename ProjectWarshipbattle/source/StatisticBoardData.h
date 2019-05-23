@@ -2,6 +2,7 @@
 #include"DxLib.h"
 #include"stdio.h"
 #include"DefinedData.h"
+#include"ColorBox.h"
 #include"OtherFunctions.h"
 class StatisticBoardData
 {
@@ -45,4 +46,6 @@ private:
 	bool press;
 	long long int pressFrame;
 	bool newHighScore[7];
+
+	ColorBox CrBox;
 };
