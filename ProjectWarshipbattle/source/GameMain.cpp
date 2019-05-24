@@ -13,6 +13,7 @@
 /****************************************************************/
 #include"DxLib.h"
 #include"HeaderForMain.h"
+#include"../resource.h"
 
 void GameMain();
 void SingleGame_Mission_Progress();
@@ -22,6 +23,7 @@ int MainMenu();
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	SetWindowIconID(IDI_ICON1);
 	ChangeWindowMode(TRUE);//ウインドモードに変更
 	SetWaitVSyncFlag(FALSE);//自動同期を無効にする
 	SetMainWindowText("WarshipBattle");
@@ -37,7 +39,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetAlwaysRunFlag(TRUE);
 	srand((unsigned)time(NULL));//乱数の初期化
 
-	MainMenuController MMC;
 	int choice = -1;//選択を無効にする
 	bool endGame = false;//ゲームオーバーフラグをオフにする
 

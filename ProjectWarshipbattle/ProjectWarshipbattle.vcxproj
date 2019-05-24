@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="source\AirWeapon.h" />
     <ClInclude Include="source\AI_Action.h" />
     <ClInclude Include="source\AllMovableObjects.h" />
@@ -111,6 +112,13 @@
     <ClCompile Include="source\TorpedoLoader.cpp" />
     <ClCompile Include="source\UserInterface.cpp" />
     <ClCompile Include="source\Weapon.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ProjectWarshipbattle.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="warship_battle.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

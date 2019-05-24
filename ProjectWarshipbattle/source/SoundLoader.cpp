@@ -39,6 +39,7 @@ void SoundLoader::LoadSound() {
 void SoundLoader::DeleteSound() {
 	DeleteSoundMem(shipSoundEngine);
 	DeleteSoundMem(shipSoundMoving);
+	DeleteSoundMem(shipSoundSlow);
 	DeleteSoundMem(shipSoundTurning);
 	DeleteSoundMem(shipHordLargeHigh);
 	DeleteSoundMem(shipHordLargeLow);

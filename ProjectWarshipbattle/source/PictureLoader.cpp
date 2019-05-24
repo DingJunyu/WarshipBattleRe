@@ -388,7 +388,7 @@ void PictureLoader::FreePicture() {
 void PictureLoader::DeleteShips() {
 	/*戦艦*/
 	for (int i = 0;
-		i < COUNT_OF_EVERYTYPE::BATTLE_CRUSIER_TYPE_COUNT;
+		i < COUNT_OF_EVERYTYPE::ALL_SHIP_COUNT;
 		i++) {
 		DeleteGraph(
 			shipHandle[i][SerialNumberOfShipHandle::SHIP_HANDLE]);
@@ -416,8 +416,8 @@ void PictureLoader::DeleteUserInterfaceInGame() {
 
 void PictureLoader::DeleteEffect(){
 	/*エフェクト*/
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 16; j++) {
+	for (int i = 0; i < TypeOfEffect::EFFECT_AMOUNT; i++) {
+		for (int j = 0; j < TypeOfEffect::EFFECT_FLAME_AMOUNT; j++) {
 			DeleteGraph(effectHandleList[i][j]);
 		}
 	}
@@ -443,7 +443,7 @@ void PictureLoader::DeleteButtonInMainMenu() {
 }
 
 void PictureLoader::DeleteButtonInGame() {
-	for (int i = CommandSerial::INCREASE_OUTPUT;
+	for (int i = 0;
 		i <= CommandSerial::COUNT; i++) {
 		DeleteGraph(buttonIntheGame[i]);
 		DeleteGraph(buttonPressedIntheGame[i]);
@@ -451,15 +451,21 @@ void PictureLoader::DeleteButtonInGame() {
 }
 
 void PictureLoader::DeleteStatisticBoard() {
-	for (int i = StatisticBoard::SB_BACKGROUND;
-		i <= StatisticBoard::LOSE;
+	for (int i = 0;
+		i <= StatisticBoard::SB_NUM;
 		i++)
 		DeleteGraph(statisticBoardHandle[i]);
 }
 
 void PictureLoader::DeleteFormationBoard() {
-	for (int i = FormationBoard::FB_BACKGROUND;
-		i <= FormationBoard::FB_SHIP_CARD;
+	for (int i = 0;
+		i <= FormationBoard::FB_NUM;
 		i++)
 		DeleteGraph(formationBoardHandle[i]);
+}
+
+void PictureLoader::DeleteFantasyNumbers() {
+	for (int i = 0; i <= 10; i++) {
+		DeleteGraph(fantasyNumbers[i]);
+	}
 }

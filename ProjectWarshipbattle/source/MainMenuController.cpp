@@ -20,6 +20,12 @@ void MainMenuController::Inif() {
 	SetButtonPosition();//各ボタンの位置を設定する
 }
 
+void MainMenuController::FREE() {
+	BC.FREE();
+	PL.FREE_FOR_MAINMENU();
+	SL.FreeAll();
+}
+
 void MainMenuController::DrawTitle() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
 	
@@ -174,8 +180,3 @@ int MainMenuController::CheckChoice(){
 	return choice;
 }
 
-void MainMenuController::FREE() {
-	BC.FREE();
-	PL.FREE_FOR_MAINMENU();
-	SL.FreeAll();
-}

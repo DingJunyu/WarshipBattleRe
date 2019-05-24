@@ -26,6 +26,7 @@ public:
 	}
 	/*ゲーム用インターフェース*/
 	void InifForGame() {
+		MemorySecure();
 		LoadShips();
 		LoadSea();
 		LoadUserInterfaceInGame();
@@ -53,6 +54,8 @@ public:
 		DeleteAmmo();
 		DeleteButtonInGame();
 		DeleteStatisticBoard();
+		DeleteFormationBoard();
+		DeleteFantasyNumbers();
 		FreeMemory();
 	}
 	void GetGraphSizeForGame();
@@ -147,6 +150,7 @@ private:
 	void DeleteButtonInGame();
 	void DeleteStatisticBoard();
 	void DeleteFormationBoard();
+	void DeleteFantasyNumbers();
 
 	/*船画像データ*/
 	/*参考：DefinedData.h-SerialNumberOfShipHandle*/

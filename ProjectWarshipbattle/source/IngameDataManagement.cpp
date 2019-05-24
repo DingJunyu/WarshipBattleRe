@@ -1135,8 +1135,6 @@ bool IngameDataManagement::Inif() {
 
 	long long startTime = GetTickCount();
 
-	PL.MemorySecure();
-
 	SetUseASyncLoadFlag(TRUE);//非同期読み込みを有効化
 	PL.InifForGame();//画像ローダー初期化
 	SL.Inif();//音声ローダー初期化
