@@ -266,12 +266,13 @@ void UserInterface::DrawUINeedInput(ShipMain *ship, bool autoFire,
 	lamps[LAMP_LIST::RETURN_TO_MIDDLE].Draw();
 }
 
-void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<double> coord
-	, Camera camera, double radian) {
+void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<double> coord,
+	Coordinate2D<double> coord_my,
+	Camera camera,
+	double radian) {
 	if (lock)
 		DrawCircle(coord,camera);
-	if (!lock)
-		DrawMyCircle(camera, radian);
+	DrawMyCircle(coord_my, camera, radian);
 }
 
 void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {
@@ -438,6 +439,22 @@ void UserInterface::DrawMyCircle(Camera camera, double radian) {
 	SetTrans(120);
 	DrawRotatePicture2(UI_LIST::MY_DIRECT,
 		xOnScreen, zOnScreen, 
+		USER_INTERFACE_POSITION::MY_DIRECT_MULTI * camera.ReferZoomRatio(),
+		radian);
+	ResetTrans();
+}
+
+void UserInterface::DrawMyCircle(Coordinate2D<double> coord,
+	Camera camera, double radian) {
+
+	double coordX = coord.x - camera.ReferRealCameraX();
+	double coordZ = coord.z - camera.ReferRealCameraZ();
+	coordX *= camera.ReferZoomRatio();
+	coordZ *= camera.ReferZoomRatio();
+
+	SetTrans(120);
+	DrawRotatePicture2(UI_LIST::MY_DIRECT,
+		coordX, coordZ,
 		USER_INTERFACE_POSITION::MY_DIRECT_MULTI * camera.ReferZoomRatio(),
 		radian);
 	ResetTrans();

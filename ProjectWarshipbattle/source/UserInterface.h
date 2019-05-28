@@ -28,7 +28,10 @@ public:
 		bool changeCamera);
 	void DrawHPBar(Coordinate2D<double> coord, int HP, int maxHP);
 
-	void DrawUIUnderShip(bool lock,Coordinate2D<double> coord,Camera camera, double radian);
+	void DrawUIUnderShip(bool lock,Coordinate2D<double> coord,
+		Coordinate2D<double> coord_my,
+		Camera camera,
+		double radian);
 
 	void DrawShipOnTheMap(double X, double Z, bool enemy);
 
@@ -70,6 +73,7 @@ private:
 	double radian_returnTheLockCircle;
 	void DrawCircle(Coordinate2D<double> coord, Camera camera);
 	void DrawMyCircle(Camera camera, double radian);
+	void DrawMyCircle(Coordinate2D<double> coord,Camera camera, double radian); 
 
 	
 

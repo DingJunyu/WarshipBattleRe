@@ -6,6 +6,7 @@ StatisticBoardData::StatisticBoardData()
 	press = false;
 	for (int i = 0; i < 7; i++)
 		newHighScore[i] = false;
+	frameCount = 0;
 }
 
 StatisticBoardData::~StatisticBoardData()
@@ -139,23 +140,35 @@ void StatisticBoardData::Draw() {
 		long long int num = (frameCount - seconds * 4) / seconds;
 		if (num > 6 || press)num = 6;
 		for (int i = TOTAL_KILL; i <= TOTAL_KILL + (int)num; i++) {
-			if (frameCount - seconds * 4 < seconds * 5 + seconds * i || press) {
+			if (frameCount - seconds * 4 > //Œo‰ß‚µ‚½ŽžŠÔ
+				seconds * i ||
+				press) {
 				if (!press)
 					SetTrans(frameCount - seconds * 4 + seconds * i + 100);
 				DxLib::DrawFormatString(1080, 115 + i * 75, CrBox.ReferColor(WHITE),
 					"%-14.1lf", boardData[i]);
 			}
 			if (newHighScore[i]) {
+				int CrNum;
+				CrNum = DROVER;
+				if (frameCount % 30 == 0) {
+					CrNum = rand() % 16;
+				}
+
 				DrawStar({ 645,110 + i * 75 }, { 695 , 160 + i * 75 });
 				DxLib::DrawFormatString(1080, 115 + i * 75, 
-					((frameCount % 60>30)?
-						CrBox.ReferColor(GORSE):
-						CrBox.ReferColor(RED_ORANGE)
-						), "%-14.1lf", boardData[i]);
+						CrBox.ReferColor(CrNum), "%-14.1lf", boardData[i]);
 			}
 			
 			ResetTrans();
 		}
+	}
+
+	if (frameCount >= seconds * 11 || press) {
+		press = true;
+		DrawFormatString(520, 640, ((frameCount % 60 > 30) ?
+			CrBox.ReferColor(DROVER) :
+			CrBox.ReferColor(RED_ORANGE)), "Press To Continue");
 	}
 	DxLib::ScreenFlip();
 }

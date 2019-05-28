@@ -169,8 +169,13 @@ int ClickableUserInterface::CheckChoice() {
 			/*‰Ÿ‚³‚ê‚½‚ç‘I‘ð‚µ‚ð•Ô‚·*/	
 			if (pressed) {
 				answer = i;
+				break;
 			}
 		}
+	}
+	if (answer >= CommandSerial::SELECT &&
+		answer < CommandSerial::SELECT + 10) {
+		answer = CommandSerial::NONE_COMMAND;
 	}
 
 	return answer;//‘I‘ð‚µ‚½‚à‚Ì‘Î‰ž‚µ‚½”Ô†‚ð•Ô‚·

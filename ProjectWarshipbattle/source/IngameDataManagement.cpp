@@ -159,6 +159,7 @@ void IngameDataManagement::DrawAll() {
 	/*‘D‚Ì‚µ‚½‚É‚ ‚éUI‚ð•`‰æ‚·‚é*/
 	UI.DrawUIUnderShip(ship->fireDataFigureUp.ReferLockOn(),
 		enemyFleet[ship->fireDataFigureUp.ReferTarget()].ReferCoord2D_d(),
+		alliesFleet[0].ReferCoord2D_d(),
 		MainCamera, ship->ReferRadianOnZ() + ship->ReferChangingRadian());
 //	DrawTorpedo();
 	DrawShips();//‘D‚ð•`‰æ‚·‚é
