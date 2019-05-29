@@ -9,7 +9,7 @@
 /*アップロード者:https://commons.wikimedia.org/wiki/User:Alexpl */
 /*UI作者:丁俊宇                                                 */
 /*                                                              */
-/*更新日:2019.5.15                                             */
+/*更新日:2019.5.29                                              */
 /****************************************************************/
 #include"DxLib.h"
 #include"HeaderForMain.h"

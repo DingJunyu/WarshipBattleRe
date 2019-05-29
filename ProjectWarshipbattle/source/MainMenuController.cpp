@@ -160,7 +160,8 @@ void MainMenuController::DrawTutorial() {
 
 	SetTrans(180);
 
-	DrawBox(0, 0, 150, 768, CrBox.ReferColor(BLUE_CHARCOAL), TRUE);
+	DrawBox(0, 0, 150, 768, CrBox.ReferColor(LOCHMARA), TRUE);
+	DrawBox(0, 0, 145, 768, CrBox.ReferColor(BLUE_CHARCOAL), TRUE);
 
 	ResetTrans();
 
