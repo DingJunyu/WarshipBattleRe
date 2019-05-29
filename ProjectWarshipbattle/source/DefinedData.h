@@ -83,7 +83,6 @@ enum TutorialNum {
 	FORMATION,
 	INBATTLE_NORMAL, 
 	INBATTLE_LOCKON
-
 };
 
 namespace AUTO_SHIP_DATA {
