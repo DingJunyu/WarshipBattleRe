@@ -7,6 +7,7 @@ StatisticBoardData::StatisticBoardData()
 	for (int i = 0; i < 7; i++)
 		newHighScore[i] = false;
 	frameCount = 0;
+	CrNum = COLOR_MARK::MY_SIN;
 }
 
 StatisticBoardData::~StatisticBoardData()
@@ -37,7 +38,7 @@ void StatisticBoardData::Read(bool Res) {
 	/*計算の部分*/
 	if (S_data.shootCount == 0)/*ゼロの時も正しく表示できる*/
 		S_data.shootCount = 1;
-	S_data.hitRate = (double)S_data.hitCount / (double)S_data.shootCount;
+	S_data.hitRate = (double)S_data.hitCount / (double)S_data.shootCount * 100;
 
 	/*記録を更新*/
 	boardData[TOTAL_KILL] += (double)S_data.killed;
@@ -106,7 +107,7 @@ void StatisticBoardData::Draw() {
 			SetTrans(frameCount - seconds + 100);//透過度がどんどん上がるように
 		}
 		DxLib::DrawFormatString(410, 110, CrBox.ReferColor(WHITE), 
-			"%4.1lf%%", S_data.hitRate * 100);
+			"%4.1lf%%", S_data.hitRate);
 		ResetTrans();//透過度をリセット
 	}
 	if (frameCount >= seconds  || press) {
@@ -145,21 +146,18 @@ void StatisticBoardData::Draw() {
 				press) {
 				if (!press)
 					SetTrans(frameCount - seconds * 4 + seconds * i + 100);
-				DxLib::DrawFormatString(1080, 115 + i * 75, CrBox.ReferColor(WHITE),
-					"%-14.1lf", boardData[i]);
+				DxLib::DrawFormatString(1060, 115 + i * 75, CrBox.ReferColor(WHITE),
+					"%9.0lf%-s", boardData[i], RecordChar[i]);
 			}
 			if (newHighScore[i]) {
-				int CrNum;
-				CrNum = DROVER;
-				if (frameCount % 30 == 0) {
+				if (frameCount % 60 == 0) {
 					CrNum = rand() % 16;
 				}
-
 				DrawStar({ 645,110 + i * 75 }, { 695 , 160 + i * 75 });
-				DxLib::DrawFormatString(1080, 115 + i * 75, 
-						CrBox.ReferColor(CrNum), "%-14.1lf", boardData[i]);
+				DxLib::DrawFormatString(1060, 115 + i * 75,
+						CrBox.ReferColor(CrNum), "%9.0lf%-s", boardData[i],
+						RecordChar[i]);
 			}
-			
 			ResetTrans();
 		}
 	}

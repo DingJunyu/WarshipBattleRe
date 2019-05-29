@@ -51,4 +51,9 @@ private:
 	bool newHighScore[7];
 
 	ColorBox CrBox;
+	int CrNum;
+
+	const char *RecordChar[7] = {
+		"ê«","äCó¢","Pt","Pt","Pt","äCó¢","%"
+	};
 };

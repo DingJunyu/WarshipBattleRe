@@ -15,6 +15,7 @@ void ColorBox::SetColorBox() {
 	CrBox[BLACK] = GetColor(0, 0, 0);
 	CrBox[WHITE] = GetColor(255, 255, 255);
 	CrBox[MIDNIGHT] = GetColor(33, 47, 61);
+	CrBox[BLUE_CHARCOAL] = GetColor(28, 40, 51);
 	CrBox[GRENADIER] = GetColor(203, 67, 53);
 	CrBox[LOCHMARA] = GetColor(36, 113, 163);
 	CrBox[MY_SIN] = GetColor(245, 176, 65);
@@ -25,4 +26,6 @@ void ColorBox::SetColorBox() {
 	CrBox[GORSE] = GetColor(255, 235, 59);
 	CrBox[RED_ORANGE] = GetColor(244, 67, 54);
 	CrBox[IRON_STONE] = GetColor(121, 85, 72);
+	CrBox[WATER_COURSE] = GetColor(14, 102, 85);
+	CrBox[ASTRONAUT_BLUE] = GetColor(21, 67, 96);
 }

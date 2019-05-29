@@ -9,6 +9,7 @@ enum COLOR_MARK {
 	BLACK,
 	WHITE,
 	MIDNIGHT,//ブラックに近い
+	BLUE_CHARCOAL,//#1C2833 ブラックに近い2
 	GRENADIER,//赤に近い
 	LOCHMARA,//青に近い
 	MY_SIN,//黄色に近い
@@ -18,7 +19,9 @@ enum COLOR_MARK {
 	DROVER,//浅い黄色 #F9E79F
 	GORSE,//黄色 #FFEB3B  
 	RED_ORANGE,//#F44336
-	IRON_STONE//茶色っぽい? #795548
+	IRON_STONE,//茶色っぽい? #795548
+	WATER_COURSE,//深い緑 #0E6655 
+	ASTRONAUT_BLUE//深いブルー #154360  
 };
 
 class ColorBox

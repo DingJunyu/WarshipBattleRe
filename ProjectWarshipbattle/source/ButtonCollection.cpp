@@ -9,7 +9,7 @@ void ButtonCollection::Inif(PictureLoader *PL) {
 	buttonContainer = new Button[ButtonEvent::BUTTON_AMOUNT];
 
 	//メインメニューボタンの初期化
-	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++)
+	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::TTR_BACK; i++)
 		buttonContainer[i].Inif(
 			PL->ReferButtonHandle(i),//普通のハンドルを取る
 			PL->ReferButtonPressedHandle(i)//押された時のハンドルを取る

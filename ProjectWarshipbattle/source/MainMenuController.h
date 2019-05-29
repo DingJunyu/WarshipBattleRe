@@ -4,6 +4,8 @@
 #include"SoundLoader.h"
 #include"DefinedData.h"
 #include"ButtonCollection.h"
+#include"OtherFunctions.h"
+#include"ColorBox.h"
 #include"FrameControl.h"
 /*もともとはこのクラスでメインメニューの操作を実現するだけが、
 実際にほかの画面のコントローラーの内容が重複しました、
@@ -17,20 +19,31 @@ public:
 		titleMultipleRateInTitle = 2;
 		titleMultipleRateInMainMenu = 4;
 		buttonMultiple = 0.7;
+		buttonMultiple_TTR = 0.35;
+		TTR_choice = TutorialNum::DIRECT_CONTROL;
 	}
 	~MainMenuController();
 
 	void Inif();
+	void Inif_Tur();
 
 	void DrawTitle();//タイトル画面を描画する
 	void DrawMainMenu();//メインメニューを描画する
 	void DrawLoading();//Loading
+	void DrawTutorial();
 
 	int CheckChoice();//選択肢を確認
 	void FREE();
 
+	void SetTutorialChoice(int x) { TTR_choice = x; }
+
 private:
+	void StandardInif();
+
 	void SetButtonPosition();
+	void SetButtonPos_Tur();
+
+	void DrawTutorialSingle();
 
 	/*実際に画像保存クラスはここに宣言すべきではなかったが、
 	デザインのミスでここに宣言しました、このクラスの命名も間違いました、
@@ -40,6 +53,7 @@ private:
 	SoundLoader SL;
 	ButtonCollection BC;
 	FrameControl FC;
+	ColorBox CrBox;
 
 	/*提示の点滅用カウント*/
 	int countForTitle;
@@ -47,14 +61,16 @@ private:
 	/*ボタンの部分*/
 	enum ButtonCoord
 	{
-		AMOUNT = 2,
-		X = 0,
-		Z
+		AMOUNT = 3,
+		BC_X = 0,
+		BC_Z,
+		BC_ACTIVE //ここはtrueとfalseを使う
 	};
 	double buttonPosition[ButtonEvent::BUTTON_AMOUNT][ButtonCoord::AMOUNT];
 	int buttonSizeX;
 	int buttonSizeZ;
 	double buttonMultiple;
+	double buttonMultiple_TTR;
 
 	/*背景*/
 	int *backGroundHandle;
@@ -77,5 +93,12 @@ private:
 
 	/*初めてメインメニューを呼び出す時に初期処理を行う*/
 	bool firstTimeGetIntoMainMenu;
+
+	/*チュートリアル*/
+	int *tutorialHandle;
+
+	int TTR_choice;
+
+	
 };
 

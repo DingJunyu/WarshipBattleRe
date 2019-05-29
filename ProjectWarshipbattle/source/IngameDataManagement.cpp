@@ -485,7 +485,7 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 	if (flameCount >= mapX / 4)
 		flameCount = fmod(flameCount, mapX / 4);
 
-	flameCount += .05;
+	flameCount += .05 * MainCamera.ReferZoomRatio();
 
 	SetTrans(90);//ìßñæìxÇâ∫Ç™ÇÈ
 	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
@@ -843,9 +843,9 @@ void IngameDataManagement::DrawFormationBoard() {
 
 	SetFontSize(35);
 	DrawFormatString(300, 16, GetColor(255, 255, 255),
-		"ëçêî%2dë‰(10ë‰Ç‹Ç≈)",teamACount);
+		"ëçêî%2dê«(10ê«Ç‹Ç≈)",teamACount);
 	DrawFormatString(670, 16, GetColor(255, 255, 255),
-		"ëçêî%2dë‰(10ë‰Ç‹Ç≈)", teamBCount);
+		"ëçêî%2dê«(10ê«Ç‹Ç≈)", teamBCount);
 
 	CUI.Draw();
 
@@ -929,6 +929,7 @@ void IngameDataManagement::DrawStatisticBoard2() {
 	statisticBoardData.GetDis(alliesFleet[0].ReferDistanceMoved()*
 		MathAndPhysics::Change_Distance/3600);
 	statisticBoardData.Read(win);
+	FC.Reset();
 	while (ProcessMessage() == 0) {
 		if (statisticBoardData.Update())
 			break;

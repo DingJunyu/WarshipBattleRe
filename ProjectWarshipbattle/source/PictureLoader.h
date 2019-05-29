@@ -23,6 +23,7 @@ public:
 		MemorySecure();
 		LoadMainMenu();
 		LoadButtonInMainMenu();
+		LoadTutorial();
 	}
 	/*ゲーム用インターフェース*/
 	void InifForGame() {
@@ -44,6 +45,7 @@ public:
 	void FREE_FOR_MAINMENU() {
 		DeleteMainMenu();
 		DeleteButtonInMainMenu();
+		DeleteTutorial();
 		FreeMemory();
 	}
 	void FREE_FOR_GAME(){
@@ -122,6 +124,9 @@ public:
 
 	int *ReferFantasyNumber() { return &fantasyNumbers[0]; }
 
+	/*チュートリアル*/
+	int *ReferTutorialHandle() { return &tutorialHandle[0]; }
+
 private:
 	
 
@@ -138,6 +143,7 @@ private:
 	void LoadStatisticBoard();
 	void LoadFormationBoard();
 	void LoadFantasyNumbers();
+	void LoadTutorial();
 
 	/*機能別メモリ解放関数*/
 	void DeleteShips();
@@ -151,6 +157,7 @@ private:
 	void DeleteStatisticBoard();
 	void DeleteFormationBoard();
 	void DeleteFantasyNumbers();
+	void DeleteTutorial();
 
 	/*船画像データ*/
 	/*参考：DefinedData.h-SerialNumberOfShipHandle*/
@@ -195,6 +202,9 @@ private:
 	int miniMapPaperHandle;
 
 	int UIList[UI_LIST::AMOUNT];//すべてのＵＩソースを保存する
+
+	/*チュートリアル*/
+	int tutorialHandle[TutorialNum::TN_AMOUNT];
 
 	/*艦マーク*/
 	int **markForAllies;

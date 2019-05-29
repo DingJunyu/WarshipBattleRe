@@ -5,25 +5,49 @@ MainMenuController::~MainMenuController()
 }
 
 void MainMenuController::Inif() {
+	StandardInif();
+
+	pressedToStart = PL.ReferPressedToStart();
+	pressedToStartDown = PL.ReferPressedToStartDown();
+	GetGraphSize(*pressedToStart, &PTSSizeX, &PTSSizeZ);
+
+	SetButtonPosition();//各ボタンの位置を設定する
+}
+
+void MainMenuController::Inif_Tur() {
+	StandardInif();
+
+	tutorialHandle = PL.ReferTutorialHandle();
+
+	SetButtonPos_Tur();
+}
+
+void MainMenuController::StandardInif() {
 	PL.InifForMainMenu();
 	SL.Inif();
 	BC.Inif(&PL);
 
 	backGroundHandle = PL.ReferBackGround();
 	title = PL.ReferTitle();
-	pressedToStart = PL.ReferPressedToStart();
-	pressedToStartDown = PL.ReferPressedToStartDown();
+
 	//使うやつのサイズを取る
 	GetGraphSize(*title, &titleSizeX, &titleSizeZ);
-	GetGraphSize(*pressedToStart, &PTSSizeX, &PTSSizeZ);
 
-	SetButtonPosition();//各ボタンの位置を設定する
+	for (int i = 0; i < ButtonEvent::BUTTON_AMOUNT; i++) {
+		buttonPosition[i][BC_ACTIVE] = false;
+	}
 }
 
 void MainMenuController::FREE() {
 	BC.FREE();
 	PL.FREE_FOR_MAINMENU();
 	SL.FreeAll();
+
+	/*ポインターを解放する*/
+	title = nullptr;
+	backGroundHandle = nullptr;
+	pressedToStart = nullptr;
+	pressedToStartDown = nullptr;
 }
 
 void MainMenuController::DrawTitle() {
@@ -117,6 +141,36 @@ void MainMenuController::DrawLoading() {
 
 	DrawString((int)(0.85*Screen::SCREEN_X), 
 		(int)(0.85*Screen::SCREEN_Z), "LOADING...", Cr);
+	
+
+	ScreenFlip();
+}
+
+void MainMenuController::DrawTutorial() {
+	if (firstTimeGetIntoMainMenu) {
+		FC.Reset();
+		firstTimeGetIntoMainMenu = false;
+	}
+
+	SetDrawScreen(DX_SCREEN_BACK);
+	ClearDrawScreen();
+
+	DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
+		*backGroundHandle, FALSE);
+
+	SetTrans(180);
+
+	DrawBox(0, 0, 150, 768, CrBox.ReferColor(BLUE_CHARCOAL), TRUE);
+
+	ResetTrans();
+
+	DrawTutorialSingle();
+
+	for (int i = ButtonEvent::TTR_DIRECT_CONTROL; 
+		i <= ButtonEvent::TTR_BACK; i++) {
+		BC.buttonContainer[i].DrawThisButton();
+	}
+	FC.Wait();
 
 	ScreenFlip();
 }
@@ -129,24 +183,45 @@ void MainMenuController::SetButtonPosition() {
 		BC.buttonContainer[ButtonEvent::NEW_GAME].ReferGraphSizeZ();
 
 	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++) {
-		buttonPosition[i][0] = BUTTON_POSITION::START_POSITION_ON_X;
+		buttonPosition[i][BC_X] = BUTTON_POSITION::START_POSITION_ON_X;
 	}
 
-	buttonPosition[ButtonEvent::NEW_GAME][1] =
+	buttonPosition[ButtonEvent::NEW_GAME][BC_Z] =
 		BUTTON_POSITION::NEW_GAME;
-	buttonPosition[ButtonEvent::CONTINUE_GAME][1] =
+	buttonPosition[ButtonEvent::TUTORIAL][BC_Z] =
 		BUTTON_POSITION::CONTINUE_GAME;
-	buttonPosition[ButtonEvent::LOAD_GAME][1] =
-		BUTTON_POSITION::LOAD_GAME;
-	buttonPosition[ButtonEvent::OPTION][1] =
-		BUTTON_POSITION::OPTION;
-	buttonPosition[ButtonEvent::GAME_OVER][1] =
+	buttonPosition[ButtonEvent::GAME_OVER][BC_Z] =
 		BUTTON_POSITION::GAME_OVER;
 
 	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++) {
-		BC.buttonContainer[i].SetXZ(buttonPosition[i][0],
-			buttonPosition[i][1], buttonMultiple);
+		BC.buttonContainer[i].SetXZ(buttonPosition[i][BC_X],
+			buttonPosition[i][BC_Z], buttonMultiple);
+		buttonPosition[i][BC_ACTIVE] = true;
 	}
+}
+
+void MainMenuController::SetButtonPos_Tur() {
+	/*各ボタンの位置を設定する*/
+	buttonSizeX =
+		BC.buttonContainer[ButtonEvent::NEW_GAME].ReferGraphSizeX();
+	buttonSizeZ =
+		BC.buttonContainer[ButtonEvent::NEW_GAME].ReferGraphSizeZ();
+
+	for (int i = ButtonEvent::TTR_DIRECT_CONTROL;
+		i <= ButtonEvent::TTR_INBATTLE_LOCKON; i++) {
+		buttonPosition[i][BC_X] = 0.005;
+		buttonPosition[i][BC_Z] = 0.07 * (i - 2);//1から始まるようにする
+		BC.buttonContainer[i].SetXZ(buttonPosition[i][BC_X],
+			buttonPosition[i][BC_Z], buttonMultiple_TTR);
+		buttonPosition[i][BC_ACTIVE] = true;
+	}
+
+	buttonPosition[ButtonEvent::TTR_BACK][BC_X] = 0.005;
+	buttonPosition[ButtonEvent::TTR_BACK][BC_Z] = 0.85;
+	BC.buttonContainer[ButtonEvent::TTR_BACK].SetXZ(
+		buttonPosition[ButtonEvent::TTR_BACK][BC_X],
+		buttonPosition[ButtonEvent::TTR_BACK][BC_Z], buttonMultiple_TTR);
+	buttonPosition[ButtonEvent::TTR_BACK][BC_ACTIVE] = true;
 }
 
 int MainMenuController::CheckChoice(){
@@ -162,21 +237,27 @@ int MainMenuController::CheckChoice(){
 	}
 
 	/*ボタンのステータスはマウスに合わせて変更する*/
-	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++) {
-		if (mouseX > buttonPosition[i][0] * Screen::SCREEN_X &&
-			mouseX < buttonPosition[i][0] *
-			Screen::SCREEN_X + buttonSizeX * buttonMultiple &&
-			mouseZ > buttonPosition[i][1] * Screen::SCREEN_Z &&
-			mouseZ < buttonPosition[i][1] *
-			Screen::SCREEN_Z + buttonSizeZ * buttonMultiple) {
+	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::TTR_BACK; i++) {
+		if (buttonPosition[i][BC_ACTIVE])
+			if (mouseX > buttonPosition[i][BC_X] * Screen::SCREEN_X &&
+				mouseX < buttonPosition[i][BC_X] *
+				Screen::SCREEN_X + buttonSizeX * buttonMultiple &&
+				mouseZ > buttonPosition[i][BC_Z] * Screen::SCREEN_Z &&
+				mouseZ < buttonPosition[i][BC_Z] *
+				Screen::SCREEN_Z + buttonSizeZ * buttonMultiple)
+			{
 
-			BC.buttonContainer[i].ChangePressed();//選べたボタンの状態を変更
+				BC.buttonContainer[i].ChangePressed();//選べたボタンの状態を変更
 
-			if (pressed)//もし押したらコマンドを返す
-				choice = i;
-		}
+				if (pressed)//もし押したらコマンドを返す
+					choice = i;
+			}
 	}
 
 	return choice;
 }
 
+void MainMenuController::DrawTutorialSingle() {
+	DrawExtendGraph(150, 50,1280, 743,
+		*(tutorialHandle + TTR_choice), TRUE);
+}

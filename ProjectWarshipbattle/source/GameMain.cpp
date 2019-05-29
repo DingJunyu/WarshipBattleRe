@@ -19,6 +19,7 @@ void GameMain();
 void SingleGame_Mission_Progress();
 void SingleGame_DeathMatch_Progress();
 int MainMenu();
+void Tutorial();
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -53,9 +54,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		switch (choice) {
 		/*まだロード機能実装しなかったため、いずれのボタンを押したらメインゲームが始まる*/
 		case ButtonEvent::NEW_GAME:
-		case ButtonEvent::CONTINUE_GAME :
-		case ButtonEvent::LOAD_GAME:
-			SingleGame_DeathMatch_Progress(); break;	
+			SingleGame_DeathMatch_Progress(); break;
+		case ButtonEvent::TUTORIAL:Tutorial(); break;
 		case ButtonEvent::GAME_OVER:endGame = true; break;
 		}
 	}
@@ -69,26 +69,46 @@ int MainMenu(){
 	MainMenuController MMC;
 	int choice = -1;
 
-		MMC.Inif();//メニュー部分初期化
-		MMC.DrawTitle();//タイトル描く
-		MMC.DrawLoading();
-		choice = -1;//選択を初期化
+	MMC.Inif();//メニュー部分初期化
+	MMC.DrawTitle();//タイトル描く
+	MMC.DrawLoading();
 
-		while (choice == -1) {
-			MMC.DrawMainMenu();//メインメニューを描く
-			choice = MMC.CheckChoice();//選択を確認・バー状態更新
-									   //メインメニューから脱出
-			if (CheckHitKey(KEY_INPUT_ESCAPE) == TRUE &&
-				GetInputChar(TRUE)) {
-				choice = ButtonEvent::GAME_OVER;
-			}
-			if (ProcessMessage() == -1)
-				break;
+	Sleep(50);
+
+	while (choice == -1) {
+		MMC.DrawMainMenu();//メインメニューを描く
+		choice = MMC.CheckChoice();//選択を確認・バー状態更新
+								   //メインメニューから脱出
+		if (CheckHitKey(KEY_INPUT_ESCAPE) == TRUE &&
+			GetInputChar(TRUE)) {
+			choice = ButtonEvent::GAME_OVER;
 		}
+		if (ProcessMessage() == -1)
+			break;
+	}
 
-		MMC.DrawLoading();//この関数はほかの部分に移動する
-		MMC.FREE();//メモリを解放
-		return choice;
+	MMC.DrawLoading();//この関数はほかの部分に移動する
+	MMC.FREE();//メモリを解放
+	return choice;
+}
+
+void Tutorial() {
+	MainMenuController MMC;
+	int choice = -1;
+
+	MMC.Inif_Tur();
+
+	while (choice != ButtonEvent::TTR_BACK) {
+		MMC.DrawTutorial();
+		choice = MMC.CheckChoice();//選択を確認・バー状態更新
+		if (choice != ButtonEvent::TTR_BACK && choice != -1)
+			MMC.SetTutorialChoice(choice - ButtonEvent::TTR_DIRECT_CONTROL);
+
+		if (ProcessMessage() == -1)
+			break;
+	}
+	MMC.DrawLoading();
+	MMC.FREE();
 }
 
 void SingleGame_DeathMatch_Progress() {

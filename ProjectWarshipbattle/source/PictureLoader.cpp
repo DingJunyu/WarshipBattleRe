@@ -216,6 +216,39 @@ void PictureLoader::LoadButtonInMainMenu() {
 		"GraphicData/Button/Button_EndGame.png");
 	buttonPressedHandle[ButtonEvent::GAME_OVER] = LoadGraph(
 		"GraphicData/Button/Button_Pressed_EndGame.png");
+	buttonHandle[ButtonEvent::TUTORIAL] = LoadGraph(
+		"GraphicData/Button/Button_Tutorial_normal.png");
+	buttonPressedHandle[ButtonEvent::TUTORIAL] = LoadGraph(
+		"GraphicData/Button/Button_Tutorial_pressed.png");
+
+	buttonHandle[ButtonEvent::TTR_DIRECT_CONTROL] = LoadGraph(
+		"GraphicData/Button/Direcet_Control_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_DIRECT_CONTROL] = LoadGraph(
+		"GraphicData/Button/Direcet_Control_Pressed.png");
+	buttonHandle[ButtonEvent::TTR_SPEED_CONTROL] = LoadGraph(
+		"GraphicData/Button/Speed_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_SPEED_CONTROL] = LoadGraph(
+		"GraphicData/Button/Speed_Pressed.png");
+	buttonHandle[ButtonEvent::TTR_WEAPON_CONTROL] = LoadGraph(
+		"GraphicData/Button/Weapon_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_WEAPON_CONTROL] = LoadGraph(
+		"GraphicData/Button/Weapon_Pressed.png");
+	buttonHandle[ButtonEvent::TTR_FORMATION] = LoadGraph(
+		"GraphicData/Button/Formation_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_FORMATION] = LoadGraph(
+		"GraphicData/Button/Formation_Pressed.png");
+	buttonHandle[ButtonEvent::TTR_INBATTLE_LOCKON] = LoadGraph(
+		"GraphicData/Button/Battle_Lock_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_INBATTLE_LOCKON] = LoadGraph(
+		"GraphicData/Button/Battle_Lock_Pressed.png");	
+	buttonHandle[ButtonEvent::TTR_INBATTLE_NORMAL] = LoadGraph(
+		"GraphicData/Button/Battle_UnLock_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_INBATTLE_NORMAL] = LoadGraph(
+		"GraphicData/Button/Battle_UnLock_Pressed.png");
+	buttonHandle[ButtonEvent::TTR_BACK] = LoadGraph(
+		"GraphicData/Button/Back_Normal.png");
+	buttonPressedHandle[ButtonEvent::TTR_BACK] = LoadGraph(
+		"GraphicData/Button/Back_Pressed.png");
 }
 
 void PictureLoader::LoadButtonInGame() {
@@ -363,6 +396,21 @@ void PictureLoader::LoadFantasyNumbers() {
 	}
 }
 
+void PictureLoader::LoadTutorial() {
+	tutorialHandle[TutorialNum::DIRECT_CONTROL] = LoadGraph(
+		"GraphicData/Tutorial/Direct_Control_MiniMap.png");
+	tutorialHandle[TutorialNum::FORMATION] = LoadGraph(
+		"GraphicData/Tutorial/Formation.png");
+	tutorialHandle[TutorialNum::INBATTLE_LOCKON] = LoadGraph(
+		"GraphicData/Tutorial/InBattle_tutorial_lockOn.png");
+	tutorialHandle[TutorialNum::INBATTLE_NORMAL] = LoadGraph(
+		"GraphicData/Tutorial/InBattle_tutorial_normal.png");
+	tutorialHandle[TutorialNum::SPEED_CONTROL] = LoadGraph(
+		"GraphicData/Tutorial/Speed_Controller.png");
+	tutorialHandle[TutorialNum::WEAPON_CONTROL] = LoadGraph(
+		"GraphicData/Tutorial/Weapon_Control_Normal.png");
+}
+
 void PictureLoader::GetGraphSizeForGame() {
 	GetGraphSize(shipHandle[4000][SerialNumberOfShipHandle::SHIP_HANDLE],
 		&shipSizeX, &shipSizeZ);
@@ -467,5 +515,11 @@ void PictureLoader::DeleteFormationBoard() {
 void PictureLoader::DeleteFantasyNumbers() {
 	for (int i = 0; i <= 10; i++) {
 		DeleteGraph(fantasyNumbers[i]);
+	}
+}
+
+void PictureLoader::DeleteTutorial() {
+	for (int i = 0; i < TutorialNum::TN_AMOUNT; i++) {
+		DeleteGraph(tutorialHandle[i]);
 	}
 }
