@@ -28,6 +28,8 @@ public:
 		bool changeCamera);
 	void DrawHPBar(Coordinate2D<double> coord, int HP, int maxHP);
 
+	void DrawWinOrLose(bool win);
+
 	void DrawUIUnderShip(bool lock,Coordinate2D<double> coord,
 		Coordinate2D<double> coord_my,
 		Camera camera,

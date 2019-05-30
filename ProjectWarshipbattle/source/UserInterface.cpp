@@ -14,6 +14,8 @@ void UserInterface::InifUI(PictureLoader *PL) {
 
 	for (int i = UI_LIST::RADAR; i <= UI_LIST::CAMERA_ON_ENEMY; i++)
 		handleList[i] = PL->ReferUIList(i);//ハンドルをコピーする
+	handleList[UI_LIST::GAME_WIN] = PL->ReferStatisticBoardHandle(StatisticBoard::WIN);
+	handleList[UI_LIST::GAME_LOSE] = PL->ReferStatisticBoardHandle(StatisticBoard::LOSE);
 
 	Coordinate2D<float> coord;
 	unsigned int color;
@@ -275,6 +277,8 @@ void UserInterface::DrawUIUnderShip(bool lock, Coordinate2D<double> coord,
 	DrawMyCircle(coord_my, camera, radian);
 }
 
+
+
 void UserInterface::DrawShipOnTheMap(double X, double Z,bool enemy) {
 	
 	unsigned int enemyCr = GetColor(255, 0, 0);
@@ -426,6 +430,15 @@ void UserInterface::DrawHPBar(Coordinate2D<double> coord, int HP, int maxHP) {
 		tempCr = CrBox.ReferColor(GRENADIER);
 
 	DrawBoxWithPerAndCr(coord, plus, per, tempCr);
+}
+
+void UserInterface::DrawWinOrLose(bool win) {
+	if (win)
+		DrawPictureByCenter(UI_LIST::GAME_WIN,0.5,
+			0.5,1.5);
+	else
+		DrawPictureByCenter(UI_LIST::GAME_LOSE, 0.5,
+			0.5,1.5);
 }
 
 /*自分のしたにある円を描く*/

@@ -23,7 +23,8 @@ void IngameDataManagement::Update() {
 
 	SinkingListUpdate();
 
-	CheckTeamStatus();//各艦隊の状態を確認し、一方が殲滅されたらゲーム終了
+	if (!GameEnd)
+		CheckTeamStatus();//各艦隊の状態を確認し、一方が殲滅されたらゲーム終了
 
 	DeleteUseless();//入らないものを消す
 	RemoveSinkedShip();
@@ -187,6 +188,9 @@ void IngameDataManagement::DrawAll() {
 	if (TEST_SHOW_ON)
 		TEST_DRAW();
 
+	if (GameEnd)
+		UI.DrawWinOrLose(win);
+
 	DrawErrorList();
 	
 	DxLib::ScreenFlip();
@@ -287,8 +291,8 @@ void IngameDataManagement::SinkingShipUpdate(ShipMain *ship) {
 	if (num) {
 		Coordinate2D<double> temp = ship->ReferCoord2D_d();
 
-		temp.x -= ship->ReferShipCrashSize().x / 8;
-		temp.z -= ship->ReferShipCrashSize().z / 8;
+		temp.x -= ship->ReferShipCrashSize().x / 16;
+		temp.z -= ship->ReferShipCrashSize().z / 16;
 
 		double randX, randZ;
 
@@ -425,14 +429,14 @@ void IngameDataManagement::DrawSea_New_Extend() {
 	double multiple = MainCamera.ReferZoomRatio();
 
 	if (MainCamera.ReferCameraX() > 0)
-		MCPOX = Screen::SCREEN_X / 2-
+		MCPOX = Screen::SCREEN_X / 2 -
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 	else
 		MCPOX =
 		abs(MainCamera.ReferPrintOutX(mapX * multiple / 2));
 
 	if (MainCamera.ReferCameraZ() > 0)
-		MCPOZ = Screen::SCREEN_Z / 2-
+		MCPOZ = Screen::SCREEN_Z / 2 -
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 	else
 		MCPOZ =
@@ -1263,9 +1267,10 @@ void IngameDataManagement::CheckAlliesStatus() {
 }
 
 void IngameDataManagement::CheckEnemyStatus() {
-	for (auto ship = enemyFleet.begin();
-		ship != enemyFleet.end();
-		ship++) {
+	if (enemyFleet[0].ReferAlive())
+		for (auto ship = enemyFleet.begin();
+			ship != enemyFleet.end();
+			ship++) {
 		if (ship->ReferAlive())
 			return;
 	}
@@ -1560,13 +1565,17 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 							statisticBoardData.CountDamageRec((int)shell->ReferDamage());
 
 						/*ロックを使えない時にロックを解除する*/
-						if (!ship->ReferAlive() && alliesFleet[0].fireDataFigureUp.ReferTarget() ==
-							ship->ReferSerialNumber()) {
-							if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
-								alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ロック状態を変更
-								ship->ResetReviseData();//修正データをリセット
-								CUI.SetShootMenu(ship->fireDataFigureUp.ReferLockOn());//ＵＩを変更
-							}
+						if (!ship->ReferAlive())//沈む状態判定
+							if (alliesFleet[0].fireDataFigureUp.ReferTarget() ==
+								//ロックのターゲットではないか
+								ship->ReferSerialNumber() - SELECT_RANGE - 1 &&
+								//敵ですか
+								ship->ReferSerialNumber() > SELECT_RANGE) {
+								if (alliesFleet[0].fireDataFigureUp.ReferLockOn() == true) {
+									alliesFleet[0].fireDataFigureUp.LockOn_Switch();//ロック状態を変更
+									ship->ResetReviseData();//修正データをリセット	
+									CUI.SetShootMenu(false);//ＵＩを変更
+								}
 						}
 						return;
 					}
