@@ -442,6 +442,9 @@ void IngameDataManagement::DrawSea_New_Extend() {
 		MCPOZ =
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2));
 
+	MCPOX *= multiple;
+	MCPOZ *= multiple;
+
 	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
 		(int)(MCPOX + mapX * multiple), 
 		(int)(MCPOZ + mapZ * multiple),
@@ -449,15 +452,15 @@ void IngameDataManagement::DrawSea_New_Extend() {
 	DrawExtendGraph((int)(MCPOX - mapX * multiple),
 		(int)MCPOZ,
 		(int)(MCPOX),
-		(int)(MCPOZ + mapZ  * multiple),
+		(int)(MCPOZ + mapZ  *  multiple),
 		*PL.ReferMapHandle(), TRUE);
 	DrawExtendGraph((int)MCPOX, 
-		(int)(MCPOZ - mapZ * multiple),
-		(int)(MCPOX + mapX * multiple),
+		(int)(MCPOZ - mapZ *  multiple),
+		(int)(MCPOX + mapX *  multiple),
 		(int)(MCPOZ),
 		*PL.ReferMapHandle(), TRUE);
-	DrawExtendGraph((int)(MCPOX - mapX * multiple),
-		(int)(MCPOZ - mapZ * multiple),
+	DrawExtendGraph((int)(MCPOX - mapX *  multiple),
+		(int)(MCPOZ - mapZ *  multiple),
 		(int)(MCPOX),
 		(int)(MCPOZ),
 		*PL.ReferMapHandle(), TRUE);
@@ -485,6 +488,9 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 		MCPOZ =
 		abs(MainCamera.ReferPrintOutZ(mapZ * multiple / 2)) + flameCount;
 
+	MCPOX *= multiple;
+	MCPOZ *= multiple;
+
 
 	if (flameCount >= mapX / 4)
 		flameCount = fmod(flameCount, mapX / 4);
@@ -493,17 +499,17 @@ void IngameDataManagement::DrawMesh_Sea_Extend() {
 
 	SetTrans(90);//透明度を下がる
 	DrawExtendGraph((int)MCPOX, (int)MCPOZ,
-		(int)(MCPOX + mapX * multiple),
-		(int)(MCPOZ + mapZ * multiple),
+		(int)(MCPOX + mapX *  multiple),
+		(int)(MCPOZ + mapZ *  multiple),
 		*PL.ReferNoiseHandle(), TRUE);
-	DrawExtendGraph((int)(MCPOX - mapX * multiple),
+	DrawExtendGraph((int)(MCPOX - mapX *  multiple),
 		(int)MCPOZ,
 		(int)(MCPOX),
 		(int)(MCPOZ + mapX * multiple),
 		*PL.ReferNoiseHandle(), TRUE);
 	DrawExtendGraph((int)MCPOX,
 		(int)(MCPOZ - mapZ * multiple),
-		(int)(MCPOX + mapX * multiple), 
+		(int)(MCPOX + mapX * multiple),
 		(int)(MCPOZ),
 		*PL.ReferNoiseHandle(), TRUE);
 	DrawExtendGraph((int)(MCPOX - mapX * multiple),
@@ -1548,7 +1554,8 @@ void IngameDataManagement::CheckThisTeamDecision(std::vector<ShipMain> *shipList
 					ship->ReferRadianOnZ()))
 					if (ship->ReferAlive()) {
 						//当たったら
-						ship->SufferDamage((int)shell->ReferDamage());//ダメージを与える
+						if (!GameEnd)
+							ship->SufferDamage((int)shell->ReferDamage());//ダメージを与える
 						Coordinate2D<double> C2D = { shell->ReferCoordX(),
 						shell->ReferCoordZ() };
 						NewExplosion(C2D);//当たったところに爆発エフェクトを生成

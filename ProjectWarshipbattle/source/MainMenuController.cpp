@@ -52,13 +52,32 @@ void MainMenuController::FREE() {
 
 void MainMenuController::DrawTitle() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
+
+	SetUseASyncLoadFlag(TRUE);//非同期読み込みを有効化
+	VideoHandle = LoadGraph(".//Video//Game_View.mpg");
+	SetUseASyncLoadFlag(FALSE);//非同期読み込みを無効化
+	
 	
 	while (1) {
 		ClearDrawScreen();
 
+		if (GetASyncLoadNum() == 0 && Loading) {
+			MoviePlaying = PlayMovieToGraph(VideoHandle);
+			Loading = false;
+		}
+
+		if (GetMovieStateToGraph(VideoHandle) != 1 && !Loading) {
+			SeekMovieToGraph(VideoHandle,0);
+			MoviePlaying = PlayMovieToGraph(VideoHandle);
+		}
+
 		/*背景を描画する*/
-		DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
-			*backGroundHandle, FALSE);
+		if (MoviePlaying != 0)
+			DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
+				*backGroundHandle, FALSE);
+		else
+			DrawGraph(0, 0, VideoHandle, FALSE);
+
 		/*タイトルを描画する*/
 		DrawExtendGraph(
 			Screen::SCREEN_X / 2 - titleSizeX / 4,
@@ -91,12 +110,15 @@ void MainMenuController::DrawTitle() {
 
 		//インプットがあれば終わる
 		if ((CheckHitKeyAll() != 0 && GetInputChar(TRUE))
-			|| GetMouseInput() == MOUSE_INPUT_LEFT)
+			|| GetMouseInput() == MOUSE_INPUT_LEFT && GetASyncLoadNum() == 0)
 			break;
 
 		if (ProcessMessage() == -1)
 			break;
 	}
+
+	PauseMovieToGraph(VideoHandle);
+	DeleteGraph(VideoHandle);
 }
 
 void MainMenuController::DrawMainMenu() {

@@ -21,6 +21,8 @@ public:
 		buttonMultiple = 0.7;
 		buttonMultiple_TTR = 0.35;
 		TTR_choice = TutorialNum::DIRECT_CONTROL;
+		MoviePlaying = -1;
+		Loading = true;
 	}
 	~MainMenuController();
 
@@ -44,6 +46,8 @@ private:
 	void SetButtonPos_Tur();
 
 	void DrawTutorialSingle();
+
+	void PlayVedioOrDrawBack();
 
 	/*実際に画像保存クラスはここに宣言すべきではなかったが、
 	デザインのミスでここに宣言しました、このクラスの命名も間違いました、
@@ -99,6 +103,8 @@ private:
 
 	int TTR_choice;
 
-	
+	int MoviePlaying;
+	int VideoHandle;
+	bool Loading;
 };
 

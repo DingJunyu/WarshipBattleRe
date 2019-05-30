@@ -245,6 +245,11 @@ enum LAMP_LIST {
 	LOCKED
 };
 
+enum VIDEO_LIST {
+	VIDEO_AMOUNT = 1,
+	TITLE = 0
+};
+
 namespace BUTTON_POSITION {
 	const double START_POSITION_ON_X = .2;
 	const double NEW_GAME = .4;
