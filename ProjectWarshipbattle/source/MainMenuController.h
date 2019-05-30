@@ -47,7 +47,10 @@ private:
 
 	void DrawTutorialSingle();
 
-	void PlayVedioOrDrawBack();
+	void LoadMovie();
+	void DeleteMovie();
+	void CheckPlayStatus();
+	void PlayVideoOrDrawBack();
 
 	/*実際に画像保存クラスはここに宣言すべきではなかったが、
 	デザインのミスでここに宣言しました、このクラスの命名も間違いました、
@@ -106,5 +109,10 @@ private:
 	int MoviePlaying;
 	int VideoHandle;
 	bool Loading;
+
+	bool PlayMovie;
+
+	int asyncLoadNum;//非同期読み込む数
+	LONGLONG startTime;
 };
 

@@ -1145,7 +1145,7 @@ void IngameDataManagement::MoveAmmo() {
 /****************************************************/
 bool IngameDataManagement::Inif() {
 
-	long long startTime = GetTickCount();
+	startTime = GetTickCount();
 
 	SetUseASyncLoadFlag(TRUE);//非同期読み込みを有効化
 	PL.InifForGame();//画像ローダー初期化
@@ -1156,14 +1156,8 @@ bool IngameDataManagement::Inif() {
 
 	asyncLoadNum = GetASyncLoadNum();
 
-	while (ProcessMessage() == 0) {
-		DrawLoading(asyncLoadNum - GetASyncLoadNum());
-		if(GetASyncLoadNum() ==0)
-			break;
-		if (GetTickCount() - startTime > TIME_NEEDED::ONE_MINUTE ) {
-			return false;
-		}
-	}
+	if (!DrawLoad_All(asyncLoadNum, startTime))
+		return false;
 
 	Sleep(10);
 	SetFontThickness(6);

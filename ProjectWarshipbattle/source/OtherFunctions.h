@@ -46,3 +46,8 @@ void DrawString_Trans(
 void SetTrans(int trans);
 void SetTrans(long long trans);
 void ResetTrans();
+
+//この関数を使わないで
+void DrawLoading_All(int num, int AsyncLoadNum);
+//ロード画面を描く時はこれを使う
+bool DrawLoad_All(int AsyncLoadNum, LONGLONG StartTime);

@@ -123,3 +123,34 @@ void SetTrans(long long trans) {
 void ResetTrans() { 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
+
+void DrawLoading_All(int num, int AsyncLoadNum) {
+	ClearDrawScreen();
+
+	unsigned int Cr;
+	Cr = GetColor(255, 255, 255);
+	DxLib::SetFontSize(30);
+
+	DrawString((int)(0.8*Screen::SCREEN_X),
+		(int)(0.8*Screen::SCREEN_Z), "LOADING...", Cr);
+	DrawFormatString((int)(0.8*Screen::SCREEN_X),
+		(int)(0.85*Screen::SCREEN_Z), Cr, "%d/%d", num, AsyncLoadNum);
+	DrawBox(0, (int)(0.9*Screen::SCREEN_Z),
+		(int)((double)num / (double)AsyncLoadNum * Screen::SCREEN_X),
+		(int)(0.95*Screen::SCREEN_Z),
+		Cr, TRUE);
+
+	DxLib::ScreenFlip();
+}
+
+bool DrawLoad_All(int AsyncLoadNum, LONGLONG StartTime) {
+	while (ProcessMessage() == 0) {
+		DrawLoading_All(AsyncLoadNum - GetASyncLoadNum(), AsyncLoadNum);
+		if (GetASyncLoadNum() == 0)
+			break;
+		if (GetTickCount() - StartTime > TIME_NEEDED::ONE_MINUTE) {
+			return false;
+		}
+	}
+	return true;
+}

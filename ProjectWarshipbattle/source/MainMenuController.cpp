@@ -5,6 +5,8 @@ MainMenuController::~MainMenuController()
 }
 
 void MainMenuController::Inif() {
+	startTime = GetTickCount();
+
 	StandardInif();
 
 	pressedToStart = PL.ReferPressedToStart();
@@ -12,6 +14,10 @@ void MainMenuController::Inif() {
 	GetGraphSize(*pressedToStart, &PTSSizeX, &PTSSizeZ);
 
 	SetButtonPosition();//各ボタンの位置を設定する
+	
+	asyncLoadNum = GetASyncLoadNum();
+
+	LoadMovie();
 }
 
 void MainMenuController::Inif_Tur() {
@@ -23,8 +29,17 @@ void MainMenuController::Inif_Tur() {
 }
 
 void MainMenuController::StandardInif() {
+
+	startTime = GetTickCount();
+	SetUseASyncLoadFlag(TRUE);
 	PL.InifForMainMenu();
 	SL.Inif();
+	SetUseASyncLoadFlag(FALSE);
+
+
+	asyncLoadNum = GetASyncLoadNum();
+	DrawLoad_All(asyncLoadNum, startTime);
+
 	BC.Inif(&PL);
 
 	backGroundHandle = PL.ReferBackGround();
@@ -43,6 +58,8 @@ void MainMenuController::FREE() {
 	PL.FREE_FOR_MAINMENU();
 	SL.FreeAll();
 
+	DeleteMovie();
+
 	/*ポインターを解放する*/
 	title = nullptr;
 	backGroundHandle = nullptr;
@@ -52,31 +69,15 @@ void MainMenuController::FREE() {
 
 void MainMenuController::DrawTitle() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
-
-	SetUseASyncLoadFlag(TRUE);//非同期読み込みを有効化
-	VideoHandle = LoadGraph(".//Video//Game_View.mpg");
-	SetUseASyncLoadFlag(FALSE);//非同期読み込みを無効化
-	
 	
 	while (1) {
 		ClearDrawScreen();
 
-		if (GetASyncLoadNum() == 0 && Loading) {
-			MoviePlaying = PlayMovieToGraph(VideoHandle);
-			Loading = false;
-		}
-
-		if (GetMovieStateToGraph(VideoHandle) != 1 && !Loading) {
-			SeekMovieToGraph(VideoHandle,0);
-			MoviePlaying = PlayMovieToGraph(VideoHandle);
-		}
+		//動画プレイ状況を確認
+		CheckPlayStatus();
 
 		/*背景を描画する*/
-		if (MoviePlaying != 0)
-			DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
-				*backGroundHandle, FALSE);
-		else
-			DrawGraph(0, 0, VideoHandle, FALSE);
+		PlayVideoOrDrawBack();
 
 		/*タイトルを描画する*/
 		DrawExtendGraph(
@@ -110,15 +111,12 @@ void MainMenuController::DrawTitle() {
 
 		//インプットがあれば終わる
 		if ((CheckHitKeyAll() != 0 && GetInputChar(TRUE))
-			|| GetMouseInput() == MOUSE_INPUT_LEFT && GetASyncLoadNum() == 0)
+			|| GetMouseInput() == MOUSE_INPUT_LEFT)
 			break;
 
 		if (ProcessMessage() == -1)
 			break;
 	}
-
-	PauseMovieToGraph(VideoHandle);
-	DeleteGraph(VideoHandle);
 }
 
 void MainMenuController::DrawMainMenu() {
@@ -130,9 +128,11 @@ void MainMenuController::DrawMainMenu() {
 	SetDrawScreen(DX_SCREEN_BACK);//裏画面に描画する
 	ClearDrawScreen();
 
-	/*背景を描画*/
-	DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
-		*backGroundHandle, FALSE);
+	//動画プレイ状況を確認
+	CheckPlayStatus();
+
+	/*背景を描画する*/
+	PlayVideoOrDrawBack();
 
 	/*ボタンを描画*/
 	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++) {
@@ -193,6 +193,13 @@ void MainMenuController::DrawTutorial() {
 		i <= ButtonEvent::TTR_BACK; i++) {
 		BC.buttonContainer[i].DrawThisButton();
 	}
+	
+	DrawBoxAA((float)(0.006 * Screen::SCREEN_X),
+		(float)(0.07 * Screen::SCREEN_Z * (TTR_choice + 1) - 10),
+		(float)(0.006 * Screen::SCREEN_X + 130),
+		(float)(0.07 * Screen::SCREEN_Z * (TTR_choice + 1) + 30),
+		CrBox.ReferColor(GORSE), FALSE, 2.5f);
+
 	FC.Wait();
 
 	ScreenFlip();
@@ -283,4 +290,36 @@ int MainMenuController::CheckChoice(){
 void MainMenuController::DrawTutorialSingle() {
 	DrawExtendGraph(150, 50,1280, 743,
 		*(tutorialHandle + TTR_choice), TRUE);
+}
+
+void MainMenuController::LoadMovie() {
+	SetUseASyncLoadFlag(TRUE);//非同期読み込みを有効化
+	VideoHandle = LoadGraph(".//Video//Game_View.mpg");
+	SetUseASyncLoadFlag(FALSE);//非同期読み込みを無効化
+}
+
+void MainMenuController::DeleteMovie() {
+	PauseMovieToGraph(VideoHandle);
+	DeleteGraph(VideoHandle);
+}
+
+void MainMenuController::CheckPlayStatus() {
+	if (GetASyncLoadNum() == 0 && Loading) {
+		MoviePlaying = PlayMovieToGraph(VideoHandle);
+		Loading = false;
+	}
+
+	if (GetMovieStateToGraph(VideoHandle) != 1 && !Loading) {
+		SeekMovieToGraph(VideoHandle, 0);
+		MoviePlaying = PlayMovieToGraph(VideoHandle);
+	}
+}
+
+void MainMenuController::PlayVideoOrDrawBack() {
+	/*背景を描画する*/
+	if (MoviePlaying != 0)
+		DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
+			*backGroundHandle, FALSE);
+	else
+		DrawGraph(0, 0, VideoHandle, FALSE);
 }

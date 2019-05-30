@@ -234,6 +234,7 @@ private:
 	void ClearTeam();
 
 	int asyncLoadNum;//”ñ“¯Šú“Ç‚İ‚Ş”
+	LONGLONG startTime;
 
 	double multipleRate;
 
