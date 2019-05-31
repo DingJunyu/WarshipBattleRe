@@ -50,7 +50,7 @@ private:
 	void LoadMovie();
 	void DeleteMovie();
 	void CheckPlayStatus();
-	void PlayVideoOrDrawBack();
+	void PlayVideoOrDrawBack(int x,int z, double rate);
 
 	/*実際に画像保存クラスはここに宣言すべきではなかったが、
 	デザインのミスでここに宣言しました、このクラスの命名も間違いました、
@@ -108,6 +108,7 @@ private:
 
 	int MoviePlaying;
 	int VideoHandle;
+	int v_Size_X, v_Size_Z;
 	bool Loading;
 
 	bool PlayMovie;

@@ -77,7 +77,7 @@ void MainMenuController::DrawTitle() {
 		CheckPlayStatus();
 
 		/*”wŒi‚ð•`‰æ‚·‚é*/
-		PlayVideoOrDrawBack();
+		PlayVideoOrDrawBack(0, 0, 1.0);
 
 		/*ƒ^ƒCƒgƒ‹‚ð•`‰æ‚·‚é*/
 		DrawExtendGraph(
@@ -132,7 +132,7 @@ void MainMenuController::DrawMainMenu() {
 	CheckPlayStatus();
 
 	/*”wŒi‚ð•`‰æ‚·‚é*/
-	PlayVideoOrDrawBack();
+	PlayVideoOrDrawBack(700, 300, 0.4);
 
 	/*ƒ{ƒ^ƒ“‚ð•`‰æ*/
 	for (int i = ButtonEvent::NEW_GAME; i <= ButtonEvent::GAME_OVER; i++) {
@@ -307,6 +307,7 @@ void MainMenuController::CheckPlayStatus() {
 	if (GetASyncLoadNum() == 0 && Loading) {
 		MoviePlaying = PlayMovieToGraph(VideoHandle);
 		Loading = false;
+		GetGraphSize(VideoHandle, &v_Size_X, &v_Size_Z);
 	}
 
 	if (GetMovieStateToGraph(VideoHandle) != 1 && !Loading) {
@@ -315,11 +316,13 @@ void MainMenuController::CheckPlayStatus() {
 	}
 }
 
-void MainMenuController::PlayVideoOrDrawBack() {
+void MainMenuController::PlayVideoOrDrawBack(int x, int z, double rate) {
 	/*”wŒi‚ð•`‰æ‚·‚é*/
-	if (MoviePlaying != 0)
-		DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
-			*backGroundHandle, FALSE);
-	else
-		DrawGraph(0, 0, VideoHandle, FALSE);
+	
+	DrawExtendGraph(0, 0, Screen::SCREEN_X, Screen::SCREEN_Z,
+		*backGroundHandle, FALSE);
+	if (MoviePlaying == 0)
+		DrawExtendGraph(x, z,
+			x + rate * v_Size_X, z + rate * v_Size_Z,
+			VideoHandle, FALSE);
 }
