@@ -121,9 +121,6 @@ void AllMovableObjects::SpeedDownbyAirResistance() {
 void AllMovableObjects::Draw(Camera CM) {
 	double xOnScreen;
 	double zOnScreen;
-	//船から影への距離
-	int shadowDistanceOnX = 2;
-	int shadowDistanceOnZ = 2;
 	//中心座標を取る
 	xOnScreen = Screen::SCREEN_X / 2;
 	zOnScreen = Screen::SCREEN_Z / 2;
@@ -156,10 +153,6 @@ void AllMovableObjects::DrawShadow(Camera CM) {
 //自機以外のはこの関数を使う
 //自機以外では自機に対して座標を利用して描く
 void AllMovableObjects::DrawSub(Camera CM) {
-	/*シャドーの距離計算はまだ*/
-	int shadowDistanceOnX = 2;
-	int shadowDistanceOnZ = 2;
-
 	/*自分の座標とカメラ座標を合わせて計算する*/
 	double coordX = coord.x - CM.ReferRealCameraX();
 	double coordZ = coord.z - CM.ReferRealCameraZ();

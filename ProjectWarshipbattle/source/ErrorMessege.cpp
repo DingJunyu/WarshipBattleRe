@@ -3,10 +3,10 @@
 ErrorMessege::ErrorMessege(const char *Mes, Coordinate2D<int> LeftUp,
 	Coordinate2D<int> RightDown)
 {
-	mes = Mes;
-	leftUp = LeftUp;
+	mes = Mes;//メッセージを保存する
+	leftUp = LeftUp;//座標を保存する
 	rightDown = RightDown;
-	nowTime = GetTickCount();
+	nowTime = GetTickCount();//生成時間を記録する
 }
 
 ErrorMessege::ErrorMessege() {
@@ -14,7 +14,7 @@ ErrorMessege::ErrorMessege() {
 }
 
 ErrorMessege::~ErrorMessege(){
-	mes = nullptr;
+	mes = nullptr;//メモリを解放する
 }
 
 void ErrorMessege::DrawMessege() {

@@ -8,6 +8,7 @@ ColorBox::~ColorBox(){
 
 }
 
+//各色のデータを設定します。
 void ColorBox::SetColorBox() {
 	CrBox[GREEN] = GetColor(0, 255, 0);
 	CrBox[RED] = GetColor(255, 0, 0);
