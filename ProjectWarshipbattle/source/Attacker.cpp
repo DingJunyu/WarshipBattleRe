@@ -4,7 +4,6 @@ Attacker::Attacker()
 {
 }
 
-
 Attacker::~Attacker()
 {
 }

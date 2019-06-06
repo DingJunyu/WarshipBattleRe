@@ -200,8 +200,9 @@ void AllMovableObjects::DrawSubShadow(Camera CM) {
 	}//•`‰æƒ‚[ƒh‚ğ‚à‚Æ‚É–ß‚é
 }
 
+//•Ò¬‰æ–Ê‚Ég‚í‚é‘D‚Ì‰æ‘œ‚ğ•`‰æ‚·‚é
 void AllMovableObjects::DrawCard(Coordinate2D<double> coord) {
-	const double & multiple = MathAndPhysics::ShipCardRate;
+	const double & multiple = MathAndPhysics::ShipCardRate;//‹K’è‚³‚ê‚½”{—¦‚ğİ’è‚·‚é
 
 	DrawExtendGraph((int)coord.x, (int)coord.z,
 		(int)(coord.x + multiple * length),

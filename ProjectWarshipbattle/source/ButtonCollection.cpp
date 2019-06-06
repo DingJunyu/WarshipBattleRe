@@ -33,6 +33,7 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 			PL->ReferButtonIntheGame(CommandSerial::SELECT),//押されたときとふつうの時が変わらないため、両方もふつうにする
 			PL->ReferButtonIntheGame(CommandSerial::SELECT));
 	}
+	/*船選択ボタン*/
 	for (int i = CommandSerial::SELECT_IN_FORMATION;
 		i < CommandSerial::SELECT_IN_FORMATION + 16; i++) {
 		if (i % 2 == 0)
@@ -44,6 +45,7 @@ void ButtonCollection::InifForUserInterface(PictureLoader *PL) {
 				PL->ReferButtonIntheGame(CommandSerial::MINUS),
 				PL->ReferButtonPressedIntheGame(CommandSerial::MINUS));
 	}
+	/*終了ボタン*/
 	buttonContainer[CommandSerial::EXIT_IN_FORMATION].Inif(
 		PL->ReferButtonIntheGame(CommandSerial::EXIT),
 		PL->ReferButtonPressedIntheGame(CommandSerial::EXIT));

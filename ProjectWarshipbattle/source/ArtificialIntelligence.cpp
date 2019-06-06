@@ -17,9 +17,9 @@ void ArtificialIntelligence::Move(ShipMain me, ShipMain target) {
 	CalWaypointDis();//距離を図る
 	CalTargetRadian();//角度を計算する
 	SetRadianNeeded();//必要な角度を計算する
-	CalDistance(target.ReferCoord2D_d());
-	if ( targetDis < DistanceRange::STOP)
-		radianNeededNow = target.ReferChangingRadian();
+	CalDistance(target.ReferCoord2D_d());//ウェイポイントとの距離を測る
+	if ( targetDis < DistanceRange::STOP)//最短距離に入ったら
+		radianNeededNow = target.ReferChangingRadian();//そのまま前の船と同じ方向に航行する
 	SetSpeed(target.ReferOutPutRate());//必要な速度を設置する
 }
 
@@ -40,7 +40,7 @@ void ArtificialIntelligence::InBattle(ShipMain *me,
 				temp = Distance2D(me->ReferCoord2D_d(), ship->ReferCoord2D_d());//距離を測る
 				if (temp < targetDis) {//今の距離より小さければ
 					targetDis = temp;//一番近い敵を選ぶ
-					me->fireDataFigureUp.SetNumber(count);
+					me->fireDataFigureUp.SetNumber(count);//ターゲットを設定する
 				}			}
 			count++;//順番を増やす
 		}
@@ -93,13 +93,13 @@ void ArtificialIntelligence::CalWaypointDis() {
 
 void ArtificialIntelligence::SetSpeed(double TGoutputRate) {
 	/*ウェイポイントとの距離によって速度が変わります*/
-	if (wayPointDis >= DistanceRange::CLOSING)
+	if (wayPointDis >= DistanceRange::CLOSING)//最大速度
 		outPutRate = 1;
 	else if (wayPointDis <= DistanceRange::SLOW_DOWN
-		&& wayPointDis > DistanceRange::STOP)
+		&& wayPointDis > DistanceRange::STOP)//接近速度
 		outPutRate = 0.25;
-	else if (wayPointDis <= DistanceRange::STOP)
+	else if (wayPointDis <= DistanceRange::STOP)//遠く行く速度
 		outPutRate = -0.3;
 	else
-		outPutRate = TGoutputRate - 0.05;
+		outPutRate = TGoutputRate - 0.05;//一般速度
 }

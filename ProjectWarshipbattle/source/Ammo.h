@@ -1,6 +1,18 @@
 #pragma once
 #include "AllMovableObjects.h"
+#include "DefinedData.h"
 #include "Camera.h"
+
+struct AmmoData {
+	double Speed;
+	double RadianOnZ;
+	Coordinate<double> coord;
+	double RadianOnY;
+	int *AmmoHandle;
+	int SerialNumber;
+	int Damage;
+};
+
 class Ammo :
 	public AllMovableObjects
 {

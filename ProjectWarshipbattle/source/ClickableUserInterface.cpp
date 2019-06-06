@@ -173,6 +173,8 @@ int ClickableUserInterface::CheckChoice() {
 			}
 		}
 	}
+	/*友軍に照準することができません*/
+	/*友軍の部分を選ぶ時にオーダーを無効に変更する*/
 	if (answer >= CommandSerial::SELECT &&
 		answer < CommandSerial::SELECT + 10) {
 		answer = CommandSerial::NONE_COMMAND;
@@ -215,6 +217,7 @@ void ClickableUserInterface::Draw() {
 
 void ClickableUserInterface::SetFormationMenuStatus() {
 
+	/*普通のオーダーを設定する*/
 	SetThisOne(CommandSerial::GAME_START, 0.365, .9, 0.75);
 	SetThisOne(CommandSerial::RANDOM_FORMATION, 0.59, 0.83, 0.42);
 	SetThisOne(CommandSerial::CLEAR_FORMATION, 0.71, 0.83, 0.42);
