@@ -7,6 +7,7 @@ namespace Screen {
 	const double DEFAULT_MULTIPLE = 1.0;
 	const double MAX_MULTIPLE = 1.5;
 	const double MIN_MULTIPLE = 0.4;
+	const int OutRange = 200;
 }
 
 //コントローラー用指令集

@@ -1,6 +1,7 @@
 #pragma once
 #include<cmath>
 #include"DefinedData.h"
+#include"OtherFunctions.h"
 #include"Camera.h"
 #include"DxLib.h"
 /*インターフェイスについて:
@@ -16,7 +17,7 @@ public:
 		plane(Plane), alive(true), point(Point), crashable(Crashable) {
 		alive = true;
 		inList = false;
-		radianChangePerFrame = 0;
+		radianChangePerFrame = 0;//旋回速度を０に設置する
 		airResistanceActive = false;
 		airResistance = 0.00001;
 		speedOnZ = 0;
@@ -51,7 +52,7 @@ public:
 
 	//状態問い合わせ関数
 	bool ReferAlive() { return alive; }//生きる状況確認
-	bool ReferInList() { return inList; }
+	bool ReferInList() { return inList; }//消滅演出リストにいるかどうか確認
 	int *ReferGraphHandle() { return pictureHandle; }//画像ハンドル
 
 	//移動関数
@@ -138,5 +139,10 @@ private:
 	int *pictureHandle;
 	int *shadowHandle;
 	double multiple;
+
+
+
+	const double HighSlowDownSpeed = 0.0015;
+	const double LowSlowDownSpeed = 0.00075;
 };
 
