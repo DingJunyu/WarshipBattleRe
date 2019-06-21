@@ -29,7 +29,6 @@ Release/
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -40,7 +39,7 @@ Release/
 /ProjectWarshipbattle/Log.txt
 
 # No need
-~$ï¿½ï¿½iï¿½Ğ‰ï¿½.docx
-~$ä½œå“ç´¹ä»‹.docx
+~$E½E½iE½Ğ‰ï¿½.docx
+~$ä½œå“ç´¹ä»Edocx
 ProjectWarshipbattle/Data/TopScore/TopScore.txt
 ProjectWarshipbattle/Data/TopScore/TopScore.txt
