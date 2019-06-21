@@ -5,6 +5,7 @@
 .vs/
 Debug/
 Release/
+!bin/
 
 # Compiled Object files
 *.slo
@@ -34,6 +35,7 @@ Release/
 *.exe
 *.out
 *.app
+!Warshipbattle.exe
 
 #log
 /ProjectWarshipbattle/Log.txt
